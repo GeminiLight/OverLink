@@ -3,6 +3,6 @@
 *.env
 *.json
 !users.json
-auth.json
+!auth.json
 error_screenshot.png
 __pycache__
