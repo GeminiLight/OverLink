@@ -55,7 +55,8 @@ The bot needs to log in to Overleaf to download your PDFs.
     -   `OVERLEAF_PASSWORD`: Your Overleaf password.
 3.  **(Optional but Recommended) Saved Session**:
     To avoid login captchas, you can provide your saved session.
-    -   Run this locally to copy your session file as secret text:
+    -   **How to get it**: Run the application locally (see [Local Development](#%EF%B8%8F-local-development) below). Once the bot successfully logs in, it creates an `auth.json` file in your root folder.
+    -   **How to add it**: Run this command to copy the file content as a secret string:
         ```bash
         base64 -i auth.json | pbcopy
         ```
