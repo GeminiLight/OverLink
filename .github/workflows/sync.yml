@@ -1,6 +1,8 @@
 name: Sync CV from Overleaf
 
 on:
+  push:
+    branches: [ "main" ]
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
   workflow_dispatch: # Allows manual trigger
