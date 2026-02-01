@@ -1,12 +1,13 @@
 import argparse
 import sys
+import asyncio
 from cv_mirror.config import Config
 from cv_mirror.bot import OverleafBot
 from cv_mirror.logger import setup_logger
 
 logger = setup_logger()
 
-def main():
+async def main():
     parser = argparse.ArgumentParser(description="CV-Mirror Service")
     parser.add_argument("--setup", action="store_true", help="Run in Setup Mode (Manual Login)")
     parser.add_argument("--visible", action="store_true", help="Run browser visibly")
@@ -17,13 +18,13 @@ def main():
     # In setup mode, we force headful
     headless = not (args.setup or args.visible)
     
-    with OverleafBot(headless=headless) as bot:
+    async with OverleafBot(headless=headless) as bot:
         # 1. Login Phase
         if args.setup:
-            bot.login(manual=True)
+            await bot.login(manual=True)
             return
 
-        if not bot.login(manual=False):
+        if not await bot.login(manual=False):
             logger.error("Authentication failed. Aborting.")
             sys.exit(1)
 
@@ -37,7 +38,7 @@ def main():
         success_count = 0
         
         for user in users:
-            if bot.process_user(user):
+            if await bot.process_user(user):
                 success_count += 1
         
         logger.info(f"Batch complete. {success_count}/{len(users)} successful.")
@@ -46,4 +47,4 @@ def main():
             sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

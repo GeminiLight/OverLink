@@ -7,9 +7,9 @@ python server.py &
 BACKEND_PID=$!
 
 # Start Frontend
-echo "Starting Frontend on port 5173..."
+echo "Starting Frontend on port 5600..."
 cd frontend
-npm run dev -- --port 5173 --host &
+npm run dev -- --port 5600 --host &
 FRONTEND_PID=$!
 
 # Handle exit

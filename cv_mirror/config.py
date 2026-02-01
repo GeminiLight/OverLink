@@ -21,3 +21,8 @@ class Config:
     @classmethod
     def ensure_public_dir(cls):
         os.makedirs(cls.PUBLIC_DIR, exist_ok=True)
+
+    @classmethod
+    def save_users(cls, users):
+        with open(cls.USERS_FILE, "w") as f:
+            json.dump(users, f, indent=4)

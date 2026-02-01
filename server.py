@@ -26,6 +26,11 @@ app.add_middleware(
 class MirrorRequest(BaseModel):
     nickname: str
     project_id: str
+    email: str
+
+class DeleteRequest(BaseModel):
+    username: str
+    email: str
 
 # Ensure public dir exists
 Config.ensure_public_dir()
@@ -33,47 +38,128 @@ Config.ensure_public_dir()
 # Mount public directory to serve PDFs
 app.mount("/public", StaticFiles(directory=Config.PUBLIC_DIR), name="public")
 
+from fastapi.responses import StreamingResponse
+import json
+import asyncio
+
 @app.post("/api/mirror")
 async def mirror_cv(request: MirrorRequest):
     """
     Mirrors the CV from Overleaf Project ID used by the Nickname.
+    Returns a stream of status updates ending with the final result.
     """
     logger.info(f"Received request for {request.nickname} (ID: {request.project_id})")
     
-    # Construct a temporary user dict for the bot
-    # The bot handles "http" vs raw ID logic, so we pass project_id as url field
+    # Construct user data
     user_data = {
         "username": request.nickname,
+        "email": request.email,
         "url": request.project_id
     }
+
+    # Save/Update user in users.json
+    try:
+        users = Config.load_users()
+        user_index = next((index for (index, d) in enumerate(users) if d["username"] == request.nickname), None)
+        
+        if user_index is not None:
+             users[user_index] = user_data
+             logger.info(f"Updated existing user: {request.nickname}")
+        else:
+             users.append(user_data)
+             logger.info(f"Added new user: {request.nickname}")
+        
+        Config.save_users(users)
+    except Exception as e:
+        logger.error(f"Error saving user data: {e}")
+
+    async def event_generator():
+        q = asyncio.Queue()
+        
+        async def bot_producer():
+            """Runs the bot and puts status updates into the queue."""
+            try:
+                # Callback that puts messages into queue
+                async def status_callback(msg):
+                    await q.put(json.dumps({"type": "status", "message": msg}) + "\n")
+                
+                await q.put(json.dumps({"type": "status", "message": "Initializing session..."}) + "\n")
+                
+                async with OverleafBot(headless=True) as bot:
+                    await q.put(json.dumps({"type": "status", "message": "Authenticating..."}) + "\n")
+                    
+                    if not await bot.login(manual=False, status_callback=status_callback):
+                        await q.put(json.dumps({"type": "error", "message": "Bot authentication failed."}) + "\n")
+                        return
+
+                    success = await bot.process_user(user_data, status_callback=status_callback)
+                    
+                    if success:
+                        pdf_filename = f"{request.nickname}.pdf"
+                        result = {
+                            "status": "success",
+                            "url": f"/public/{pdf_filename}",
+                            "filename": pdf_filename
+                        }
+                        await q.put(json.dumps({"type": "result", **result}) + "\n")
+                    else:
+                        await q.put(json.dumps({"type": "error", "message": "Failed to mirror CV."}) + "\n")
+                        
+            except Exception as e:
+                logger.error(f"Error in bot producer: {e}")
+                await q.put(json.dumps({"type": "error", "message": f"Server error: {str(e)}"}) + "\n")
+            finally:
+                # Sentinel to signal end of stream
+                await q.put(None)
+
+        # Start producer as a background task
+        producer_task = asyncio.create_task(bot_producer())
+        
+        try:
+            while True:
+                # Wait for next item
+                item = await q.get()
+                if item is None:
+                    break
+                yield item
+        except asyncio.CancelledError:
+            # If client disconnects, we should try to cancel the producer
+            producer_task.cancel()
+            raise
+
+    return StreamingResponse(event_generator(), media_type="application/x-ndjson")
+
+@app.post("/api/delete")
+async def delete_cv(request: DeleteRequest):
+    """
+    Deletes the CV entry if username and email match.
+    """
+    logger.info(f"Received delete request for {request.username}")
     
     try:
-        # We start a fresh bot instance for each request to ensure isolation and stability
-        # Note: This is synchronous and blocking. For high load, this should be offloaded to a background task.
-        # But for a personal tool, this is fine and keeps it simple.
-        with OverleafBot(headless=True) as bot:
-            # Login (uses cached session if available)
-            if not bot.login(manual=False):
-                raise HTTPException(status_code=500, detail="Bot authentication failed. Service unavailable.")
+        users = Config.load_users()
+        found = False
+        new_users = []
+        
+        for user in users:
+            # Check for match (case-sensitive for simplicity, could be lowered)
+            if user.get("username") == request.username and user.get("email") == request.email:
+                found = True
+                # Skip this user (delete)
+                continue
+            new_users.append(user)
             
-            # Process the user
-            success = bot.process_user(user_data)
+        if found:
+            Config.save_users(new_users)
+            logger.info(f"User {request.username} deleted.")
+            return {"status": "success", "message": "CV entry deleted."}
+        else:
+            raise HTTPException(status_code=404, detail="User not found or email mismatch.")
             
-            if success:
-                # Construct the public URL
-                # Assuming the server is running on the same host
-                # We return a relative path or full URL if we knew the domain
-                pdf_filename = f"{request.nickname}.pdf"
-                return {
-                    "status": "success",
-                    "url": f"/public/{pdf_filename}",
-                    "filename": pdf_filename
-                }
-            else:
-                raise HTTPException(status_code=400, detail="Failed to mirror CV. Check the Project ID or permissions.")
-                
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error processing request: {e}")
+        logger.error(f"Error deleting user: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
