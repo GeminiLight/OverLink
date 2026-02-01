@@ -63,7 +63,11 @@ To allow the bot to log in to Overleaf during the daily sync, you must add your 
 ### Accessing Hosted PDFs
 Your CVs will be available at:
 ```
-https://<YourUsername>.github.io/<RepoName>/<Nickname>.pdf
+https://<YourUsername>.github.io/<RepoName>/pdfs/<Nickname>.pdf
+```
+*Note: If you use a custom domain (e.g., tianfuwang.tech), the URL will be:*
+```
+http://tianfuwang.tech/cv-mirror/pdfs/<Nickname>.pdf
 ```
 
 ## Technical Overview
