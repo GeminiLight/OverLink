@@ -53,7 +53,11 @@ The bot needs to log in to Overleaf to download your PDFs.
 2.  Add **New Repository Secret**:
     -   `OVERLEAF_EMAIL`: Your Overleaf email address.
     -   `OVERLEAF_PASSWORD`: Your Overleaf password.
-3.  **(Optional but Recommended) Saved Session**:
+3.  **Automation Token** (Required for updates):
+    -   Create a **Personal Access Token (classic)** with `repo` scope.
+    -   Add **New Repository Secret**: `GITHUB_ACCESS_TOKEN` (paste the token).
+    -   *This allows the update bot to trigger the deployment bot.*
+4.  **(Optional, if you have one) Saved Session**:
     To avoid login captchas, you can provide your saved session.
     -   **How to get it**: Run the application locally (see [Local Development](#%EF%B8%8F-local-development) below). Once the bot successfully logs in, it creates an `auth.json` file in your root folder.
     -   **How to add it**: Run this command to copy the file content as a secret string:
