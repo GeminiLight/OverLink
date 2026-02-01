@@ -53,6 +53,13 @@ The bot needs to log in to Overleaf to download your PDFs.
 2.  Add **New Repository Secret**:
     -   `OVERLEAF_EMAIL`: Your Overleaf email address.
     -   `OVERLEAF_PASSWORD`: Your Overleaf password.
+3.  **(Optional but Recommended) Saved Session**:
+    To avoid login captchas, you can provide your saved session.
+    -   Run this locally to copy your session file as secret text:
+        ```bash
+        base64 -i auth.json | pbcopy
+        ```
+    -   Add **New Repository Secret**: `AUTH_JSON_BASE64` (paste the content).
 
 ### 4. 📝 Configure Your Assets
 You can configure which projects to mirror by editing `users.json` directly in the repo, or running the tool locally to use the UI.
