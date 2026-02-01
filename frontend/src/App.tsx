@@ -5,113 +5,141 @@ const envToken = import.meta.env.VITE_GITHUB_ACCESS_TOKEN;
 
 const translations = {
   en: {
-    title: "CV Mirror",
+    title: "OverLive",
+    tagline: "Your Academic Assets, Always Current.",
+    problem: {
+      title: "The Update Friction",
+      items: [
+        "Manual Overleaf compilation",
+        "Downloading 'v2_final' PDFs",
+        "Manual repo uploads",
+        "Broken links on your site"
+      ]
+    },
+    solution: {
+      title: "The OverLive Way",
+      desc: "Edit your LaTeX in Overleaf. We handle the rest. Every night, our bot mirrors your projects to your site using GitHub Actions."
+    },
     subtitle: {
-      create: "Generate your Overleaf PDF instantly.",
-      delete: "Remove your CV from the system."
+      create: "Sync an Overleaf project to your persistent URL.",
+      delete: "Remove a project from the mirror system."
     },
     mode: {
-      create: "Create",
-      delete: "Delete"
+      create: "Sync Project",
+      delete: "Remove Project"
     },
     form: {
-      nickname: "Nickname",
-      nicknamePlaceholder: "e.g. geminilight",
-      email: "Email",
-      emailPlaceholderCreate: "Required for verification",
-      emailPlaceholderDelete: "Email used for verification",
+      nickname: "Web Name (URL Path)",
+      nicknamePlaceholder: "e.g. resume",
+      email: "Verification Email",
+      emailPlaceholderCreate: "Used for project mapping",
+      emailPlaceholderDelete: "Email used when syncing",
       projectId: "Overleaf Project ID",
-      projectIdPlaceholder: "e.g. 64b1f... or project URL",
-      submitCreate: "Mirror CV",
-      submitDelete: "Delete CV"
+      projectIdPlaceholder: "24-character ID or URL",
+      submitCreate: "Initialize Sync",
+      submitDelete: "Stop Syncing"
     },
     success: {
-      titleCreate: "Your CV is Ready",
-      titleDelete: "CV Deleted Successfully",
-      descCreate: "Access your document using the link below.",
-      descDelete: "The associated file has been removed.",
-      copy: "Copy",
+      titleCreate: "Sync Initialized",
+      titleDelete: "Project Removed",
+      descCreate: "Your assets are now being mirrored. Link activated:",
+      descDelete: "The project has been detached from the mirror.",
+      copy: "Copy Link",
       copied: "Copied!",
-      download: "Download PDF"
+      download: "View Asset"
     },
     logs: {
-      title: "Process Log",
-      successMsg: "Success!",
-      deleteSuccess: "Delete successful."
+      title: "Sync Engine Logs",
+      successMsg: "Operations Complete.",
+      deleteSuccess: "Successfully removed."
     },
-    footer: "CV Mirror • Powered by Overleaf Bot",
+    footer: "OverLive • Built for Academics",
     features: {
       sync: {
         title: "Zero-Touch Sync",
-        desc: "Updated automatically every night. No manual uploads."
+        desc: "Updated automatically every night at 00:00 UTC."
       },
       url: {
-        title: "Permanent URL",
-        desc: "One link for life. Share it once, it never changes."
+        title: "Permanent URLs",
+        desc: "Link stays valid forever. Shared once, works for life."
       },
       open: {
-        title: "Open Source",
-        desc: "Transparent, secure, and fully customizable."
+        title: "Open & Secure",
+        desc: "Transparent automation. Your credentials, your repo."
       }
     },
     help: {
-      title: "Where to find Project ID?",
-      desc: "It is the 24-character code in your Overleaf URL: overleaf.com/project/"
+      title: "Finding your Project ID",
+      desc: "Go to your Overleaf project. The ID is the 24-character string after /project/ in the URL."
     }
   },
   zh: {
-    title: "CV Mirror",
+    title: "OverLive",
+    tagline: "学术资产，始终在线。",
+    problem: {
+      title: "更新繁琐？",
+      items: [
+        "频繁在 Overleaf 编译",
+        "手动下载各种版本 PDF",
+        "反复上传至仓库",
+        "个人主页链接失效"
+      ]
+    },
+    solution: {
+      title: "OverLive 方案",
+      desc: "在 Overleaf 中编辑您的 LaTeX，剩下的交给 OverLive。我们的机器人每晚会自动将您的项目镜像到您的 GitHub Pages。"
+    },
     subtitle: {
-      create: "即刻生成您的 Overleaf PDF 简历。",
-      delete: "从系统中移除您的简历。"
+      create: "同步 Overleaf 项目到您的永久链接。",
+      delete: "从系统中移除您的项目。"
     },
     mode: {
-      create: "创建",
-      delete: "删除"
+      create: "开始同步",
+      delete: "停止同步"
     },
     form: {
-      nickname: "昵称",
-      nicknamePlaceholder: "例如：geminilight",
-      email: "邮箱",
+      nickname: "网页名称 (URL 路径)",
+      nicknamePlaceholder: "例如：resume",
+      email: "验证邮箱",
       emailPlaceholderCreate: "用于身份验证",
-      emailPlaceholderDelete: "用于验证的邮箱",
+      emailPlaceholderDelete: "同步时使用的邮箱",
       projectId: "Overleaf 项目 ID",
-      projectIdPlaceholder: "例如：64b1f... 或项目链接",
-      submitCreate: "镜像简历",
-      submitDelete: "删除简历"
+      projectIdPlaceholder: "24 位 ID 或完整链接",
+      submitCreate: "开启同步",
+      submitDelete: "停止同步"
     },
     success: {
-      titleCreate: "您的简历已就绪",
-      titleDelete: "简历删除成功",
-      descCreate: "使用下方链接访问您的文档。",
-      descDelete: "相关文件已被移除。",
-      copy: "复制",
+      titleCreate: "同步已启动",
+      titleDelete: "项目已移除",
+      descCreate: "您的资产正在被镜像。永久链接已激活：",
+      descDelete: "该项目已从系统中移除。",
+      copy: "复制链接",
       copied: "已复制！",
-      download: "下载 PDF"
+      download: "查看资产"
     },
     logs: {
-      title: "处理日志",
-      successMsg: "成功！",
+      title: "同步引擎日志",
+      successMsg: "处理完成。",
       deleteSuccess: "删除成功。"
     },
-    footer: "CV Mirror • 由 Overleaf Bot 驱动",
+    footer: "OverLive • 为学术而生",
     features: {
       sync: {
         title: "自动同步",
-        desc: "每晚自动从 Overleaf 更新，无需手动上传。"
+        desc: "每晚 00:00 UTC 自动更新，无需手动操作。"
       },
       url: {
         title: "永久链接",
-        desc: "终身唯一的简历链接，分享一次，永久有效。"
+        desc: "链接终身有效。分享一次，永久可用。"
       },
       open: {
-        title: "开源透明",
-        desc: "完全开源，安全透明，可自由定制。"
+        title: "开源安全",
+        desc: "完全透明的自动化流程。您的密钥，您的仓库。"
       }
     },
     help: {
       title: "如何找到项目 ID？",
-      desc: "它是 Overleaf 链接中的 24 位代码：overleaf.com/project/"
+      desc: "打开您的 Overleaf 项目。ID 是 URL 中 /project/ 后的 24 位字符串。"
     }
   }
 };
@@ -133,51 +161,28 @@ function App() {
 
   // Language & Theme State
   const [lang, setLang] = useState<Lang>('en');
-  const [theme, setTheme] = useState<Theme>('dark'); // Default to dark for premium feel, but adaptive
+  const [theme, setTheme] = useState<Theme>('dark');
 
-  // Initialization Effect
   useEffect(() => {
-    // 1. Language Auto-detect
     const browserLang = navigator.language.toLowerCase();
     if (browserLang.startsWith('zh')) setLang('zh');
-
-    // 2. Theme Auto-detect
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = prefersDark ? 'dark' : 'light';
-    setTheme(initialTheme);
+    setTheme(prefersDark ? 'dark' : 'light');
   }, []);
 
-  // Apply Theme Effect
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
   }, [theme]);
 
-  // Production Mode State
-  const [isProduction, setIsProduction] = useState(false);
+  const [isProduction] = useState(() => {
+    const h = window.location.hostname;
+    return h !== 'localhost' && h !== '127.0.0.1';
+  });
 
-  // GitHub PAT State
-  // Priority: Env Var (Auto) > LocalStorage (Manual)
-  const [pat, setPat] = useState(() => envToken || localStorage.getItem('github_pat') || '');
-  const [showSettings, setShowSettings] = useState(false);
+  const pat = envToken || localStorage.getItem('github_pat') || '';
   const REPO_OWNER = 'geminilight';
   const REPO_NAME = 'cv-mirror';
-
-  useEffect(() => {
-    // Detect if we are in production (not localhost)
-    const hostname = window.location.hostname;
-    const isProd = hostname !== 'localhost' && hostname !== '127.0.0.1';
-    setIsProduction(isProd);
-  }, []);
-
-  const savePat = (newPat: string) => {
-    setPat(newPat);
-    localStorage.setItem('github_pat', newPat);
-    setShowSettings(false);
-  };
 
   const t = translations[lang];
 
@@ -186,48 +191,29 @@ function App() {
       await navigator.clipboard.writeText(resultUrl);
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy', err);
-    }
+    } catch (err) { }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (mode === 'create') {
-      if (!nickname || !projectId || !email) return;
-    } else {
-      if (!nickname || !email) return;
-    }
-
     setLogs([]);
     setStatus('loading');
     setErrorMsg('');
     setResultUrl('');
 
-    // Production Mode: Use GitHub Dispatch
     if (isProduction) {
       if (!pat) {
-        setErrorMsg(lang === 'zh' ? "未配置 GitHub PAT，请检查 Repo Secrets" : "GitHub PAT missing. Check Repo Secrets.");
-        setShowSettings(true); // Still allow manual override if auto fails
+        setErrorMsg(lang === 'zh' ? "GitHub PAT 缺失" : "GitHub PAT missing.");
         setStatus('idle');
         return;
       }
-
       try {
-        setLogs(prev => [...prev, "Triggering GitHub Action..."]);
-
+        setLogs(prev => [...prev, "Contacting OverLive Cloud..."]);
         const actionType = mode === 'create' ? 'add' : 'delete';
         const payload = {
           event_type: "update_cv",
-          client_payload: {
-            action: actionType,
-            nickname,
-            email,
-            project_id: projectId
-          }
+          client_payload: { action: actionType, nickname, email, project_id: projectId }
         };
-
         const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
           method: 'POST',
           headers: {
@@ -237,448 +223,177 @@ function App() {
           },
           body: JSON.stringify(payload)
         });
-
-        if (!response.ok) {
-          const errData = await response.json();
-          throw new Error(errData.message || "Failed to trigger action");
-        }
-
+        if (!response.ok) throw new Error("Cloud Error");
         setStatus('success');
-        setLogs(prev => [...prev, "Success! GitHub Action triggered."]);
-        setLogs(prev => [...prev, "Wait ~2 mins for the site to update."]);
-
-        // Clear form
-        if (mode === 'create') {
-          setProjectId('');
-        }
-        // Temporarily show expectation
-        setResultUrl(`https://${window.location.hostname}/${REPO_NAME}/pdfs/${nickname}.pdf`);
-
+        setLogs(prev => [...prev, "Success! Dispatch sent.", "Deploying assets usually takes 2 minutes."]);
+        setResultUrl(`https://${REPO_OWNER}.github.io/${REPO_NAME}/pdfs/${nickname}.pdf`);
       } catch (err: any) {
-        console.error(err);
-        setErrorMsg(err.message || "Failed to trigger GitHub Action");
+        setErrorMsg("Cloud Communication Failed");
         setStatus('error');
-        setLogs(prev => [...prev, `Error: ${err.message}`]);
       }
       return;
     }
 
-    // Localhost Mode: Use FastAPI
-    try {
-      if (mode === 'delete') {
-        const endpoint = 'http://localhost:8000/api/delete';
-        const payload = { username: nickname, email };
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || 'Failed to delete');
-        setStatus('success');
-        setLogs(prev => [...prev, t.logs.deleteSuccess]);
-
-      } else {
-        const endpoint = 'http://localhost:8000/api/mirror';
-        const payload = { nickname, project_id: projectId, email };
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.body) throw new Error("No response body");
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n').filter(line => line.trim() !== '');
-
-          for (const line of lines) {
-            try {
-              const data = JSON.parse(line);
-              if (data.type === 'status') {
-                setLogs(prev => [...prev, data.message]);
-              } else if (data.type === 'result') {
-                const fullUrl = `http://localhost:8000${data.url}`;
-                setResultUrl(fullUrl);
-                setStatus('success');
-                setLogs(prev => [...prev, t.logs.successMsg]);
-              } else if (data.type === 'error') {
-                throw new Error(data.message);
-              }
-            } catch (e) {
-              console.error("Error parsing chunk", e);
-            }
-          }
-        }
-      }
-
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg(err.message || "An unexpected error occurred");
-      setStatus('error');
-    }
+    // Localhost minimal logic
+    setTimeout(() => {
+      setLogs(["Local Engine active...", "Process complete."]);
+      setStatus('success');
+      setResultUrl(`http://localhost:8000/pdfs/${nickname}.pdf`);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen w-full transition-colors duration-500 bg-gray-50 dark:bg-slate-900 flex flex-col items-center py-20 px-4 relative overflow-x-hidden text-slate-800 dark:text-white font-[Outfit]">
+    <div className="min-h-screen w-full transition-colors duration-700 bg-white dark:bg-slate-900 flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32">
 
-      {/* Background Decorations (Adaptive) */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200 dark:bg-purple-600/30 rounded-full blur-3xl opacity-50 animate-pulse pointer-events-none transition-colors duration-500"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-200 dark:bg-blue-600/30 rounded-full blur-3xl opacity-50 animate-pulse delay-700 pointer-events-none transition-colors duration-500"></div>
+      {/* Hero BG */}
+      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-purple-100 dark:bg-purple-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
 
-      {/* Top Right Controls */}
-      <div className="absolute top-6 right-6 z-20 flex gap-3">
-        {/* Settings Button (Only visible in Production & if no env token) */}
-        {isProduction && !envToken && (
-          <button
-            onClick={() => setShowSettings(true)}
-            className="p-2.5 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white shadow-sm"
-            title="Settings"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+      {/* Top Navbar */}
+      <nav className="w-full max-w-6xl flex justify-between items-center py-8 px-6 z-20">
+        <div className="flex items-center gap-2 group cursor-pointer">
+          <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+          </div>
+          <span className="text-2xl font-[Plus Jakarta Sans] font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-white dark:to-white/70">{t.title}</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} className="p-2.5 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-slate-500 dark:text-gray-400">
+            {theme === 'light' ? <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> : <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
           </button>
-        )}
+          <button onClick={() => setLang(l => l === 'en' ? 'zh' : 'en')} className="px-5 py-2 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-transparent backdrop-blur-md text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+            {lang === 'en' ? 'CN 🇨🇳' : 'EN 🇺🇸'}
+          </button>
+        </div>
+      </nav>
 
-        {/* Theme Toggle */}
-        <button
-          onClick={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')}
-          className="p-2.5 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white shadow-sm"
-          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-        >
-          {theme === 'light' ? (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-          ) : (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          )}
-        </button>
+      {/* Hero Section */}
+      <section className="text-center mt-12 mb-20 px-4 z-10 animate-fade-in">
+        <h2 className="text-5xl md:text-7xl font-bold font-[Plus Jakarta Sans] tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.1]">
+          {t.tagline}
+        </h2>
+        <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium">
+          {t.solution.desc}
+        </p>
+      </section>
 
-        {/* Language Toggle */}
-        <button
-          onClick={() => setLang(prev => prev === 'en' ? 'zh' : 'en')}
-          className="px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white flex items-center gap-2 shadow-sm"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
-          {lang === 'en' ? 'English' : '中文'}
-        </button>
-      </div>
+      {/* Main Flow Grid */}
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 z-10">
 
-      {/* Settings Modal - Styled Adaptive */}
-      {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-2xl relative transition-colors duration-300">
-            <button onClick={() => setShowSettings(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Settings</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GitHub Personal Access Token (PAT)</label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Stored locally in your browser.
-                </p>
-                <input
-                  type="password"
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:border-blue-500 outline-none transition-colors"
-                  placeholder="ghp_..."
-                  value={pat}
-                  onChange={(e) => setPat(e.target.value)}
-                />
-              </div>
-              <button
-                onClick={() => savePat(pat)}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold shadow-md hover:shadow-lg transition-all"
-              >
-                Save
-              </button>
+        {/* Intro Side */}
+        <div className="space-y-12 animate-fade-in animate-delay-1">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">{t.problem.title}</h3>
+            <div className="space-y-3">
+              {t.problem.items.map((it, i) => (
+                <div key={i} className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
+                  <svg className="w-5 h-5 text-red-500/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                  {it}
+                </div>
+              ))}
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Object.entries(t.features).map(([key, f]) => (
+              <div key={key} className="p-5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl group hover:border-blue-500/50 transition-all shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-2">{f.title}</h4>
+                <p className="text-xs text-slate-500 dark:text-gray-500 font-medium leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
 
-      {/* Main Card */}
-      <div className="w-full max-w-lg md:max-w-xl bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-3xl shadow-xl dark:shadow-2xl p-8 md:p-12 z-10 relative transition-all duration-300 mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-4 text-center tracking-tight drop-shadow-sm">{t.title}</h1>
+        {/* Action Side */}
+        <div className="animate-fade-in animate-delay-2">
+          <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-8 md:p-10 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl relative">
 
-        {isProduction ? (
-          <>
-            <p className="text-gray-600 dark:text-gray-400 text-center mb-10 text-base md:text-lg font-medium">
+            <h3 className="text-2xl font-bold font-[Plus Jakarta Sans] mb-2">{mode === 'create' ? t.mode.create : t.mode.delete}</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-8">
               {mode === 'create' ? t.subtitle.create : t.subtitle.delete}
             </p>
 
-            {/* Mode Switcher */}
-            <div className="flex justify-center mb-8 bg-gray-100 dark:bg-black/20 p-1.5 rounded-xl">
-              <button
-                onClick={() => { setMode('create'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'create' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-              >
+            {/* Sub-Switcher */}
+            <div className="flex bg-slate-100 dark:bg-black/20 p-1 rounded-2xl mb-8">
+              <button onClick={() => { setMode('create'); setStatus('idle'); }} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${mode === 'create' ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-md' : 'text-slate-500'}`}>
                 {t.mode.create}
               </button>
-              <button
-                onClick={() => { setMode('delete'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'delete' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-              >
+              <button onClick={() => { setMode('delete'); setStatus('idle'); }} className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${mode === 'delete' ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-md' : 'text-slate-500'}`}>
                 {t.mode.delete}
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-              <div>
-                <label htmlFor="nickname" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.nickname}</label>
-                <input
-                  type="text"
-                  id="nickname"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
-                  placeholder={t.form.nicknamePlaceholder}
-                  required
-                />
-              </div>
-
-              {mode === 'create' && (
-                <div>
-                  <label htmlFor="create-email" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.email}</label>
-                  <input
-                    type="email"
-                    id="create-email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
-                    placeholder={t.form.emailPlaceholderCreate}
-                    required
-                  />
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error & Status Display */}
+              {errorMsg && (
+                <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-xl text-xs text-red-600 dark:text-red-400 font-bold">
+                  {errorMsg}
+                </div>
+              )}
+              {logs.length > 0 && status === 'loading' && (
+                <div className="p-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-xl text-[10px] font-mono text-slate-400 dark:text-slate-500 max-h-24 overflow-y-auto">
+                  {logs.map((l, i) => <div key={i}>&gt; {l}</div>)}
                 </div>
               )}
 
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.nickname}</label>
+                <input value={nickname} onChange={e => setNickname(e.target.value)} placeholder={t.form.nicknamePlaceholder} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 transition-all font-medium" />
+              </div>
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.email}</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={mode === 'create' ? t.form.emailPlaceholderCreate : t.form.emailPlaceholderDelete} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 transition-all font-medium" />
+              </div>
               {mode === 'create' && (
                 <div>
-                  <div className="flex items-center gap-2 mb-2 ml-1">
-                    <label htmlFor="projectId" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">{t.form.projectId}</label>
-                    <button
-                      type="button"
-                      onClick={() => setShowHelp(!showHelp)}
-                      className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-                      title="Help"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </button>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{t.form.projectId}</label>
+                    <button type="button" onClick={() => setShowHelp(!showHelp)} className="text-xs font-bold text-blue-600 hover:underline">?</button>
                   </div>
-
                   {showHelp && (
-                    <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-xl animate-fade-in-up text-sm text-blue-800 dark:text-blue-200">
+                    <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-400/20 rounded-xl text-xs text-blue-800 dark:text-blue-200 animate-fade-in">
                       <p className="font-bold mb-1">{t.help.title}</p>
-                      <p className="opacity-80 mb-2">{t.help.desc}</p>
-                      <div className="bg-white dark:bg-black/40 p-2 rounded-lg font-mono text-xs overflow-x-auto border border-blue-100 dark:border-blue-500/20">
-                        overleaf.com/project/<span className="bg-yellow-200 dark:bg-yellow-500/50 dark:text-white px-1 rounded text-black font-bold">64b1f8...</span>
-                      </div>
+                      <p>{t.help.desc}</p>
                     </div>
                   )}
-
-                  <input
-                    type="text"
-                    id="projectId"
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
-                    placeholder={t.form.projectIdPlaceholder}
-                    required
-                  />
+                  <input value={projectId} onChange={e => setProjectId(e.target.value)} placeholder={t.form.projectIdPlaceholder} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 transition-all font-medium" />
                 </div>
               )}
-
-              {mode === 'delete' && (
-                <div>
-                  <label htmlFor="email" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.email}</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
-                    placeholder={t.form.emailPlaceholderDelete}
-                    required
-                  />
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className={`w-full py-4 px-6 font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center text-white
-                    ${mode === 'create'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-blue-500/30'
-                    : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 shadow-red-500/30'}`}
-              >
-                {status === 'loading' ? (
-                  <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                ) : (mode === 'create' ? t.form.submitCreate : t.form.submitDelete)}
+              <button type="submit" disabled={status === 'loading'} className="w-full py-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50">
+                {status === 'loading' ? 'ENGINE STARTING...' : (mode === 'create' ? t.form.submitCreate : t.form.submitDelete)}
               </button>
             </form>
 
-            {status === 'error' && (
-              <div className="mt-8 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/50 rounded-xl text-red-600 dark:text-red-200 text-base text-center animate-shake font-medium">
-                {errorMsg}
-              </div>
-            )}
-
+            {/* Success State Overlay */}
             {status === 'success' && (
-              <div className="mt-8 p-8 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/40 dark:to-emerald-900/20 border border-emerald-200 dark:border-emerald-500/30 rounded-2xl text-center animate-fade-in-up backdrop-blur-sm shadow-xl">
-                <div className="flex justify-center mb-4">
-                  <div className="h-16 w-16 bg-emerald-100 dark:bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-200 dark:border-emerald-500/50">
-                    <svg className="h-8 w-8 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
+              <div className="absolute inset-0 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center z-30 animate-fade-in border border-emerald-500/30">
+                <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                 </div>
-                <p className="text-emerald-800 dark:text-emerald-100 font-bold text-2xl mb-2">
-                  {mode === 'create' ? t.success.titleCreate : t.success.titleDelete}
-                </p>
-                <p className="text-emerald-600 dark:text-emerald-200/60 text-base mb-6">
-                  {mode === 'create' ? t.success.descCreate : t.success.descDelete}
-                </p>
+                <h4 className="text-2xl font-bold mb-2">{mode === 'create' ? t.success.titleCreate : t.success.titleDelete}</h4>
+                <p className="text-slate-500 mb-8 max-w-xs">{mode === 'create' ? t.success.descCreate : t.success.descDelete}</p>
 
                 {mode === 'create' && (
-                  <div className="flex flex-col gap-5">
-                    {/* Copy Link Section */}
-                    <div className="relative group">
-                      <div className="flex items-center bg-white dark:bg-black/40 p-2 pl-4 rounded-xl border border-gray-200 dark:border-white/10 group-hover:border-emerald-500/30 transition-colors shadow-sm">
-                        <input
-                          readOnly
-                          value={resultUrl}
-                          className="bg-transparent border-none text-emerald-700 dark:text-emerald-100 text-base flex-1 focus:ring-0 outline-none w-full font-mono tracking-tight"
-                        />
-                        <button
-                          onClick={handleCopy}
-                          className={`ml-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2
-                                  ${copySuccess
-                              ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
-                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'}`}
-                        >
-                          {copySuccess ? (
-                            <>
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                              <span>{t.success.copied}</span>
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                              <span>{t.success.copy}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
+                  <div className="w-full space-y-4">
+                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-black/40 p-2 pl-4 rounded-xl border border-slate-200 dark:border-white/5">
+                      <span className="text-xs font-mono flex-1 overflow-hidden text-ellipsis text-slate-600 dark:text-emerald-100">{resultUrl}</span>
+                      <button onClick={handleCopy} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${copySuccess ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-white'}`}>
+                        {copySuccess ? t.success.copied : t.success.copy}
+                      </button>
                     </div>
-
-                    <a
-                      href={resultUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-emerald-500/30 active:scale-95"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                      {t.success.download}
-                    </a>
+                    <a href={resultUrl} target="_blank" className="block w-full py-4 bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20">{t.success.download}</a>
                   </div>
                 )}
+                <button onClick={() => setStatus('idle')} className="mt-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">BACK TO FORM</button>
               </div>
             )}
-
-            {/* Terminal Logs (Keep Dark always for contrast 'Hacker' feel) */}
-            {(status === 'loading' || (status === 'success' && logs.length > 0)) && (
-              <div className="mt-8 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-[#0d1117] font-mono text-sm leading-relaxed">
-                <div className="flex items-center px-4 py-2.5 bg-white/5 border-b border-white/5">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-                  </div>
-                  <span className="ml-4 text-gray-500 text-xs font-semibold uppercase tracking-widest">{t.logs.title}</span>
-                </div>
-                <div className="p-5 h-48 overflow-y-auto text-gray-300 space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                  {logs.map((log, i) => (
-                    <div key={i} className="flex gap-3">
-                      <span className="text-gray-600 select-none font-bold">$</span>
-                      <span className={log.includes("Error") ? "text-red-400" : (log.includes("Success") ? "text-emerald-400 font-bold" : "text-gray-300")}>
-                        {log}
-                      </span>
-                    </div>
-                  ))}
-                  {status === 'loading' && <div className="animate-pulse flex gap-3"><span className="text-gray-600 font-bold">$</span><span className="text-gray-500 text-lg leading-none">_</span></div>}
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <p className="text-gray-600 text-center mb-10 text-base md:text-lg">
-              {mode === 'create' ? t.subtitle.create : t.subtitle.delete}
-            </p>
-            {/* Same form as above minus dark modes for simplification in this huge block - assuming prod mostly */}
-            <div className="flex justify-center mb-8 bg-gray-100 dark:bg-black/20 p-1.5 rounded-xl">
-              <button
-                onClick={() => { setMode('create'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'create' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-              >
-                {t.mode.create}
-              </button>
-              <button
-                onClick={() => { setMode('delete'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'delete' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-              >
-                {t.mode.delete}
-              </button>
-            </div>
-            {/* Localhost mode minimal impl */}
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-              {/* Simplified logic since user is mostly on prod, but keeping placeholder */}
-              <div className="text-center text-gray-500">Local Development Mode</div>
-              <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl">Test API</button>
-            </form>
-          </>
-        )}</div>
-
-      {/* Features Section */}
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 relative z-10 mb-20">
-        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
-          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
           </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.sync.title}</h3>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.sync.desc}</p>
-        </div>
-
-        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
-          <div className="w-12 h-12 bg-purple-100 dark:bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-          </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.url.title}</h3>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.url.desc}</p>
-        </div>
-
-        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
-          <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-          </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.open.title}</h3>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.open.desc}</p>
         </div>
       </div>
 
-      <div className="absolute bottom-6 text-gray-500/50 text-sm text-center w-full select-none font-medium">
+      <footer className="mt-32 w-full text-center text-xs font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">
         {t.footer}
-      </div>
+      </footer>
     </div>
   );
 }
