@@ -1,76 +1,104 @@
-# CV Mirror Service
+<div align="center">
 
-A "Set and Forget" service that automatically keeps your hosted CV synchronized with your Overleaf project. Now with a modern Web UI for easy management.
+# 🎓 OverLive
+### Your Academic Assets, Always Current.
 
-## Features
+[![Daily Sync](https://github.com/geminilight/cv-mirror/actions/workflows/sync.yml/badge.svg)](https://github.com/geminilight/cv-mirror/actions/workflows/sync.yml)
+[![License](https://img.shields.io/github/license/geminilight/cv-mirror)](https://github.com/geminilight/cv-mirror/blob/main/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
--   **Dashboard UI**: Easily add, update, or remove CVs using a modern React frontend.
--   **Real-time Feedback**: Watch the mirroring process live with a terminal-style log.
--   **Instant Public URL**: Get a stable, shareable link to your PDF immediately after mirroring.
--   **Daily Auto-Sync**: GitHub Actions automatically updates all registered CVs every day at 00:00 UTC.
+**OverLive** is a "Set and Forget" service that automatically keeps your personal website's CV and academic papers synchronized with your Overleaf projects.
 
-## Quick Start (Local Development)
+[Features](#-features) • [Quick Start](#-quick-start-for-users) • [Local Dev](#-local-development) • [Architecture](#-architecture)
 
-### Prerequisites
--   Python 3.10+
--   Node.js & npm
--   Playwright Browsers (`playwright install chromium`)
+</div>
 
-### 1. Configure Environment
-Create a `.env` file in the root directory:
-```bash
-OVERLEAF_EMAIL=your_email@example.com
-OVERLEAF_PASSWORD=your_password
-```
+---
 
-### 2. Start the Application
-Use the helper script to run both backend and frontend:
-```bash
-chmod +x start.sh
-./start.sh
-```
--   **Frontend**: http://localhost:5600
--   **Backend**: http://localhost:8000
+### 🚫 The Problem
+Updating your personal website with your latest CV is a friction-filled loop:
+1.  Compile in Overleaf 🐌
+2.  Download PDF ("cv_final_v2_really_final.pdf") 📥
+3.  Rename and upload to your server/repo 📂
+4.  Commit and push 🚀
 
-## Deploying & GitHub Actions Scope
+### ✅ The Solution
+**OverLive** automates this entirely. You edit your LaTeX in Overleaf, and every night, a bot mirrors the compiled PDF to your `public` folder and deploys it to GitHub Pages. You get a stable, permanent URL that always serves the latest version.
 
-This repository is designed to be hosted on GitHub. The mirroring logic runs in **GitHub Actions**, and the PDFs are hosted on **GitHub Pages**.
+---
 
-### 1. Enable GitHub Pages
-1.  Go to **Settings > Pages**.
+## ✨ Features
+
+-   **🔄 Zero-Touch Sync**: Runs daily on GitHub Actions at 00:00 UTC. No server to manage.
+-   **🔗 Permanent URLs**: Your link (`.../pdfs/cv.pdf`) never changes, so you can share it once and it stays valid forever.
+-   **🖥️ Dashboard UI**: A modern React interface to easily manage which projects are mirrored.
+-   **👀 Real-Time Feedback**: Watch the bot's progress live in the terminal or action logs.
+
+---
+
+## 🚀 Quick Start (For Users)
+
+You can run OverLive entirely for free using **GitHub Actions** and **GitHub Pages**.
+
+### 1. 🍴 Fork this Repository
+Fork this repo to your own GitHub account.
+
+### 2. ⚙️ Enable GitHub Pages
+1.  Go to your repo **Settings > Pages**.
 2.  Under **Build and deployment**, select **GitHub Actions** as the source.
 
-### 2. Set Up Secrets
-To allow the bot to log in to Overleaf during the daily sync, you must add your credentials as **Repository Secrets** (NOT Environment Secrets).
-
+### 3. 🔑 Add Secrets
+The bot needs to log in to Overleaf to download your PDFs.
 1.  Go to **Settings > Secrets and variables > Actions**.
-2.  Add the following **New Repository Secrets**:
-    -   `OVERLEAF_EMAIL`: Your Overleaf account email.
-    -   `OVERLEAF_PASSWORD`: Your Overleaf account password.
+2.  Add **New Repository Secret**:
+    -   `OVERLEAF_EMAIL`: Your Overleaf email address.
+    -   `OVERLEAF_PASSWORD`: Your Overleaf password.
 
-*Note: Without these secrets, the `Sync CV` workflow will fail.*
+### 4. 📝 Configure Your Assets
+You can configure which projects to mirror by editing `users.json` directly in the repo, or running the tool locally to use the UI.
 
-## Usage
-
-### Adding a CV
-1.  Open the Web UI.
-2.  Enter a **Nickname** (this determines the filename, e.g., `nickname.pdf`).
-3.  Enter your **Overleaf Project ID** (the read-only link URL).
-4.  Enter your **Email** (for verification/record keeping).
-5.  Click **Mirror CV**.
-6.  Once complete, copy your public link!
-
-### Accessing Hosted PDFs
-Your CVs will be available at:
+**Example `users.json`:**
+```json
+[
+    {
+        "username": "resume",
+        "email": "your_email@example.com",
+        "url": "https://www.overleaf.com/project/664b..."
+    }
+]
 ```
-https://<YourUsername>.github.io/<RepoName>/pdfs/<Nickname>.pdf
-```
-*Note: If you use a custom domain (e.g., tianfuwang.tech), the URL will be:*
-```
-http://tianfuwang.tech/cv-mirror/pdfs/<Nickname>.pdf
-```
+*This will create a PDF at: `https://<your-username>.github.io/<repo-name>/pdfs/resume.pdf`*
 
-## Technical Overview
--   **Frontend**: React, Vite, TailwindCSS (located in `frontend/`)
--   **Backend**: FastAPI, Playwright (located in `server.py`, `cv_mirror/`)
--   **CI/CD**: GitHub Actions (`.github/workflows/sync.yml`) runs `main.py` daily to re-download all PDFs in `users.json`.
+### 5. ▶️ Run!
+Go to the **Actions** tab, select **Sync CV from Overleaf**, and click **Run workflow**. It will also run automatically every day.
+
+---
+
+## 🛠️ Local Development
+
+If you want to contribute or manage your config via the UI:
+
+### Prerequisites
+-   🐍 Python 3.10+
+-   🟢 Node.js & npm
+-   🎭 Playwright (`pip install playwright && playwright install chromium`)
+
+### Setup & Run
+1.  Create a `.env` file:
+    ```bash
+    OVERLEAF_EMAIL=your_email@example.com
+    OVERLEAF_PASSWORD=your_password
+    ```
+2.  Run the helper script:
+    ```bash
+    chmod +x start.sh
+    ./start.sh
+    ```
+3.  Open the Dashboard at **http://localhost:5600**.
+
+## 🏗️ Architecture
+
+-   **Frontend**: React + Vite + TailwindCSS (in `frontend/`)
+-   **Backend**: FastAPI (in `server.py`) manages the `users.json` state.
+-   **Bot Engine**: Playwright (in `cv_mirror/`) runs headless to authenticate and download PDFs.
+-   **Orchestration**: GitHub Actions (`sync.yml`) runs the Python script and deploys the `public/` folder to GitHub Pages.
