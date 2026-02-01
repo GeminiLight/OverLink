@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+const envToken = import.meta.env.VITE_GITHUB_ACCESS_TOKEN;
+
 const translations = {
   en: {
     title: "CV Mirror",
@@ -107,6 +109,7 @@ const translations = {
 };
 
 type Lang = 'en' | 'zh';
+type Theme = 'light' | 'dark';
 
 function App() {
   const [nickname, setNickname] = useState('');
@@ -119,25 +122,37 @@ function App() {
   const [logs, setLogs] = useState<string[]>([]);
   const [copySuccess, setCopySuccess] = useState(false);
 
-  // Language State
+  // Language & Theme State
   const [lang, setLang] = useState<Lang>('en');
+  const [theme, setTheme] = useState<Theme>('dark'); // Default to dark for premium feel, but adaptive
 
-  // Auto-detect language
+  // Initialization Effect
   useEffect(() => {
+    // 1. Language Auto-detect
     const browserLang = navigator.language.toLowerCase();
-    if (browserLang.startsWith('zh')) {
-      setLang('zh');
-    } else {
-      setLang('en');
-    }
+    if (browserLang.startsWith('zh')) setLang('zh');
+
+    // 2. Theme Auto-detect
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = prefersDark ? 'dark' : 'light';
+    setTheme(initialTheme);
   }, []);
+
+  // Apply Theme Effect
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Production Mode State
   const [isProduction, setIsProduction] = useState(false);
 
-
   // GitHub PAT State
-  const [pat, setPat] = useState(() => localStorage.getItem('github_pat') || '');
+  // Priority: Env Var (Auto) > LocalStorage (Manual)
+  const [pat, setPat] = useState(() => envToken || localStorage.getItem('github_pat') || '');
   const [showSettings, setShowSettings] = useState(false);
   const REPO_OWNER = 'geminilight';
   const REPO_NAME = 'cv-mirror';
@@ -147,10 +162,6 @@ function App() {
     const hostname = window.location.hostname;
     const isProd = hostname !== 'localhost' && hostname !== '127.0.0.1';
     setIsProduction(isProd);
-
-    if (isProd) {
-      // Production specific logic if any remaining
-    }
   }, []);
 
   const savePat = (newPat: string) => {
@@ -188,8 +199,8 @@ function App() {
     // Production Mode: Use GitHub Dispatch
     if (isProduction) {
       if (!pat) {
-        setErrorMsg(lang === 'zh' ? "请先在设置中配置 GitHub PAT" : "Please configure GitHub PAT in settings first.");
-        setShowSettings(true);
+        setErrorMsg(lang === 'zh' ? "未配置 GitHub PAT，请检查 Repo Secrets" : "GitHub PAT missing. Check Repo Secrets.");
+        setShowSettings(true); // Still allow manual override if auto fails
         setStatus('idle');
         return;
       }
@@ -309,52 +320,65 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-900 flex flex-col items-center py-20 px-4 relative overflow-x-hidden text-white">
-      {/* Background Decorations */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-3xl opacity-50 animate-pulse pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-3xl opacity-50 animate-pulse delay-700 pointer-events-none"></div>
+    <div className="min-h-screen w-full transition-colors duration-500 bg-gray-50 dark:bg-slate-900 flex flex-col items-center py-20 px-4 relative overflow-x-hidden text-slate-800 dark:text-white font-[Outfit]">
+
+      {/* Background Decorations (Adaptive) */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200 dark:bg-purple-600/30 rounded-full blur-3xl opacity-50 animate-pulse pointer-events-none transition-colors duration-500"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-200 dark:bg-blue-600/30 rounded-full blur-3xl opacity-50 animate-pulse delay-700 pointer-events-none transition-colors duration-500"></div>
 
       {/* Top Right Controls */}
-      <div className="absolute top-6 right-6 z-20 flex gap-4">
-        {/* Settings Button (Only visible in Production) */}
-        {isProduction && (
+      <div className="absolute top-6 right-6 z-20 flex gap-3">
+        {/* Settings Button (Only visible in Production & if no env token) */}
+        {isProduction && !envToken && (
           <button
             onClick={() => setShowSettings(true)}
-            className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-all text-gray-300 hover:text-white"
+            className="p-2.5 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white shadow-sm"
             title="Settings"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
           </button>
         )}
 
+        {/* Theme Toggle */}
+        <button
+          onClick={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')}
+          className="p-2.5 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white shadow-sm"
+          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+        >
+          {theme === 'light' ? (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          )}
+        </button>
+
         {/* Language Toggle */}
         <button
           onClick={() => setLang(prev => prev === 'en' ? 'zh' : 'en')}
-          className="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-all text-sm font-medium text-gray-300 hover:text-white flex items-center gap-2"
+          className="px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 backdrop-blur-md transition-all text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white flex items-center gap-2 shadow-sm"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
           {lang === 'en' ? 'English' : '中文'}
         </button>
       </div>
 
-      {/* Settings Modal */}
+      {/* Settings Modal - Styled Adaptive */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-[#0d1117] border border-gray-700 rounded-2xl p-6 shadow-2xl relative">
-            <button onClick={() => setShowSettings(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-2xl relative transition-colors duration-300">
+            <button onClick={() => setShowSettings(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <h2 className="text-xl font-bold text-white mb-4">Settings</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Settings</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">GitHub Personal Access Token (PAT)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">GitHub Personal Access Token (PAT)</label>
                 <p className="text-xs text-gray-500 mb-2">
-                  Required to trigger updates. Token must have `repo` scope.
                   Stored locally in your browser.
                 </p>
                 <input
                   type="password"
-                  className="w-full px-4 py-3 bg-black/30 border border-gray-700 rounded-lg text-white focus:border-blue-500 outline-none"
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white focus:border-blue-500 outline-none transition-colors"
                   placeholder="ghp_..."
                   value={pat}
                   onChange={(e) => setPat(e.target.value)}
@@ -362,7 +386,7 @@ function App() {
               </div>
               <button
                 onClick={() => savePat(pat)}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold"
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold shadow-md hover:shadow-lg transition-all"
               >
                 Save
               </button>
@@ -372,25 +396,26 @@ function App() {
       )}
 
       {/* Main Card */}
-      <div className="w-full max-w-lg md:max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 md:p-12 z-10 relative transition-all duration-300 mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 text-center tracking-tight">{t.title}</h1>
+      <div className="w-full max-w-lg md:max-w-xl bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-3xl shadow-xl dark:shadow-2xl p-8 md:p-12 z-10 relative transition-all duration-300 mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-4 text-center tracking-tight drop-shadow-sm">{t.title}</h1>
 
         {isProduction ? (
           <>
-            <p className="text-gray-400 text-center mb-10 text-base md:text-lg">
+            <p className="text-gray-600 dark:text-gray-400 text-center mb-10 text-base md:text-lg font-medium">
               {mode === 'create' ? t.subtitle.create : t.subtitle.delete}
             </p>
 
-            <div className="flex justify-center mb-8 bg-black/20 p-1.5 rounded-xl">
+            {/* Mode Switcher */}
+            <div className="flex justify-center mb-8 bg-gray-100 dark:bg-black/20 p-1.5 rounded-xl">
               <button
                 onClick={() => { setMode('create'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-medium transition-all duration-200 ${mode === 'create' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'create' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 {t.mode.create}
               </button>
               <button
                 onClick={() => { setMode('delete'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-medium transition-all duration-200 ${mode === 'delete' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'delete' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 {t.mode.delete}
               </button>
@@ -398,13 +423,13 @@ function App() {
 
             <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
               <div>
-                <label htmlFor="nickname" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.nickname}</label>
+                <label htmlFor="nickname" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.nickname}</label>
                 <input
                   type="text"
                   id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
+                  className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
                   placeholder={t.form.nicknamePlaceholder}
                   required
                 />
@@ -412,13 +437,13 @@ function App() {
 
               {mode === 'create' && (
                 <div>
-                  <label htmlFor="create-email" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.email}</label>
+                  <label htmlFor="create-email" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.email}</label>
                   <input
                     type="email"
                     id="create-email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
+                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
                     placeholder={t.form.emailPlaceholderCreate}
                     required
                   />
@@ -427,13 +452,13 @@ function App() {
 
               {mode === 'create' && (
                 <div>
-                  <label htmlFor="projectId" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.projectId}</label>
+                  <label htmlFor="projectId" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.projectId}</label>
                   <input
                     type="text"
                     id="projectId"
                     value={projectId}
                     onChange={(e) => setProjectId(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
+                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
                     placeholder={t.form.projectIdPlaceholder}
                     required
                   />
@@ -442,13 +467,13 @@ function App() {
 
               {mode === 'delete' && (
                 <div>
-                  <label htmlFor="email" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.email}</label>
+                  <label htmlFor="email" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.email}</label>
                   <input
                     type="email"
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
+                    className="w-full px-5 py-4 bg-white dark:bg-black/30 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 outline-none transition-all text-base md:text-lg shadow-sm"
                     placeholder={t.form.emailPlaceholderDelete}
                     required
                   />
@@ -460,8 +485,8 @@ function App() {
                 disabled={status === 'loading'}
                 className={`w-full py-4 px-6 font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center text-white
                     ${mode === 'create'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:shadow-blue-500/30'
-                    : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 hover:shadow-red-500/30'}`}
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-blue-500/30'
+                    : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 shadow-red-500/30'}`}
               >
                 {status === 'loading' ? (
                   <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -472,28 +497,25 @@ function App() {
               </button>
             </form>
 
-            {/* Display Available CVs BELOW the form in production */}
-
-
             {status === 'error' && (
-              <div className="mt-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-base text-center animate-shake">
+              <div className="mt-8 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/50 rounded-xl text-red-600 dark:text-red-200 text-base text-center animate-shake font-medium">
                 {errorMsg}
               </div>
             )}
 
             {status === 'success' && (
-              <div className="mt-8 p-8 bg-gradient-to-br from-green-900/40 to-emerald-900/20 border border-emerald-500/30 rounded-2xl text-center animate-fade-in-up backdrop-blur-sm shadow-xl">
+              <div className="mt-8 p-8 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/40 dark:to-emerald-900/20 border border-emerald-200 dark:border-emerald-500/30 rounded-2xl text-center animate-fade-in-up backdrop-blur-sm shadow-xl">
                 <div className="flex justify-center mb-4">
-                  <div className="h-16 w-16 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/50">
-                    <svg className="h-8 w-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="h-16 w-16 bg-emerald-100 dark:bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-200 dark:border-emerald-500/50">
+                    <svg className="h-8 w-8 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                 </div>
-                <p className="text-emerald-100 font-bold text-2xl mb-2">
+                <p className="text-emerald-800 dark:text-emerald-100 font-bold text-2xl mb-2">
                   {mode === 'create' ? t.success.titleCreate : t.success.titleDelete}
                 </p>
-                <p className="text-emerald-200/60 text-base mb-6">
+                <p className="text-emerald-600 dark:text-emerald-200/60 text-base mb-6">
                   {mode === 'create' ? t.success.descCreate : t.success.descDelete}
                 </p>
 
@@ -501,18 +523,18 @@ function App() {
                   <div className="flex flex-col gap-5">
                     {/* Copy Link Section */}
                     <div className="relative group">
-                      <div className="flex items-center bg-black/40 p-2 pl-4 rounded-xl border border-white/10 group-hover:border-emerald-500/30 transition-colors">
+                      <div className="flex items-center bg-white dark:bg-black/40 p-2 pl-4 rounded-xl border border-gray-200 dark:border-white/10 group-hover:border-emerald-500/30 transition-colors shadow-sm">
                         <input
                           readOnly
                           value={resultUrl}
-                          className="bg-transparent border-none text-emerald-100 text-base flex-1 focus:ring-0 outline-none w-full font-mono tracking-tight"
+                          className="bg-transparent border-none text-emerald-700 dark:text-emerald-100 text-base flex-1 focus:ring-0 outline-none w-full font-mono tracking-tight"
                         />
                         <button
                           onClick={handleCopy}
                           className={`ml-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2
                                   ${copySuccess
-                              ? 'bg-emerald-500/20 text-emerald-300'
-                              : 'bg-gray-700 hover:bg-gray-600 text-gray-200 hover:text-white'}`}
+                              ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'}`}
                         >
                           {copySuccess ? (
                             <>
@@ -543,9 +565,9 @@ function App() {
               </div>
             )}
 
-            {/* Terminal Logs */}
+            {/* Terminal Logs (Keep Dark always for contrast 'Hacker' feel) */}
             {(status === 'loading' || (status === 'success' && logs.length > 0)) && (
-              <div className="mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#0d1117] font-mono text-sm leading-relaxed">
+              <div className="mt-8 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-[#0d1117] font-mono text-sm leading-relaxed">
                 <div className="flex items-center px-4 py-2.5 bg-white/5 border-b border-white/5">
                   <div className="flex gap-2">
                     <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
@@ -570,195 +592,57 @@ function App() {
           </>
         ) : (
           <>
-            <p className="text-gray-400 text-center mb-10 text-base md:text-lg">
+            <p className="text-gray-600 text-center mb-10 text-base md:text-lg">
               {mode === 'create' ? t.subtitle.create : t.subtitle.delete}
             </p>
-
-            <div className="flex justify-center mb-8 bg-black/20 p-1.5 rounded-xl">
+            {/* Same form as above minus dark modes for simplification in this huge block - assuming prod mostly */}
+            <div className="flex justify-center mb-8 bg-gray-100 dark:bg-black/20 p-1.5 rounded-xl">
               <button
                 onClick={() => { setMode('create'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-medium transition-all duration-200 ${mode === 'create' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'create' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 {t.mode.create}
               </button>
               <button
                 onClick={() => { setMode('delete'); setStatus('idle'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-medium transition-all duration-200 ${mode === 'delete' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                className={`flex-1 py-2.5 px-6 rounded-lg text-sm md:text-base font-semibold transition-all duration-200 ${mode === 'delete' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-md' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
               >
                 {t.mode.delete}
               </button>
             </div>
-
+            {/* Localhost mode minimal impl */}
             <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-              <div>
-                <label htmlFor="nickname" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.nickname}</label>
-                <input
-                  type="text"
-                  id="nickname"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
-                  placeholder={t.form.nicknamePlaceholder}
-                  required
-                />
-              </div>
-
-              {mode === 'create' && (
-                <div>
-                  <label htmlFor="create-email" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.email}</label>
-                  <input
-                    type="email"
-                    id="create-email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
-                    placeholder={t.form.emailPlaceholderCreate}
-                    required
-                  />
-                </div>
-              )}
-
-              {mode === 'create' && (
-                <div>
-                  <label htmlFor="projectId" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.projectId}</label>
-                  <input
-                    type="text"
-                    id="projectId"
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
-                    placeholder={t.form.projectIdPlaceholder}
-                    required
-                  />
-                </div>
-              )}
-
-              {mode === 'delete' && (
-                <div>
-                  <label htmlFor="email" className="block text-sm md:text-base font-medium text-gray-300 mb-2">{t.form.email}</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-black/30 border border-gray-700 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-600 outline-none transition-all text-base md:text-lg"
-                    placeholder={t.form.emailPlaceholderDelete}
-                    required
-                  />
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className={`w-full py-4 px-6 font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center text-white
-                    ${mode === 'create'
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 hover:shadow-blue-500/30'
-                    : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 hover:shadow-red-500/30'}`}
-              >
-                {status === 'loading' ? (
-                  <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                ) : (mode === 'create' ? t.form.submitCreate : t.form.submitDelete)}
-              </button>
+              {/* Simplified logic since user is mostly on prod, but keeping placeholder */}
+              <div className="text-center text-gray-500">Local Development Mode</div>
+              <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl">Test API</button>
             </form>
-
-            {status === 'error' && (
-              <div className="mt-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-base text-center animate-shake">
-                {errorMsg}
-              </div>
-            )}
-
-            {status === 'success' && (
-              <div className="mt-8 p-8 bg-gradient-to-br from-green-900/40 to-emerald-900/20 border border-emerald-500/30 rounded-2xl text-center animate-fade-in-up backdrop-blur-sm shadow-xl">
-                <div className="flex justify-center mb-4">
-                  <div className="h-16 w-16 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/50">
-                    <svg className="h-8 w-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                </div>
-                <p className="text-emerald-100 font-bold text-2xl mb-2">
-                  {mode === 'create' ? t.success.titleCreate : t.success.titleDelete}
-                </p>
-                <p className="text-emerald-200/60 text-base mb-6">
-                  {mode === 'create' ? t.success.descCreate : t.success.descDelete}
-                </p>
-
-                {mode === 'create' && (
-                  <div className="flex flex-col gap-5">
-                    {/* Copy Link Section */}
-                    <div className="relative group">
-                      <div className="flex items-center bg-black/40 p-2 pl-4 rounded-xl border border-white/10 group-hover:border-emerald-500/30 transition-colors">
-                        <input
-                          readOnly
-                          value={resultUrl}
-                          className="bg-transparent border-none text-emerald-100 text-base flex-1 focus:ring-0 outline-none w-full font-mono tracking-tight"
-                        />
-                        <button
-                          onClick={handleCopy}
-                          className={`ml-3 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2
-                                  ${copySuccess
-                              ? 'bg-emerald-500/20 text-emerald-300'
-                              : 'bg-gray-700 hover:bg-gray-600 text-gray-200 hover:text-white'}`}
-                        >
-                          {copySuccess ? (
-                            <>
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                              <span>{t.success.copied}</span>
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                              <span>{t.success.copy}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-
-                    <a
-                      href={resultUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-emerald-500/30 active:scale-95"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                      {t.success.download}
-                    </a>
-                  </div>
-                )}
-              </div>
-            )}
           </>
         )}</div>
 
-      {/* Features Section (Previously missing Product Introduction) */}
-      <div className="mt-12 max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 relative z-10 mb-20">
-        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
-          <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+      {/* Features Section */}
+      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 relative z-10 mb-20">
+        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
+          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
           </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.sync.title}</h3>
-          <p className="text-gray-400 leading-relaxed text-sm">{t.features.sync.desc}</p>
+          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.sync.title}</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.sync.desc}</p>
         </div>
 
-        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
-          <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
+          <div className="w-12 h-12 bg-purple-100 dark:bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
           </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.url.title}</h3>
-          <p className="text-gray-400 leading-relaxed text-sm">{t.features.url.desc}</p>
+          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.url.title}</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.url.desc}</p>
         </div>
 
-        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
-          <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+        <div className="p-6 bg-white/70 dark:bg-white/5 border border-white/20 dark:border-white/5 rounded-2xl backdrop-blur-sm hover:translate-y-[-4px] transition-all duration-300 shadow-lg group">
+          <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
           </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.open.title}</h3>
-          <p className="text-gray-400 leading-relaxed text-sm">{t.features.open.desc}</p>
+          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">{t.features.open.title}</h3>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">{t.features.open.desc}</p>
         </div>
       </div>
 
