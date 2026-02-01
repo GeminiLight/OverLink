@@ -134,7 +134,7 @@ function App() {
 
   // Production Mode State
   const [isProduction, setIsProduction] = useState(false);
-  const [usersList, setUsersList] = useState<any[]>([]);
+
 
   // GitHub PAT State
   const [pat, setPat] = useState(() => localStorage.getItem('github_pat') || '');
@@ -149,11 +149,7 @@ function App() {
     setIsProduction(isProd);
 
     if (isProd) {
-      // Fetch users list
-      fetch('./users.json')
-        .then(res => res.json())
-        .then(data => setUsersList(data))
-        .catch(err => console.error("Failed to load users list", err));
+      // Production specific logic if any remaining
     }
   }, []);
 
@@ -477,34 +473,7 @@ function App() {
             </form>
 
             {/* Display Available CVs BELOW the form in production */}
-            <div className="mt-12 pt-8 border-t border-white/10">
-              <h3 className="text-xl font-bold mb-4 text-emerald-400">{lang === 'en' ? 'Available CVs' : '可用简历'}</h3>
-              <div className="space-y-4">
-                {usersList.length > 0 ? usersList.map((user, idx) => (
-                  <a
-                    key={idx}
-                    href={`./pdfs/${user.username}.pdf`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <div className="font-bold text-lg text-emerald-400 group-hover:text-emerald-300">{user.username}</div>
-                        <div className="text-xs text-gray-500">{user.url.substring(0, 30)}...</div>
-                      </div>
-                      <svg className="w-6 h-6 text-gray-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                    </div>
-                  </a>
-                )) : (
-                  <div className="text-center text-gray-500 py-8">
-                    {lang === 'en' ? 'No public CVs found.' : '未找到公开简历。'}
-                  </div>
-                )}
-              </div>
-            </div>
+
 
             {status === 'error' && (
               <div className="mt-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-200 text-base text-center animate-shake">
