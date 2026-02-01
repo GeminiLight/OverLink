@@ -1,0 +1,57 @@
+name: Sync CV from Overleaf
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  sync_cv:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install chromium
+
+    - name: Run Sync Script
+      env:
+        OVERLEAF_EMAIL: ${{ secrets.OVERLEAF_EMAIL }}
+        OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
+      run: python sync_cv.py
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'public/'
+
+    - name: Commit and Push (Optional Backup)
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add public/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update CVs [skip ci]" && git push)
+
+  deploy:
+    needs: sync_cv
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
