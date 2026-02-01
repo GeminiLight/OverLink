@@ -23,7 +23,7 @@ Updating your personal website with your latest CV is a friction-filled loop:
 4.  Commit and push 🚀
 
 ### ✅ The Solution
-**OverLive** automates this entirely. You edit your LaTeX in Overleaf, and every night, a bot mirrors the compiled PDF to your `public` folder and deploys it to GitHub Pages. You get a stable, permanent URL that always serves the latest version.
+**OverLink** automates this entirely. You edit your LaTeX in Overleaf, and every night, a bot mirrors the compiled PDF to your `public` folder and deploys it to GitHub Pages. You get a stable, permanent URL that always serves the latest version.
 
 ---
 
@@ -38,7 +38,7 @@ Updating your personal website with your latest CV is a friction-filled loop:
 
 ## 🚀 Quick Start (For Users)
 
-You can run OverLive entirely for free using **GitHub Actions** and **GitHub Pages**.
+You can run OverLink entirely for free using **GitHub Actions** and **GitHub Pages**.
 
 ### 1. 🍴 Fork this Repository
 Fork this repo to your own GitHub account.

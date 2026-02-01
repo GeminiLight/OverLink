@@ -208,7 +208,7 @@ function App() {
         return;
       }
       try {
-        setLogs(prev => [...prev, "Contacting OverLive Cloud..."]);
+        setLogs(prev => [...prev, "Contacting OverLink Cloud..."]);
         const actionType = mode === 'create' ? 'add' : 'delete';
         const payload = {
           event_type: "update_cv",
