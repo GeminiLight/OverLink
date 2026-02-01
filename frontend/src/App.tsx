@@ -37,7 +37,21 @@ const translations = {
       successMsg: "Success!",
       deleteSuccess: "Delete successful."
     },
-    footer: "CV Mirror • Powered by Overleaf Bot"
+    footer: "CV Mirror • Powered by Overleaf Bot",
+    features: {
+      sync: {
+        title: "Zero-Touch Sync",
+        desc: "Updated automatically every night. No manual uploads."
+      },
+      url: {
+        title: "Permanent URL",
+        desc: "One link for life. Share it once, it never changes."
+      },
+      open: {
+        title: "Open Source",
+        desc: "Transparent, secure, and fully customizable."
+      }
+    }
   },
   zh: {
     title: "CV Mirror",
@@ -74,7 +88,21 @@ const translations = {
       successMsg: "成功！",
       deleteSuccess: "删除成功。"
     },
-    footer: "CV Mirror • 由 Overleaf Bot 驱动"
+    footer: "CV Mirror • 由 Overleaf Bot 驱动",
+    features: {
+      sync: {
+        title: "自动同步",
+        desc: "每晚自动从 Overleaf 更新，无需手动上传。"
+      },
+      url: {
+        title: "永久链接",
+        desc: "终身唯一的简历链接，分享一次，永久有效。"
+      },
+      open: {
+        title: "开源透明",
+        desc: "完全开源，安全透明，可自由定制。"
+      }
+    }
   }
 };
 
@@ -285,10 +313,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden text-white">
+    <div className="min-h-screen w-full bg-slate-900 flex flex-col items-center py-20 px-4 relative overflow-x-hidden text-white">
       {/* Background Decorations */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-3xl opacity-50 animate-pulse"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-3xl opacity-50 animate-pulse delay-700"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-3xl opacity-50 animate-pulse pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-3xl opacity-50 animate-pulse delay-700 pointer-events-none"></div>
 
       {/* Top Right Controls */}
       <div className="absolute top-6 right-6 z-20 flex gap-4">
@@ -347,8 +375,8 @@ function App() {
         </div>
       )}
 
-      {/* Increased container width from max-w-md to max-w-lg or xl for desktop */}
-      <div className="w-full max-w-lg md:max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 md:p-12 z-10 relative transition-all duration-300">
+      {/* Main Card */}
+      <div className="w-full max-w-lg md:max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 md:p-12 z-10 relative transition-all duration-300 mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4 text-center tracking-tight">{t.title}</h1>
 
         {isProduction ? (
@@ -735,33 +763,35 @@ function App() {
                 )}
               </div>
             )}
-
-            {/* Terminal Logs */}
-            {(status === 'loading' || (status === 'success' && logs.length > 0)) && (
-              <div className="mt-8 rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#0d1117] font-mono text-sm leading-relaxed">
-                <div className="flex items-center px-4 py-2.5 bg-white/5 border-b border-white/5">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-                  </div>
-                  <span className="ml-4 text-gray-500 text-xs font-semibold uppercase tracking-widest">{t.logs.title}</span>
-                </div>
-                <div className="p-5 h-48 overflow-y-auto text-gray-300 space-y-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                  {logs.map((log, i) => (
-                    <div key={i} className="flex gap-3">
-                      <span className="text-gray-600 select-none font-bold">$</span>
-                      <span className={log.includes("Error") ? "text-red-400" : (log.includes("Success") ? "text-emerald-400 font-bold" : "text-gray-300")}>
-                        {log}
-                      </span>
-                    </div>
-                  ))}
-                  {status === 'loading' && <div className="animate-pulse flex gap-3"><span className="text-gray-600 font-bold">$</span><span className="text-gray-500 text-lg leading-none">_</span></div>}
-                </div>
-              </div>
-            )}
           </>
         )}</div>
+
+      {/* Features Section (Previously missing Product Introduction) */}
+      <div className="mt-12 max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 px-4 relative z-10 mb-20">
+        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
+          <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          </div>
+          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.sync.title}</h3>
+          <p className="text-gray-400 leading-relaxed text-sm">{t.features.sync.desc}</p>
+        </div>
+
+        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
+          <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+          </div>
+          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.url.title}</h3>
+          <p className="text-gray-400 leading-relaxed text-sm">{t.features.url.desc}</p>
+        </div>
+
+        <div className="p-6 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all group">
+          <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+          </div>
+          <h3 className="text-xl font-bold mb-2 text-gray-100">{t.features.open.title}</h3>
+          <p className="text-gray-400 leading-relaxed text-sm">{t.features.open.desc}</p>
+        </div>
+      </div>
 
       <div className="absolute bottom-6 text-gray-500/50 text-sm text-center w-full select-none font-medium">
         {t.footer}
