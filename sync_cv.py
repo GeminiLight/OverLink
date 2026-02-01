@@ -55,6 +55,14 @@ def process_user(page, user, auth_file):
                 # After login, go back to project
                 random_delay()
                 page.goto(project_url)
+                
+                # We successfully logged in, let's save this session!
+                try:
+                     page.context.storage_state(path=auth_file)
+                     print(f"Automatic login successful. Session saved to {auth_file}.")
+                except Exception as e:
+                     print(f"Warning: Could not save session: {e}")
+
         else:
             print("Error: detailed credentials missing for fallback login.")
             return False
