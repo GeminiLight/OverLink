@@ -30,6 +30,19 @@ jobs:
         OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
       run: python main.py
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm install
+        npm run build
+        # Copy frontend build to public directory (merging with PDFs)
+        cp -r dist/* ../public/
+
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
