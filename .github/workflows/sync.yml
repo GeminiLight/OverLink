@@ -47,7 +47,7 @@ jobs:
         npm run build
         # Copy frontend build to public directory (merging with PDFs)
         cp -r dist/* ../public/
-        cp ../users.json ../public/
+
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3

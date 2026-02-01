@@ -10,7 +10,7 @@ class Config:
     AUTH_FILE = "auth.json"
     PUBLIC_DIR = "public"
     PDF_DIR = os.path.join(PUBLIC_DIR, "pdfs")
-    USERS_FILE = "users.json"
+    USERS_FILE = os.path.join(PUBLIC_DIR, "users.json")
     
     @classmethod
     def load_users(cls):
