@@ -5,7 +5,7 @@ const envToken = import.meta.env.VITE_GITHUB_ACCESS_TOKEN;
 
 const translations = {
   en: {
-    title: "OverLive",
+    title: "OverLink",
     tagline: "Your Academic Assets, Always Current.",
     problem: {
       title: "The Update Friction",
@@ -17,7 +17,7 @@ const translations = {
       ]
     },
     solution: {
-      title: "The OverLive Way",
+      title: "The OverLink Way",
       desc: "Edit your LaTeX in Overleaf. We handle the rest. Every night, our bot mirrors your projects to your site using GitHub Actions."
     },
     subtitle: {
@@ -53,7 +53,7 @@ const translations = {
       successMsg: "Operations Complete.",
       deleteSuccess: "Successfully removed."
     },
-    footer: "OverLive • Built for Academics",
+    footer: "OverLink • Built for Academics",
     features: {
       sync: {
         title: "Zero-Touch Sync",
@@ -74,7 +74,7 @@ const translations = {
     }
   },
   zh: {
-    title: "OverLive",
+    title: "OverLink",
     tagline: "学术资产，始终在线。",
     problem: {
       title: "更新繁琐？",
@@ -86,8 +86,8 @@ const translations = {
       ]
     },
     solution: {
-      title: "OverLive 方案",
-      desc: "在 Overleaf 中编辑您的 LaTeX，剩下的交给 OverLive。我们的机器人每晚会自动将您的项目镜像到您的 GitHub Pages。"
+      title: "OverLink 方案",
+      desc: "在 Overleaf 中编辑您的 LaTeX，剩下的交给 OverLink。我们的机器人每晚会自动将您的项目镜像到您的 GitHub Pages。"
     },
     subtitle: {
       create: "同步 Overleaf 项目到您的永久链接。",
@@ -122,7 +122,7 @@ const translations = {
       successMsg: "处理完成。",
       deleteSuccess: "删除成功。"
     },
-    footer: "OverLive • 为学术而生",
+    footer: "OverLink • 为学术而生",
     features: {
       sync: {
         title: "自动同步",
@@ -182,7 +182,7 @@ function App() {
 
   const pat = envToken || localStorage.getItem('github_pat') || '';
   const REPO_OWNER = 'geminilight';
-  const REPO_NAME = 'cv-mirror';
+  const REPO_NAME = 'overlink';
 
   const t = translations[lang];
 

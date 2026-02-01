@@ -1,13 +1,13 @@
 <div align="center">
 
-# 🎓 OverLive
+# 🎓 OverLink
 ### Your Academic Assets, Always Current.
 
-[![Daily Sync](https://github.com/geminilight/cv-mirror/actions/workflows/sync.yml/badge.svg)](https://github.com/geminilight/cv-mirror/actions/workflows/sync.yml)
-[![License](https://img.shields.io/github/license/geminilight/cv-mirror)](https://github.com/geminilight/cv-mirror/blob/main/LICENSE)
+[![Daily Sync](https://github.com/geminilight/overlink/actions/workflows/sync.yml/badge.svg)](https://github.com/geminilight/overlink/actions/workflows/sync.yml)
+[![License](https://img.shields.io/github/license/geminilight/overlink)](https://github.com/geminilight/overlink/blob/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-**OverLive** is a "Set and Forget" service that automatically keeps your personal website's CV and academic papers synchronized with your Overleaf projects.
+**OverLink** is a "Set and Forget" service that automatically keeps your personal website's CV and academic papers synchronized with your Overleaf projects.
 
 [Features](#-features) • [Quick Start](#-quick-start-for-users) • [Local Dev](#-local-development) • [Architecture](#-architecture)
 

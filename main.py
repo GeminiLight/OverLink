@@ -8,7 +8,7 @@ from cv_mirror.logger import setup_logger
 logger = setup_logger()
 
 async def main():
-    parser = argparse.ArgumentParser(description="CV-Mirror Service")
+    parser = argparse.ArgumentParser(description="OverLink Service")
     parser.add_argument("--setup", action="store_true", help="Run in Setup Mode (Manual Login)")
     parser.add_argument("--visible", action="store_true", help="Run browser visibly")
     args = parser.parse_args()
