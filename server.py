@@ -98,7 +98,7 @@ async def mirror_cv(request: MirrorRequest):
                         pdf_filename = f"{request.nickname}.pdf"
                         result = {
                             "status": "success",
-                            "url": f"/public/{pdf_filename}",
+                            "url": f"/public/pdfs/{pdf_filename}",
                             "filename": pdf_filename
                         }
                         await q.put(json.dumps({"type": "result", **result}) + "\n")

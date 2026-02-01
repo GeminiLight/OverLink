@@ -1,5 +1,5 @@
 *.pdf
-!public/*.pdf
+!public/pdfs/*.pdf
 *.pyc
 *.env
 

@@ -9,6 +9,7 @@ class Config:
     PASSWORD = os.getenv("OVERLEAF_PASSWORD")
     AUTH_FILE = "auth.json"
     PUBLIC_DIR = "public"
+    PDF_DIR = os.path.join(PUBLIC_DIR, "pdfs")
     USERS_FILE = "users.json"
     
     @classmethod
@@ -21,6 +22,7 @@ class Config:
     @classmethod
     def ensure_public_dir(cls):
         os.makedirs(cls.PUBLIC_DIR, exist_ok=True)
+        os.makedirs(cls.PDF_DIR, exist_ok=True)
 
     @classmethod
     def save_users(cls, users):

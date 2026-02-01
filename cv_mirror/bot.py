@@ -142,7 +142,7 @@ class OverleafBot:
         username = user.get("username")
         url_raw = user.get("url")
         
-        target_path = os.path.join(Config.PUBLIC_DIR, f"{username}.pdf")
+        target_path = os.path.join(Config.PDF_DIR, f"{username}.pdf")
         
         # Normalize URL
         if "http" in url_raw:
