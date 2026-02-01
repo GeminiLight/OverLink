@@ -71,6 +71,27 @@ const translations = {
     help: {
       title: "Finding your Project ID",
       desc: "Go to your Overleaf project. The ID is the 24-character string after /project/ in the URL."
+    },
+    howItWorks: {
+      title: "How it Works",
+      step1: { title: "Write LaTeX", desc: "Focus on your research and writing in Overleaf." },
+      step2: { title: "Bot Syncs", desc: "OverLink bot pulls and builds your latest PDF nightly." },
+      step3: { title: "Live Link", desc: "Your personal site always serves the current version." }
+    },
+    steps: {
+      auth: "Verifying Authentication",
+      dispatch: "Triggering Remote Cloud",
+      sync: "Synchronizing Assets",
+      deploy: "Preparing Live URL"
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+      q1: "Is it really free?",
+      a1: "Yes. It runs entirely on your GitHub Actions free tier and GitHub Pages.",
+      q2: "How long until it's live?",
+      a2: "Usually about 2 minutes after the sync is triggered.",
+      q3: "Is my data safe?",
+      a3: "Your Overleaf credentials are encrypted and stored only in your GitHub Secrets."
     }
   },
   zh: {
@@ -140,6 +161,27 @@ const translations = {
     help: {
       title: "如何找到项目 ID？",
       desc: "打开您的 Overleaf 项目。ID 是 URL 中 /project/ 后的 24 位字符串。"
+    },
+    howItWorks: {
+      title: "运作过程",
+      step1: { title: "编写 LaTeX", desc: "在 Overleaf 中如常进行您的学术写作。" },
+      step2: { title: "机器人抓取", desc: "OverLink 机器人每晚会自动同步您的最新版 PDF。" },
+      step3: { title: "即刻呈现", desc: "您的个人主页将始终显示最新版本的简历。" }
+    },
+    steps: {
+      auth: "验证身份信息",
+      dispatch: "触发远程云端",
+      sync: "同步资产文件",
+      deploy: "准备永久链接"
+    },
+    faq: {
+      title: "常见问题",
+      q1: "它是免费的吗？",
+      a1: "是的，完全免费。它利用 GitHub Actions 和 GitHub Pages 运行。",
+      q2: "同步需要多久？",
+      a2: "初始化后，GitHub 大约需要 2 分钟来重新部署您的站点。",
+      q3: "数据安全吗？",
+      a3: "您的 Overleaf 密码仅存储在您自己的 GitHub Secrets 中。"
     }
   }
 };
@@ -208,7 +250,7 @@ function App() {
         return;
       }
       try {
-        setLogs(prev => [...prev, "Contacting OverLink Cloud..."]);
+        setLogs(["Checking credentials..."]);
         const actionType = mode === 'create' ? 'add' : 'delete';
         const payload = {
           event_type: "update_cv",
@@ -224,8 +266,14 @@ function App() {
           body: JSON.stringify(payload)
         });
         if (!response.ok) throw new Error("Cloud Error");
+
+        setLogs(prev => [...prev, "Cloud triggered."]);
+        await new Promise(r => setTimeout(r, 800));
+        setLogs(prev => [...prev, "Queueing sync..."]);
+        await new Promise(r => setTimeout(r, 600));
+        setLogs(prev => [...prev, "Process complete."]);
+
         setStatus('success');
-        setLogs(prev => [...prev, "Success! Dispatch sent.", "Deploying assets usually takes 2 minutes."]);
         setResultUrl(`https://${REPO_OWNER}.github.io/${REPO_NAME}/pdfs/${nickname}.pdf`);
       } catch (err: any) {
         setErrorMsg("Cloud Communication Failed");
@@ -280,25 +328,30 @@ function App() {
       {/* Main Flow Grid */}
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 z-10">
 
-        {/* Intro Side */}
+        {/* How it Works / Features */}
         <div className="space-y-12 animate-fade-in animate-delay-1">
-          <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">{t.problem.title}</h3>
-            <div className="space-y-3">
-              {t.problem.items.map((it, i) => (
-                <div key={i} className="flex items-center gap-3 text-slate-600 dark:text-slate-400 font-medium">
-                  <svg className="w-5 h-5 text-red-500/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
-                  {it}
+          <div className="space-y-8">
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 text-center lg:text-left">{t.howItWorks.title}</h3>
+            <div className="grid grid-cols-1 gap-6">
+              {[1, 2, 3].map((num) => (
+                <div key={num} className="glass p-6 rounded-2xl flex items-start gap-4 hover-lift group">
+                  <div className="w-10 h-10 rounded-full bg-blue-600/10 dark:bg-blue-400/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    {num}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white mb-1">{(t.howItWorks as any)[`step${num}`].title}</h4>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {Object.entries(t.features).map(([key, f]) => (
-              <div key={key} className="p-5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl group hover:border-blue-500/50 transition-all shadow-sm">
-                <h4 className="font-bold text-slate-900 dark:text-white mb-2">{f.title}</h4>
-                <p className="text-xs text-slate-500 dark:text-gray-500 font-medium leading-relaxed">{f.desc}</p>
+              <div key={key} className="p-5 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-2xl transition-all">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-2 text-sm">{f.title}</h4>
+                <p className="text-[11px] text-slate-500 dark:text-gray-500 font-medium leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -306,7 +359,8 @@ function App() {
 
         {/* Action Side */}
         <div className="animate-fade-in animate-delay-2">
-          <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-8 md:p-10 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl relative">
+          <div className="glass-card p-8 md:p-10 rounded-[2.5rem] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-3xl rounded-full"></div>
 
             <h3 className="text-2xl font-bold font-[Plus Jakarta Sans] mb-2">{mode === 'create' ? t.mode.create : t.mode.delete}</h3>
             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-8">
@@ -330,15 +384,45 @@ function App() {
                   {errorMsg}
                 </div>
               )}
-              {logs.length > 0 && status === 'loading' && (
-                <div className="p-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-xl text-[10px] font-mono text-slate-400 dark:text-slate-500 max-h-24 overflow-y-auto">
-                  {logs.map((l, i) => <div key={i}>&gt; {l}</div>)}
+              {status === 'loading' && (
+                <div className="space-y-4 py-4 animate-fade-in">
+                  {[
+                    { id: 'auth', icon: '🔐' },
+                    { id: 'dispatch', icon: '🚀' },
+                    { id: 'sync', icon: '🔄' },
+                    { id: 'deploy', icon: '✨' }
+                  ].map((step, idx) => {
+                    const isDone = logs.length > idx + 1;
+                    const isCurrent = logs.length === idx + 1;
+                    return (
+                      <div key={step.id} className={`flex items-center gap-3 transition-opacity duration-500 ${isDone || isCurrent ? 'opacity-100' : 'opacity-20'}`}>
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${isDone ? 'bg-emerald-500 text-white' : (isCurrent ? 'bg-blue-600 animate-pulse text-white' : 'bg-slate-200 dark:bg-slate-800')}`}>
+                          {isDone ? '✓' : step.icon}
+                        </div>
+                        <span className={`text-xs font-bold ${isCurrent ? 'text-blue-600 dark:text-blue-400' : ''}`}>
+                          {(t as any).steps[step.id]}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.nickname}</label>
-                <input value={nickname} onChange={e => setNickname(e.target.value)} placeholder={t.form.nicknamePlaceholder} className="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-gray-700 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 transition-all font-medium" />
+                <div className="relative">
+                  <input
+                    value={nickname}
+                    onChange={e => setNickname(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                    placeholder={t.form.nicknamePlaceholder}
+                    className="w-full bg-slate-50/50 dark:bg-black/40 border border-slate-200 dark:border-gray-800 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 transition-all font-medium"
+                  />
+                  {nickname && (
+                    <div className="mt-2 ml-1 text-[10px] font-mono text-blue-600/60 dark:text-blue-400/60 truncate">
+                      preview: https://{REPO_OWNER}.github.io/{REPO_NAME}/pdfs/{nickname}.pdf
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.email}</label>
@@ -366,11 +450,14 @@ function App() {
 
             {/* Success State Overlay */}
             {status === 'success' && (
-              <div className="absolute inset-0 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center z-30 animate-fade-in border border-emerald-500/30">
-                <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-10 h-10 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+              <div className="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center z-30 animate-fade-in overflow-hidden">
+                <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500"></div>
+
+                <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 relative">
+                  <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-20"></div>
+                  <svg className="w-12 h-12 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                 </div>
-                <h4 className="text-2xl font-bold mb-2">{mode === 'create' ? t.success.titleCreate : t.success.titleDelete}</h4>
+                <h4 className="text-3xl font-bold mb-2 tracking-tight">{mode === 'create' ? t.success.titleCreate : t.success.titleDelete}</h4>
                 <p className="text-slate-500 mb-8 max-w-xs">{mode === 'create' ? t.success.descCreate : t.success.descDelete}</p>
 
                 {mode === 'create' && (
@@ -391,7 +478,20 @@ function App() {
         </div>
       </div>
 
-      <footer className="mt-32 w-full text-center text-xs font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+      {/* FAQ Section */}
+      <div className="w-full max-w-4xl mt-32 px-6 z-10 animate-fade-in animate-delay-3">
+        <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 text-center mb-12">{(t as any).faq.title}</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="space-y-2 text-center md:text-left">
+              <h4 className="font-bold text-slate-900 dark:text-white">{(t as any).faq[`q${i}`]}</h4>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{(t as any).faq[`a${i}`]}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <footer className="mt-40 w-full text-center text-[10px] font-bold text-slate-400 dark:text-slate-700 uppercase tracking-[0.3em]">
         {t.footer}
       </footer>
     </div>
