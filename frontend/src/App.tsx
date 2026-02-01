@@ -53,6 +53,10 @@ const translations = {
         title: "Open Source",
         desc: "Transparent, secure, and fully customizable."
       }
+    },
+    help: {
+      title: "Where to find Project ID?",
+      desc: "It is the 24-character code in your Overleaf URL: overleaf.com/project/"
     }
   },
   zh: {
@@ -104,6 +108,10 @@ const translations = {
         title: "开源透明",
         desc: "完全开源，安全透明，可自由定制。"
       }
+    },
+    help: {
+      title: "如何找到项目 ID？",
+      desc: "它是 Overleaf 链接中的 24 位代码：overleaf.com/project/"
     }
   }
 };
@@ -121,6 +129,7 @@ function App() {
   const [errorMsg, setErrorMsg] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   // Language & Theme State
   const [lang, setLang] = useState<Lang>('en');
@@ -452,7 +461,28 @@ function App() {
 
               {mode === 'create' && (
                 <div>
-                  <label htmlFor="projectId" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{t.form.projectId}</label>
+                  <div className="flex items-center gap-2 mb-2 ml-1">
+                    <label htmlFor="projectId" className="block text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">{t.form.projectId}</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowHelp(!showHelp)}
+                      className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                      title="Help"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </button>
+                  </div>
+
+                  {showHelp && (
+                    <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-xl animate-fade-in-up text-sm text-blue-800 dark:text-blue-200">
+                      <p className="font-bold mb-1">{t.help.title}</p>
+                      <p className="opacity-80 mb-2">{t.help.desc}</p>
+                      <div className="bg-white dark:bg-black/40 p-2 rounded-lg font-mono text-xs overflow-x-auto border border-blue-100 dark:border-blue-500/20">
+                        overleaf.com/project/<span className="bg-yellow-200 dark:bg-yellow-500/50 dark:text-white px-1 rounded text-black font-bold">64b1f8...</span>
+                      </div>
+                    </div>
+                  )}
+
                   <input
                     type="text"
                     id="projectId"
