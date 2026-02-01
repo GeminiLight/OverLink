@@ -1,59 +1,72 @@
-# CV-Mirror Service
+# CV Mirror Service
 
-A "Set and Forget" service that automatically keeps your hosted CV synchronized with your Overleaf project.
+A "Set and Forget" service that automatically keeps your hosted CV synchronized with your Overleaf project. Now with a modern Web UI for easy management.
 
-## How it Works
-1.  **You** provide a Read-Only link to your Overleaf project.
-2.  **The Bot** runs daily (via GitHub Actions).
-3.  **The Result**: Your CV is published to a stable, public URL.
+## Features
 
-## Accessing Your CV
-Once the service is running, your CV will be available at:
+-   **Dashboard UI**: Easily add, update, or remove CVs using a modern React frontend.
+-   **Real-time Feedback**: Watch the mirroring process live with a terminal-style log.
+-   **Instant Public URL**: Get a stable, shareable link to your PDF immediately after mirroring.
+-   **Daily Auto-Sync**: GitHub Actions automatically updates all registered CVs every day at 00:00 UTC.
 
-```
-https://<OWNER_USERNAME>.github.io/<REPO_NAME>/<USERNAME>.pdf
-```
+## Quick Start (Local Development)
 
-Example:
-- **Repo Owner**: `geminilight`
-- **Repo Name**: `cv-mirror`
-- **Configured Username**: `alice`
-- **Result URL**: `https://geminilight.github.io/cv-mirror/alice.pdf`
+### Prerequisites
+-   Python 3.10+
+-   Node.js & npm
+-   Playwright Browsers (`playwright install chromium`)
 
-## Configuration
-Edit `users.json` to add users:
-
-```json
-[
-  {
-    "username": "alice",
-    "url": "https://www.overleaf.com/read/abcdefg123456"
-  },
-  {
-    "username": "bob",
-    "url": "https://www.overleaf.com/read/uvwxyz987654"
-  }
-]
+### 1. Configure Environment
+Create a `.env` file in the root directory:
+```bash
+OVERLEAF_EMAIL=your_email@example.com
+OVERLEAF_PASSWORD=your_password
 ```
 
-## Setup for the Owner
+### 2. Start the Application
+Use the helper script to run both backend and frontend:
+```bash
+chmod +x start.sh
+./start.sh
+```
+-   **Frontend**: http://localhost:5600
+-   **Backend**: http://localhost:8000
 
-### 1. Daily Sync via GitHub Actions
-This repository is configured to run daily at 00:00 UTC.
+## Deploying & GitHub Actions Scope
 
-**Requirements:**
-- Go to **Settings > Secrets and variables > Actions**.
-- Add the following Repository Secrets:
-    - `OVERLEAF_EMAIL`: Email of the account used by the bot.
-    - `OVERLEAF_PASSWORD`: Password for the bot account.
+This repository is designed to be hosted on GitHub. The mirroring logic runs in **GitHub Actions**, and the PDFs are hosted on **GitHub Pages**.
 
-### 2. Enable GitHub Pages
-- Go to **Settings > Pages**.
-- Under **Build and deployment**, select **GitHub Actions** as the source.
-- The next time the `Sync CV` workflow runs, it will deploy to this site.
+### 1. Enable GitHub Pages
+1.  Go to **Settings > Pages**.
+2.  Under **Build and deployment**, select **GitHub Actions** as the source.
 
-### 3. Session Setup (Local Only)
-To bypass Cloudflare/CAPTCHA, the bot uses a saved session (`auth.json`).
-1.  Run locally once: `python main.py --setup`
-2.  Log in and press Enter.
-3.  Commit `auth.json` to the repository (private repo recommended) or upload it as a secret if advanced. *Note: For this v1, checking in `auth.json` to a private repo is the simplest path.*
+### 2. Set Up Secrets
+To allow the bot to log in to Overleaf during the daily sync, you must add your credentials as **Repository Secrets** (NOT Environment Secrets).
+
+1.  Go to **Settings > Secrets and variables > Actions**.
+2.  Add the following **New Repository Secrets**:
+    -   `OVERLEAF_EMAIL`: Your Overleaf account email.
+    -   `OVERLEAF_PASSWORD`: Your Overleaf account password.
+
+*Note: Without these secrets, the `Sync CV` workflow will fail.*
+
+## Usage
+
+### Adding a CV
+1.  Open the Web UI.
+2.  Enter a **Nickname** (this determines the filename, e.g., `nickname.pdf`).
+3.  Enter your **Overleaf Project ID** (the read-only link URL).
+4.  Enter your **Email** (for verification/record keeping).
+5.  Click **Mirror CV**.
+6.  Once complete, copy your public link!
+
+### Accessing Hosted PDFs
+Your CVs will be available at:
+```
+https://<YourUsername>.github.io/<RepoName>/<Nickname>.pdf
+```
+
+## Technical Overview
+-   **Frontend**: React, Vite, TailwindCSS (located in `frontend/`)
+-   **Backend**: FastAPI, Playwright (located in `server.py`, `cv_mirror/`)
+-   **CI/CD**: GitHub Actions (`.github/workflows/sync.yml`) runs `main.py` daily to re-download all PDFs in `users.json`.

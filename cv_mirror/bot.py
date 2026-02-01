@@ -107,8 +107,21 @@ class OverleafBot:
             await self._random_delay()
             await self.page.fill('input[name="password"]', Config.PASSWORD)
             
-            async with self.page.expect_navigation(timeout=60000):
+            # Use more flexible wait strategy (wait for URL change instead of strict navigation event)
+            # This handles cases where the app might be an SPA or Cloudflare intervenes
+            try:
                 await self.page.click('button[type="submit"], .btn-primary-main')
+                
+                # Wait for either leaving the login page OR staying on it (e.g. error)
+                # We simply wait a bit for the action to take effect or look for /project in URL
+                await self.page.wait_for_url(lambda u: "login" not in u, timeout=60000)
+            except Exception as wait_err:
+                 # If we timed out waiting for URL change, we check if we are still on login page to report specific error
+                 if "login" in self.page.url:
+                     logger.warning("Timeout waiting for URL change. Possible ReCaptcha or wrong credentials.")
+                     # Take screenshot for debugging if possible (not implemented here but good practice)
+                 else:
+                     raise wait_err
             
             # Verify result
             if "login" not in self.page.url:
