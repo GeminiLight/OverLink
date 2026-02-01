@@ -54,6 +54,6 @@ This repository is configured to run daily at 00:00 UTC.
 
 ### 3. Session Setup (Local Only)
 To bypass Cloudflare/CAPTCHA, the bot uses a saved session (`auth.json`).
-1.  Run locally once: `python sync_cv.py --setup`
+1.  Run locally once: `python main.py --setup`
 2.  Log in and press Enter.
 3.  Commit `auth.json` to the repository (private repo recommended) or upload it as a secret if advanced. *Note: For this v1, checking in `auth.json` to a private repo is the simplest path.*

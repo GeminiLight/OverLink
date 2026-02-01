@@ -28,7 +28,7 @@ jobs:
       env:
         OVERLEAF_EMAIL: ${{ secrets.OVERLEAF_EMAIL }}
         OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
-      run: python sync_cv.py
+      run: python main.py
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
