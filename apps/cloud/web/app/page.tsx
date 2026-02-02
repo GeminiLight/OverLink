@@ -768,6 +768,9 @@ export default function Home() {
                     className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
                     required
                   />
+                  <p className="text-[10px] opacity-40 font-bold px-2 pt-1 leading-relaxed">
+                    Tip: You can paste the full Overleaf URL (e.g., <span className="text-blue-500 font-mono">overleaf.com/project/64b...</span>) or just the ID.
+                  </p>
                 </div>
                 <div className="flex gap-4 pt-4">
                   <button
