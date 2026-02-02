@@ -3,7 +3,7 @@ import asyncio
 import sys
 import uvicorn
 from cv_mirror.config import Config
-from cv_mirror.bot import OverleafBot
+from overlink_bot.client import OverleafBot
 from cv_mirror.logger import setup_logger
 
 logger = setup_logger()
@@ -16,13 +16,13 @@ def run_sync(args):
     headless = not (args.setup or args.visible)
     
     async def _sync():
-        async with OverleafBot(headless=headless) as bot:
+        async with OverleafBot(headless=headless, auth_path=Config.AUTH_FILE) as bot:
             # 1. Login Phase
             if args.setup:
                 await bot.login(manual=True)
                 return
 
-            if not await bot.login(manual=False):
+            if not await bot.login(email=Config.EMAIL, password=Config.PASSWORD, manual=False):
                 logger.error("Authentication failed. Aborting.")
                 sys.exit(1)
 
@@ -36,7 +36,10 @@ def run_sync(args):
             success_count = 0
             
             for user in users:
-                if await bot.process_user(user):
+                username = user.get("username")
+                target_path = os.path.join(Config.PDF_DIR, f"{username}.pdf")
+                
+                if await bot.download_project(user.get("url"), target_path):
                     success_count += 1
             
             logger.info(f"Batch complete. {success_count}/{len(users)} successful.")

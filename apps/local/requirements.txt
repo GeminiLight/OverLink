@@ -1,0 +1,4 @@
+-e ../../packages/python-core
+fastapi
+uvicorn
+python-dotenv

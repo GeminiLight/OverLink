@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import logging
 import json
 import asyncio
-from cv_mirror.bot import OverleafBot
+from overlink_bot.client import OverleafBot
 from cv_mirror.config import Config
 
 # Setup logging
@@ -75,14 +75,15 @@ async def mirror_cv(request: MirrorRequest):
                 
                 await q.put(json.dumps({"type": "status", "message": "Initializing session..."}) + "\n")
                 
-                async with OverleafBot(headless=True) as bot:
+                async with OverleafBot(headless=True, auth_path=Config.AUTH_FILE) as bot:
                     await q.put(json.dumps({"type": "status", "message": "Authenticating..."}) + "\n")
                     
-                    if not await bot.login(manual=False, status_callback=status_callback):
+                    if not await bot.login(email=Config.EMAIL, password=Config.PASSWORD, manual=False, status_callback=status_callback):
                         await q.put(json.dumps({"type": "error", "message": "Bot authentication failed."}) + "\n")
                         return
 
-                    success = await bot.process_user(user_data, status_callback=status_callback)
+                    target_path = os.path.join(Config.PDF_DIR, f"{request.nickname}.pdf")
+                    success = await bot.download_project(user_data["url"], target_path, status_callback=status_callback)
                     
                     if success:
                         pdf_filename = f"{request.nickname}.pdf"
