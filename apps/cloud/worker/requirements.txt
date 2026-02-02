@@ -1,0 +1,4 @@
+boto3
+playwright>=1.41.0
+pycryptodome
+python-dotenv
