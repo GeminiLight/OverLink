@@ -18,12 +18,11 @@ jobs:
           git checkout -b mirror-branch
           
           # 2. Remove private content
-          # We use git rm -rf to ensure it's removed from the index of this temporary branch
-          # List everything you want to EXCLUDE
-          git rm -rf apps/cloud
-          git rm -rf .env*
-          git rm -rf auth.json
-          git rm -rf .shared/auth.json
+          # Using --ignore-unmatch so it doesn't fail if a file is already gone or renamed
+          git rm -rf --ignore-unmatch apps/cloud
+          git rm -rf --ignore-unmatch .env*
+          git rm -rf --ignore-unmatch auth.json
+          git rm -rf --ignore-unmatch .shared/auth.json
           
           # 3. Commit the changes (only on the mirror branch)
           git config user.name "github-actions[bot]"
