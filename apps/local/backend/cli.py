@@ -3,7 +3,7 @@ import asyncio
 import sys
 import uvicorn
 from backend.config import Config
-from overlink_bot.core import OverleafBot
+from overleaf_bot.core import OverleafBot
 from backend.logger import setup_logger
 
 logger = setup_logger()

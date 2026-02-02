@@ -1,9 +1,9 @@
 setup.py
-overlink_bot/__init__.py
-overlink_bot/core.py
-overlink_bot/logger.py
-overlink_bot.egg-info/PKG-INFO
-overlink_bot.egg-info/SOURCES.txt
-overlink_bot.egg-info/dependency_links.txt
-overlink_bot.egg-info/requires.txt
-overlink_bot.egg-info/top_level.txt
+overleaf_bot/__init__.py
+overleaf_bot/core.py
+overleaf_bot/logger.py
+overleaf_bot.egg-info/PKG-INFO
+overleaf_bot.egg-info/SOURCES.txt
+overleaf_bot.egg-info/dependency_links.txt
+overleaf_bot.egg-info/requires.txt
+overleaf_bot.egg-info/top_level.txt

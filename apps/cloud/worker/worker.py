@@ -3,7 +3,7 @@ import os
 import json
 import boto3
 from Crypto.Cipher import AES
-from overlink_bot.core import OverleafBot
+from overleaf_bot.core import OverleafBot
 
 def decrypt_from_string(encrypted_text, secret_key):
     """

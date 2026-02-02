@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import logging
 import json
 import asyncio
-from overlink_bot.client import OverleafBot
+from overleaf_bot.client import OverleafBot
 from overlink.config import Config
 
 # Setup logging
