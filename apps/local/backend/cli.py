@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import sys
+import os
 import uvicorn
 from backend.config import Config
 from overleaf_bot.core import OverleafBot
@@ -33,15 +34,18 @@ def run_sync(args):
                 return
 
             logger.info(f"Found {len(users)} users.")
-            success_count = 0
             
+            # Prepare batch arguments
+            projects = []
             for user in users:
                 username = user.get("username")
                 target_path = os.path.join(Config.PDF_DIR, f"{username}.pdf")
-                
-                if await bot.download_project(user.get("url"), target_path):
-                    success_count += 1
+                projects.append((user.get("url"), target_path))
+
+            # Execute batch download
+            results = await bot.batch_download_projects(projects, max_concurrent=3)
             
+            success_count = sum(1 for r in results if r)
             logger.info(f"Batch complete. {success_count}/{len(users)} successful.")
             
             if success_count == 0 and len(users) > 0:

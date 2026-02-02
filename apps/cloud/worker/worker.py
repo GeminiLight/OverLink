@@ -50,6 +50,14 @@ async def run_worker():
 
     email = data.get('email')
     password = data.get('password')
+    is_encrypted = data.get('is_encrypted', False)
+
+    if is_encrypted and ENCRYPTION_KEY:
+        print("Decrypting credentials...")
+        if email:
+            email = decrypt_from_string(email, ENCRYPTION_KEY)
+        if password:
+            password = decrypt_from_string(password, ENCRYPTION_KEY)
 
     # Fallback to environment variables if not provided in payload
     if not email:
@@ -58,8 +66,6 @@ async def run_worker():
     if not password:
         password = os.getenv("OVERLEAF_PASSWORD")
         print("Using OVERLEAF_PASSWORD from environment.")
-        # If password comes from env, it's likely NOT encrypted in the same way as web payload
-        # But we'll let the decryption logic handle the check below
 
     if not email or not password:
         print("ERROR: Overleaf credentials missing (neither in payload nor environment).")
@@ -100,7 +106,7 @@ async def run_worker():
         batch_args = [(pid, dest) for pid, dest, _ in download_tasks]
         results = await bot.batch_download_projects(batch_args, max_concurrent=3)
         
-    # 3. Upload to R2
+        # 3. Upload to R2
     if R2_ACCESS_KEY and R2_SECRET_KEY:
         print(f"Initializing R2 client (Endpoint: {R2_ENDPOINT}, Bucket: {R2_BUCKET})...")
         try:
@@ -116,27 +122,37 @@ async def run_worker():
                 region_name="auto"
             )
             
-            for (pid, dest, fname), success in zip(download_tasks, results):
-                if success:
-                    if os.path.exists(dest):
-                        size = os.path.getsize(dest)
-                        print(f"Uploading {fname}.pdf to R2 (Size: {size} bytes)...")
-                        try:
-                            # Using put_object for more explicit control/error reporting
-                            with open(dest, 'rb') as f:
-                                response = s3.put_object(
-                                    Bucket=R2_BUCKET,
-                                    Key=f"{fname}.pdf",
-                                    Body=f,
-                                    ContentType='application/pdf'
-                                )
-                            print(f"Upload complete: {fname}.pdf (Response Code: {response.get('ResponseMetadata', {}).get('HTTPStatusCode')})")
-                        except Exception as upload_err:
-                            print(f"Failed to upload {fname}.pdf to R2: {upload_err}")
-                    else:
-                        print(f"ERROR: Local file {dest} not found despite success result.")
-                else:
+            async def upload_file(pid_tuple, success):
+                pid, dest, fname = pid_tuple
+                if not success:
                     print(f"Skipping R2 upload for {fname}.pdf as download failed.")
+                    return
+
+                if not os.path.exists(dest):
+                    print(f"ERROR: Local file {dest} not found despite success result.")
+                    return
+
+                size = os.path.getsize(dest)
+                print(f"Uploading {fname}.pdf to R2 (Size: {size} bytes)...")
+                try:
+                    # Run blocking upload in a separate thread
+                    def _do_upload():
+                        with open(dest, 'rb') as f:
+                            return s3.put_object(
+                                Bucket=R2_BUCKET,
+                                Key=f"{fname}.pdf",
+                                Body=f,
+                                ContentType='application/pdf'
+                            )
+                    
+                    response = await asyncio.to_thread(_do_upload)
+                    print(f"Upload complete: {fname}.pdf (Response Code: {response.get('ResponseMetadata', {}).get('HTTPStatusCode')})")
+                except Exception as upload_err:
+                    print(f"Failed to upload {fname}.pdf to R2: {upload_err}")
+
+            upload_tasks = [upload_file(pt, res) for pt, res in zip(download_tasks, results)]
+            await asyncio.gather(*upload_tasks)
+
         except Exception as e:
             print(f"R2 client initialization or batch upload error: {e}")
     else:

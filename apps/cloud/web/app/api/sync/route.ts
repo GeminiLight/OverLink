@@ -34,29 +34,14 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Project not found' }, { status: 404 });
         }
 
-        // 2. Prepare Payload for Worker
-        // Note: We are sending encrypted data? No, the Worker needs RAW password to login.
-        // So we must DECRYPT it here? 
-        // Wait, `crypto.ts` is in `lib`. We need to be able to decrypt.
-        // But `crypto.ts` only had `encrypt`. I need to update it to support `decrypt`.
-        // OR, we verify the implementation plan. 
-        // Plan said: "Worker... Accept inputs...".
-        // SECURITY RISK: Sending raw password in GitHub Dispatch payload means it appears in GitHub Action logs if not careful.
-        // BETTER: Send Encrypted, and have Worker Decrypt. But Worker needs the same Key.
-        // Let's stick to: We decrypt here (Server Side) then send as Secret Payload?
-        // GitHub Dispatch payload IS visible. 
-        // CORRECTION: Repository Dispatch payload is NOT a secret.
-        // SOLUTION: We should encryption in the payload using a shared key that the Worker also has.
-        // Since `crypto.ts` uses `process.env.ENCRYPTION_KEY`, and we can set the same env var in GitHub Actions Secret.
-        // We can just pass the `overlink_password_enc` string AS IS, and let the worker decrypt it.
-
-        // So we just pass the database values.
-
+        // 3. Trigger GitHub Dispatch
+        // We pass the encrypted credentials directly from DB.
+        // worker.py will decrypt them using the same ENCRYPTION_KEY.
         const workerPayload = {
             filename: project.filename,
             project_id: project.project_id,
-            email: project.overleaf_email_enc, // Sending Encrypted
-            password: project.overleaf_password_enc, // Sending Encrypted
+            email: project.overleaf_email_enc,
+            password: project.overleaf_password_enc,
             is_encrypted: true // Tell worker to decrypt
         };
 

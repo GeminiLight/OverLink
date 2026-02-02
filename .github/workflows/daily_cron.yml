@@ -1,0 +1,27 @@
+name: Daily Sync Cron
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger_daily_sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Daily Sync Endpoint
+        env:
+          APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }} # or PRODUCTION_URL
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "APP_URL secret is not set"
+            exit 1
+          fi
+          
+          echo "Triggering daily sync at $APP_URL/api/cron/daily-sync"
+          
+          curl -f -X GET "$APP_URL/api/cron/daily-sync" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -H "Content-Type: application/json"
