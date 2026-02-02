@@ -204,13 +204,19 @@ function App() {
 
   // Language & Theme State
   const [lang, setLang] = useState<Lang>('en');
-  const [theme, setTheme] = useState<Theme>('dark');
+
+  // Lazy init theme to prevent FOUC
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'light';
+    }
+    return 'light';
+  });
 
   useEffect(() => {
     const browserLang = navigator.language.toLowerCase();
     if (browserLang.startsWith('zh')) setLang('zh');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(prefersDark ? 'dark' : 'light');
   }, []);
 
   useEffect(() => {
