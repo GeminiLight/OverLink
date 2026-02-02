@@ -2,6 +2,9 @@
 !public/pdfs/*.pdf
 *.pyc
 *.env
+*.env.local
+
+!apps/cloud/web/.env.local.example
 
 .shared/
 !users.json
