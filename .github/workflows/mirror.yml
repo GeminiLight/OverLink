@@ -21,8 +21,6 @@ jobs:
           # Using --ignore-unmatch so it doesn't fail if a file is already gone or renamed
           git rm -rf --ignore-unmatch apps/cloud
           git rm -rf --ignore-unmatch .env*
-          git rm -rf --ignore-unmatch auth.json
-          git rm -rf --ignore-unmatch .shared/auth.json
           
           # 3. Commit the changes (only on the mirror branch)
           git config user.name "github-actions[bot]"
