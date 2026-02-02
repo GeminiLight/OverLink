@@ -6,7 +6,6 @@ const translations = {
   en: {
     title: "OverLink",
     tagline: "Your Academic Assets, Always Current.",
-    subtitle: "Sync an Overleaf project to your persistent URL.",
     dashboard: "Dashboard",
     addProject: "Add New Project",
     yourProjects: "Your Projects",
@@ -34,6 +33,26 @@ const translations = {
       title: "OverLink Cloud",
       desc: "Sync your Overleaf projects to persistent, magic URLs. Zero friction."
     },
+    howItWorks: {
+      title: "How it Works",
+      step1: { title: "Write LaTeX", desc: "Focus on your research and writing in Overleaf." },
+      step2: { title: "Bot Syncs", desc: "OverLink bot pulls and builds your latest PDF nightly." },
+      step3: { title: "Live Link", desc: "Your personal site always serves the current version." }
+    },
+    features: {
+      sync: "Zero-Touch Sync",
+      url: "Permanent URLs",
+      open: "Secure & Encryption"
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+      q1: "Is it really free?",
+      a1: "Yes. Use our cloud infra or deploy your own worker.",
+      q2: "How long until it's live?",
+      a2: "Usually about 2 minutes after the sync is triggered.",
+      q3: "Is my data safe?",
+      a3: "Your Overleaf credentials are encrypted before storage."
+    },
     empty: "No projects yet. Add one to get started.",
     alert: {
       success: "Sync started!",
@@ -44,7 +63,6 @@ const translations = {
   zh: {
     title: "OverLink",
     tagline: "学术资产，始终在线。",
-    subtitle: "同步 Overleaf 项目到您的永久链接。",
     dashboard: "控制台",
     addProject: "添加新项目",
     yourProjects: "您的项目",
@@ -71,6 +89,26 @@ const translations = {
     hero: {
       title: "OverLink 云端",
       desc: "将您的 Overleaf 项目同步到永久链接。零摩擦，全自动。"
+    },
+    howItWorks: {
+      title: "运作过程",
+      step1: { title: "编写 LaTeX", desc: "在 Overleaf 中如常进行您的学术写作。" },
+      step2: { title: "机器人抓取", desc: "OverLink 机器人每晚会自动同步您的最新版 PDF。" },
+      step3: { title: "即刻呈现", desc: "您的个人仓库将始终显示最新版本的 PDF。" }
+    },
+    features: {
+      sync: "自动同步",
+      url: "永久链接",
+      open: "安全加密"
+    },
+    faq: {
+      title: "常见问题",
+      q1: "它是免费的吗？",
+      a1: "是的。使用我们的云端设施，或部署您自己的 Worker。",
+      q2: "同步需要多久？",
+      a2: "初始化后，系统大约需要 2 分钟来更新您的资产。",
+      q3: "数据安全吗？",
+      a3: "您的 Overleaf 密码在存储前会经过高强度加密。"
     },
     empty: "暂无项目。添加一个开始使用。",
     alert: {
@@ -243,6 +281,13 @@ export default function Home() {
             </div>
             <div className="flex gap-4 items-center bg-white/50 dark:bg-white/5 backdrop-blur-md p-2 pl-4 rounded-full border border-white/20 dark:border-white/5 shadow-sm">
               <span className="text-sm font-medium text-slate-600 dark:text-white/80">{session.user.email}</span>
+              {session.user.tier !== 'pro' && (
+                <button
+                  className="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 rounded-full text-xs font-bold transition-all shadow-lg shadow-amber-500/20"
+                >
+                  GO PRO
+                </button>
+              )}
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-full text-xs font-bold transition-colors"
@@ -316,8 +361,17 @@ export default function Home() {
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[4rem] pointer-events-none"></div>
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="font-bold text-lg text-slate-800 dark:text-white">{project.filename}.pdf</h3>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-bold text-lg text-slate-800 dark:text-white">{project.filename}.pdf</h3>
+                          {session.user.tier === 'pro' && (
+                            <span className="px-2 py-0.5 bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-bold rounded-full uppercase tracking-tighter">Pro</span>
+                          )}
+                        </div>
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-mono truncate max-w-[150px]">{project.project_id}</p>
+                        <div className="flex items-center gap-2 mt-2 text-slate-400 dark:text-slate-500">
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                          <span className="text-xs font-semibold">{project.view_count || 0} views</span>
+                        </div>
                       </div>
                       <div className="w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
                     </div>
