@@ -26,10 +26,10 @@
 }
 
 :root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --glass-bg: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --background: #020202;
+  --foreground: #f8fafc;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 body {

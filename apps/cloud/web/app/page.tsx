@@ -242,17 +242,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-300">
-      {/* Hero BG */}
-      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/5 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
-      <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-purple-100 dark:bg-purple-600/5 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
+    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-500">
+      {/* Dynamic Background Mesh/Blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-[160px] pointer-events-none transition-colors duration-700 animate-pulse"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-[140px] pointer-events-none transition-colors duration-700 animate-pulse" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-emerald-400/5 dark:bg-emerald-600/5 rounded-full blur-[100px] pointer-events-none transition-colors duration-700"></div>
 
       {/* Navbar Controls (Absolute Top-Right for Cleanliness) */}
       <div className="absolute top-6 right-6 z-50 flex gap-3">
-        <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} className="p-2.5 rounded-full bg-white/50 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all text-slate-500 dark:text-gray-400 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-sm">
-          {theme === 'light' ? <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> : <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
+        <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} className="p-3 rounded-2xl bg-white/20 dark:bg-white/5 hover:bg-white/40 dark:hover:bg-white/10 transition-all text-slate-800 dark:text-gray-200 backdrop-blur-3xl border border-white/40 dark:border-white/10 shadow-2xl group active:scale-95">
+          {theme === 'light' ? <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> : <svg className="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
         </button>
-        <button onClick={() => setLang(l => l === 'en' ? 'zh' : 'en')} className="px-4 py-2 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md text-xs font-bold hover:bg-slate-50 dark:hover:bg-white/10 transition-all">
+        <button onClick={() => setLang(l => l === 'en' ? 'zh' : 'en')} className="px-5 py-3 rounded-2xl border border-white/40 dark:border-white/10 bg-white/20 dark:bg-white/5 backdrop-blur-3xl text-[10px] font-black uppercase tracking-widest hover:bg-white/40 dark:hover:bg-white/10 transition-all text-foreground active:scale-95">
           {lang === 'en' ? '🇬🇧 EN' : '🇨🇳 中文'}
         </button>
       </div>
@@ -261,11 +262,11 @@ export default function Home() {
         // Enriched Landing Page
         <div className="w-full flex flex-col items-center">
           {/* Hero Section */}
-          <div className="flex min-h-[85vh] flex-col items-center justify-center p-8 z-10 animate-fade-in text-center max-w-4xl">
-            <div className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl mb-10 rotate-3 hover:rotate-6 transition-transform">
-              <span className="text-white font-bold text-4xl">O</span>
+          <div className="flex min-h-[90vh] flex-col items-center justify-center p-8 z-10 animate-fade-in text-center max-w-5xl">
+            <div className="w-24 h-24 bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 rounded-[1.8rem] flex items-center justify-center shadow-2xl mb-12 rotate-3 hover:rotate-6 transition-transform shadow-blue-500/20">
+              <span className="text-white font-bold text-5xl">O</span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-slate-950 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.05]">
+            <h1 className="text-7xl md:text-9xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-10 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-white/90 dark:to-white/40 leading-[0.95] drop-shadow-sm">
               {t.hero.title}
             </h1>
             <p className="max-w-2xl mx-auto text-xl md:text-2xl opacity-70 font-medium mb-14 leading-relaxed">
@@ -292,132 +293,138 @@ export default function Home() {
           </div>
 
           {/* How it Works */}
-          <section className="w-full max-w-6xl px-6 mb-40 z-10 animate-fade-in delay-200">
-            <h3 className="text-center text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-20">{t.howItWorks.title}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <section className="w-full max-w-6xl px-6 mb-48 z-10 animate-fade-in delay-200">
+            <h3 className="text-center text-xs font-black uppercase tracking-[0.5em] text-blue-600 dark:text-blue-400 mb-20 opacity-80">{t.howItWorks.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[1, 2, 3].map((num) => (
-                <div key={num} className="glass p-10 rounded-[3rem] flex flex-col items-start gap-6 hover-lift group relative overflow-hidden backdrop-blur-2xl">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[5rem] group-hover:scale-110 transition-transform"></div>
-                  <div className="w-14 h-14 rounded-[1.25rem] bg-blue-600/10 dark:bg-blue-400/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all text-2xl shadow-inner">
+                <div key={num} className="glass p-12 rounded-[3.5rem] flex flex-col items-start gap-8 hover-lift group relative overflow-hidden backdrop-blur-3xl border-white/40 dark:border-white/5 shadow-2xl">
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-bl-[6rem] group-hover:scale-125 transition-transform duration-700"></div>
+                  <div className="w-16 h-16 rounded-2xl bg-blue-600/10 dark:bg-white/5 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all text-3xl shadow-lg border border-white/10 dark:border-white/5">
                     {num}
                   </div>
-                  <h4 className="text-2xl font-bold text-foreground tracking-tight">{(t.howItWorks as any)[`step${num}`].title}</h4>
-                  <p className="text-lg opacity-60 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
+                  <div className="space-y-4">
+                    <h4 className="text-2xl font-black text-foreground tracking-tight">{(t.howItWorks as any)[`step${num}`].title}</h4>
+                    <p className="text-lg opacity-50 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Bento Features */}
-          <section className="w-full max-w-6xl px-6 mb-40 z-10">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+          <section className="w-full max-w-6xl px-6 mb-48 z-10 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="md:col-span-1 p-12 bg-white/50 dark:bg-white/[0.02] border border-white/50 dark:border-white/5 rounded-[3.5rem] flex flex-col items-center justify-center hover:bg-white dark:hover:bg-white/[0.05] transition-all group backdrop-blur-xl">
                 <div className="space-y-4">
-                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-blue-600 transition-colors">{t.features.sync}</h4>
-                  <p className="opacity-60 font-medium text-lg leading-relaxed">Automated nightly builds. Zero manual effort to keep your site updated.</p>
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-blue-600 transition-colors uppercase">{t.features.sync}</h4>
+                  <p className="opacity-40 font-medium text-lg leading-relaxed">Automated nightly builds. Zero manual effort to keep your site updated.</p>
                 </div>
               </div>
-              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+              <div className="md:col-span-1 p-12 bg-white/50 dark:bg-white/[0.02] border border-white/50 dark:border-white/5 rounded-[3.5rem] flex flex-col items-center justify-center hover:bg-white dark:hover:bg-white/[0.05] transition-all group backdrop-blur-xl">
                 <div className="space-y-4">
-                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-purple-600 transition-colors">{t.features.url}</h4>
-                  <p className="opacity-60 font-medium text-lg leading-relaxed">One permanent URL for your resume or paper. Never send a dead link again.</p>
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-purple-600 transition-colors uppercase">{t.features.url}</h4>
+                  <p className="opacity-40 font-medium text-lg leading-relaxed">One permanent URL for your resume or paper. Never send a dead link again.</p>
                 </div>
               </div>
-              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+              <div className="md:col-span-1 p-12 bg-white/50 dark:bg-white/[0.02] border border-white/50 dark:border-white/5 rounded-[3.5rem] flex flex-col items-center justify-center hover:bg-white dark:hover:bg-white/[0.05] transition-all group backdrop-blur-xl">
                 <div className="space-y-4">
-                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-emerald-600 transition-colors">{t.features.open}</h4>
-                  <p className="opacity-60 font-medium text-lg leading-relaxed">Military-grade encryption for your credentials. Your privacy is our priority.</p>
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-emerald-600 transition-colors uppercase">{t.features.open}</h4>
+                  <p className="opacity-40 font-medium text-lg leading-relaxed">Military-grade encryption for your credentials. Your privacy is our priority.</p>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Dynamic FAQ Section */}
-          <section className="w-full max-w-5xl px-6 mb-40 z-10">
-            <h3 className="text-center text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-20">{t.faq.title}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-16">
+          <section className="w-full max-w-5xl px-6 mb-48 z-10">
+            <h3 className="text-center text-xs font-black uppercase tracking-[0.5em] text-blue-600 dark:text-blue-400 mb-20 opacity-80">{t.faq.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20">
               {[1, 2, 3].map(i => (
-                <div key={i} className="space-y-4">
-                  <h4 className="font-bold text-2xl tracking-tight text-foreground">{(t as any).faq[`q${i}`]}</h4>
-                  <p className="text-lg opacity-60 font-medium leading-relaxed">{(t as any).faq[`a${i}`]}</p>
+                <div key={i} className="space-y-5 border-l-2 border-blue-600/20 dark:border-white/5 pl-8 py-2">
+                  <h4 className="font-bold text-2xl tracking-tight text-foreground opacity-90">{(t as any).faq[`q${i}`]}</h4>
+                  <p className="text-lg opacity-40 font-medium leading-relaxed">{(t as any).faq[`a${i}`]}</p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Footer */}
-          <footer className="w-full py-20 text-center opacity-30">
-            <p className="text-xs font-black uppercase tracking-[1em] text-slate-400">{t.title} CLOUD</p>
+          <footer className="w-full py-24 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[1.5em] opacity-20">{t.title} CLOUD PLATFORM</p>
           </footer>
         </div>
       ) : (
         // Dashboard
-        <div className="w-full max-w-6xl px-6 z-10 animate-fade-in">
+        <div className="w-full max-w-7xl px-8 z-10 animate-fade-in pt-12">
           {/* Header */}
-          <header className="flex justify-between items-center py-8 mb-12">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">O</span>
+          <header className="flex justify-between items-center mb-16 px-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/10">
+                <span className="text-white font-bold text-2xl">O</span>
               </div>
-              <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">{t.dashboard}</h1>
+              <div>
+                <h1 className="text-3xl font-black tracking-tighter text-foreground">{t.dashboard}</h1>
+                <p className="text-xs uppercase tracking-widest opacity-30 font-bold">{session.user.email}</p>
+              </div>
             </div>
-            <div className="flex gap-4 items-center bg-white/50 dark:bg-white/5 backdrop-blur-md p-2 pl-4 rounded-full border border-white/20 dark:border-white/5 shadow-sm">
-              <span className="text-sm font-medium opacity-80">{session.user.email}</span>
-              {session.user.tier !== 'pro' && (
+            <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
+              {session.user.tier !== 'pro' ? (
                 <button
-                  className="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 rounded-full text-xs font-bold transition-all shadow-lg shadow-amber-500/20"
+                  className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
                 >
                   GO PRO
                 </button>
+              ) : (
+                <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
               )}
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-full text-xs font-bold transition-colors"
+                className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
               >
                 {t.logout}
               </button>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
             {/* Add Project Form */}
             <div className="lg:col-span-1">
-              <div className="glass-card p-8 rounded-[2rem] relative overflow-hidden">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-bold text-foreground">{editingId ? t.actions.edit : t.addProject}</h2>
+              <div className="glass-card p-10 rounded-[3rem] relative overflow-hidden backdrop-blur-3xl border-white/50 dark:border-white/5 shadow-3xl">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-black tracking-tighter text-foreground">{editingId ? t.actions.edit : t.addProject}</h2>
                   {editingId && (
                     <button
                       onClick={() => { setEditingId(null); setFilename(""); setProjectId(""); }}
-                      className="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider"
+                      className="text-[10px] font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest"
                     >
                       Cancel
                     </button>
                   )}
                 </div>
-                <form onSubmit={handleAddProject} className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.filename}</label>
+                <form onSubmit={handleAddProject} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
                     <input
                       placeholder={t.form.filenamePlaceholder}
                       value={filename}
                       onChange={e => setFilename(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
+                      className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
                       required
                     />
                   </div>
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.projectId}</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
                     <input
                       placeholder={t.form.projectIdPlaceholder}
                       value={projectId}
                       onChange={e => setProjectId(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
+                      className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
                       required
                     />
                   </div>
                   <button
                     disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all disabled:opacity-50"
+                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
                   >
                     {loading ? t.form.submitting : (editingId ? t.form.updateSubmit : t.form.submit)}
                   </button>
@@ -426,52 +433,52 @@ export default function Home() {
             </div>
 
             {/* Project List */}
-            <div className="lg:col-span-2 space-y-4">
-              <h2 className="text-xl font-bold mb-4 px-2 text-foreground">{t.yourProjects}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="lg:col-span-3 space-y-6">
+              <h2 className="text-2xl font-black tracking-tighter mb-8 px-2 text-foreground opacity-90">{t.yourProjects}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {projects.map(project => (
-                  <div key={project.id} className="glass p-6 rounded-2xl hover-lift group relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[4rem] pointer-events-none"></div>
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-bold text-lg text-foreground">{project.filename}.pdf</h3>
+                  <div key={project.id} className="glass p-8 rounded-[2.5rem] hover-lift group relative overflow-hidden backdrop-blur-3xl border-white/50 dark:border-white/5 shadow-2xl">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-bl-[4rem] pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-3">
+                          <h3 className="font-black text-2xl text-foreground tracking-tight">{project.filename}.pdf</h3>
                           {session.user.tier === 'pro' && (
-                            <span className="px-2 py-0.5 bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-bold rounded-full uppercase tracking-tighter">Pro</span>
+                            <span className="px-3 py-1 bg-amber-400 dark:bg-amber-400/10 text-amber-500 text-[9px] font-black rounded-full uppercase tracking-widest border border-amber-400/20">Pro</span>
                           )}
                         </div>
-                        <p className="text-xs opacity-50 font-mono truncate max-w-[150px]">{project.project_id}</p>
-                        <div className="flex items-center gap-2 mt-2 opacity-40">
+                        <p className="text-[10px] opacity-30 font-bold uppercase tracking-widest truncate max-w-[200px]">{project.project_id}</p>
+                        <div className="flex items-center gap-2 mt-4 opacity-40 bg-slate-100 dark:bg-white/5 px-3 py-1 rounded-full w-fit">
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                          <span className="text-xs font-semibold">{project.view_count || 0} views</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest">{project.view_count || 0} views</span>
                         </div>
                       </div>
-                      <div className="w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
+                      <div className="w-4 h-4 bg-emerald-400 rounded-full shadow-[0_0_20px_rgba(52,211,153,0.6)] animate-pulse"></div>
                     </div>
 
-                    <div className="flex gap-2 mt-4 flex-wrap">
+                    <div className="flex gap-3 mt-8 flex-wrap">
                       <a
                         href={`${process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://cdn.overlink.com'}/${project.filename}.pdf`}
                         target="_blank"
-                        className="flex-1 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold text-center hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
+                        className="flex-1 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-slate-900/20 dark:shadow-white/5"
                       >
                         {t.actions.view}
                       </a >
                       <button
                         onClick={() => handleSync(project.id)}
-                        className="px-4 py-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-xl text-xs font-bold transition-colors"
+                        className="px-6 py-4 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-600/20"
                       >
                         {t.actions.sync}
                       </button>
                       <button
                         onClick={() => handleEditProject(project)}
-                        className="px-4 py-3 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl text-xs font-bold transition-colors"
+                        className="px-4 py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
                       >
                         {t.actions.edit}
                       </button>
                       <button
                         onClick={() => handleDeleteProject(project.id)}
-                        className="px-4 py-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-xl text-xs font-bold transition-colors"
+                        className="px-4 py-4 bg-red-500/10 text-red-600 hover:bg-red-600 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
                       >
                         {t.actions.delete}
                       </button>
@@ -480,8 +487,11 @@ export default function Home() {
                 ))}
                 {
                   projects.length === 0 && (
-                    <div className="col-span-full py-20 text-center opacity-40 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl">
-                      <p>{t.empty}</p>
+                    <div className="col-span-full py-32 text-center opacity-20 border-4 border-dashed border-slate-200 dark:border-white/5 rounded-[3rem] flex flex-col items-center gap-6">
+                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center">
+                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                      </div>
+                      <p className="text-sm font-black uppercase tracking-[0.5em]">{t.empty}</p>
                     </div>
                   )
                 }
