@@ -65,7 +65,7 @@ For the login to redirect back to your website (and not `localhost`), you **must
 
 ## 4. Cloudflare R2 (PDF Storage)
 
-1.  Go to [Cloudflare R2](https://dash.cloudflare.com/) and create a bucket (e.g., `overlink-pdfs`).
+1.  Go to [Cloudflare R2](https://dash.cloudflare.com/) and create a bucket (e.g., `overlink`).
 2.  Enable **Public Access**:
     -   **Option A (Custom Domain)**: Go to your bucket settings -> "Public Access" -> "Connect Domain".
     -   **Option B (R2.dev Subdomain)**: If you don't have a domain, go to settings -> "Public Access" -> "Allow Access" (under R2.dev Subdomain). This will give you a long URL like `https://pub-xxx.r2.dev`.

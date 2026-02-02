@@ -33,7 +33,7 @@ class OverleafBot:
             "locale": "en-US"
         }
         
-        if os.path.exists(self.auth_path) and self.headless:
+        if self.auth_path and os.path.exists(self.auth_path) and self.headless:
             logger.info(f"Loading session from {self.auth_path}...")
             context_args["storage_state"] = self.auth_path
             
@@ -136,6 +136,10 @@ class OverleafBot:
         Downloads the PDF from a project ID or URL to the specified output path.
         Returns True on success.
         """
+        return await self._download_project_with_page(self.page, project_id, output_path, status_callback)
+
+    async def _download_project_with_page(self, page, project_id, output_path, status_callback=None):
+        """Helper to download a project using a specific page."""
         # Normalize URL
         if "http" in project_id:
             url = project_id
@@ -149,12 +153,12 @@ class OverleafBot:
         
         try:
             if status_callback: await status_callback(f"Navigating to Overleaf project...")
-            await self.page.goto(url)
+            await page.goto(url)
             await self._random_delay()
             
             # 1. Handle Join Interstitial
             try:
-                join_btn = self.page.get_by_text("OK, join project")
+                join_btn = page.get_by_text("OK, join project")
                 if await join_btn.is_visible(timeout=3000):
                     logger.info("Joining project...")
                     await join_btn.click()
@@ -165,14 +169,14 @@ class OverleafBot:
             # 2. Download
             download_selector = '[aria-label="Download PDF"]'
             if status_callback: await status_callback("Waiting for editor to load...")
-            await self.page.wait_for_selector(download_selector, timeout=60000)
+            await page.wait_for_selector(download_selector, timeout=60000)
             
             # Download to a temporary path first (output_path + .tmp)
             temp_path = output_path + ".tmp"
             
             if status_callback: await status_callback("Initiating PDF download...")
-            async with self.page.expect_download() as download_info:
-                await self.page.click(download_selector)
+            async with page.expect_download() as download_info:
+                await page.click(download_selector)
                 
             download = await download_info.value
             await download.save_as(temp_path)
@@ -186,6 +190,27 @@ class OverleafBot:
             
         except Exception as e:
             logger.error(f"Failed to process project {pid}: {e}")
-            if status_callback: await status_callback(f"Error processing: {str(e)}")
+            if status_callback: await status_callback(f"Error processing {pid}: {str(e)}")
             return False
+
+    async def batch_download_projects(self, projects, max_concurrent=3, status_callback=None):
+        """
+        Downloads multiple projects in parallel.
+        :param projects: List of tuples (project_id, output_path)
+        :param max_concurrent: Max number of simultaneous downloads
+        :param status_callback: Optional async callback for status updates
+        """
+        semaphore = asyncio.Semaphore(max_concurrent)
+        
+        async def bounded_download(project_id, output_path):
+            async with semaphore:
+                page = await self.context.new_page()
+                try:
+                    return await self._download_project_with_page(page, project_id, output_path, status_callback)
+                finally:
+                    await page.close()
+
+        tasks = [bounded_download(pid, path) for pid, path in projects]
+        results = await asyncio.gather(*tasks)
+        return results
 
