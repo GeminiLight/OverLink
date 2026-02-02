@@ -72,5 +72,5 @@ if __name__ == "__main__":
     import sys
     import os
     # Ensure package is in path for local run (in Actions we install it)
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../packages/python-core')))
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../overlink')))
     asyncio.run(run_worker())

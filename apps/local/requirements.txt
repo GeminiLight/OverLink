@@ -1,4 +1,4 @@
--e ../../packages/python-core
+-e ../../overlink
 fastapi
 uvicorn
 python-dotenv
