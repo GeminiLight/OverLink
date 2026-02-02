@@ -309,6 +309,43 @@ export default function Home() {
     setProjects([]);
   };
 
+  const handleSync = async (projId: string) => {
+    if (!session) return;
+    setSyncingIds(prev => new Set(prev).add(projId));
+
+    // Optimistic Update
+    setProjects(prev => prev.map(p =>
+      p.id === projId ? { ...p, last_sync_status: 'running', last_sync_at: new Date().toISOString() } : p
+    ));
+
+    try {
+      const res = await fetch("/api/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: projId, userId: session.user.id })
+      });
+
+      if (res.ok) {
+        setNotification({ message: t.alert.syncStarted, type: 'success' });
+      } else {
+        setNotification({ message: t.alert.syncFail, type: 'error' });
+        setSyncingIds(prev => {
+          const next = new Set(prev);
+          next.delete(projId);
+          return next;
+        });
+        fetchProjects(session.user.id);
+      }
+    } catch (e) {
+      setNotification({ message: t.alert.syncFail, type: 'error' });
+      setSyncingIds(prev => {
+        const next = new Set(prev);
+        next.delete(projId);
+        return next;
+      });
+    }
+  };
+
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) return;
