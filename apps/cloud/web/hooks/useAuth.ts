@@ -8,40 +8,62 @@ export function useAuth() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let mounted = true;
+
+        // Safety timeout to prevent infinite loading spinner
+        const safetyTimeout = setTimeout(() => {
+            if (mounted) {
+                console.warn("[useAuth] Safety timeout reached, forcing loading to false");
+                setLoading(false);
+            }
+        }, 10000);
+
         const initSession = async () => {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
-                setSession(session);
-                setUser(session?.user ?? null);
-                setLoading(false); // Set loading false as soon as we have session/user
-                if (session?.user) {
-                    fetchProfile(session.user.id); // Non-blocking profile fetch
+                // Supabase parses URL hash automatically on initialization
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) throw error;
+
+                if (mounted) {
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                    if (session?.user) {
+                        fetchProfile(session.user.id);
+                    }
                 }
             } catch (e) {
-                console.error("Error initializing session:", e);
-                setLoading(false);
+                console.error("[useAuth] Session init error:", e);
+            } finally {
+                if (mounted) setLoading(false);
             }
         };
 
         initSession();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            try {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("[useAuth] Auth Event:", event);
+
+            if (mounted) {
                 setSession(session);
                 setUser(session?.user ?? null);
+
                 if (session?.user) {
                     fetchProfile(session.user.id);
                 } else {
                     setProfile(null);
                 }
-            } catch (e) {
-                console.error("Error on auth state change:", e);
-            } finally {
+
+                // SIGNED_IN or INITIAL_SESSION events should definitely mark loading as false
                 setLoading(false);
             }
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            mounted = false;
+            clearTimeout(safetyTimeout);
+            subscription.unsubscribe();
+        };
     }, []);
 
     const fetchProfile = async (userId: string) => {
