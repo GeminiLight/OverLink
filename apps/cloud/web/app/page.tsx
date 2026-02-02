@@ -51,7 +51,7 @@ const translations: Record<Lang, any> = {
     faq: {
       title: "Frequently Asked Questions",
       q1: "How do I find my Project ID?",
-      a1: "It's the 24-character code at the end of your project URL (e.g., overleaf.com/project/64b...)",
+      a1: "Open your Overleaf project, click 'Share', turn on 'Link Sharing', and copy the 'Read-only link'. Paste that URL here.",
       q2: "Can I sync private projects?",
       a2: "Yes! OverLink uses a secure browser bot to access and compile your private projects.",
       q3: "Does my PDF link change?",
@@ -122,7 +122,7 @@ const translations: Record<Lang, any> = {
     faq: {
       title: "常见问题",
       q1: "如何获取我的项目 ID？",
-      a1: "项目 URL 末尾的24位字符即是ID（例如：overleaf.com/project/64b...）。",
+      a1: "打开您的 Overleaf 项目，点击右上角“Share (分享)”，开启“Turn on link sharing (开启链接分享)”，复制“Read-only link (只读链接)”并填入此处。",
       q2: "支持私有项目同步吗？",
       a2: "支持！OverLink通过安全的浏览器机器人访问并编译您的私有项目。",
       q3: "PDF 链接会变吗？",
@@ -769,7 +769,7 @@ export default function Home() {
                     required
                   />
                   <p className="text-[10px] opacity-40 font-bold px-2 pt-1 leading-relaxed">
-                    Tip: You can paste the full Overleaf URL (e.g., <span className="text-blue-500 font-mono">overleaf.com/project/64b...</span>) or just the ID.
+                    Tip: Turn on "Link Sharing" in Overleaf and paste the full <strong>Read Link</strong> (e.g., <span className="text-blue-500 font-mono">overleaf.com/read/abc...</span>).
                   </p>
                 </div>
                 <div className="flex gap-4 pt-4">
