@@ -2,9 +2,9 @@ import argparse
 import asyncio
 import sys
 import uvicorn
-from cv_mirror.config import Config
-from overlink_bot.client import OverleafBot
-from cv_mirror.logger import setup_logger
+from backend.config import Config
+from overlink_bot.core import OverleafBot
+from backend.logger import setup_logger
 
 logger = setup_logger()
 
@@ -51,7 +51,7 @@ def run_sync(args):
 
 def run_server(args):
     """Runs the FastAPI server."""
-    uvicorn.run("cv_mirror.server:app", host=args.host, port=args.port, reload=args.reload)
+    uvicorn.run("backend.server:app", host=args.host, port=args.port, reload=args.reload)
 
 def run_user_add(args):
     """Adds or updates a user."""

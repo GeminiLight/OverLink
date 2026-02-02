@@ -2,7 +2,7 @@ import asyncio
 import os
 import json
 import boto3
-from overlink_bot.client import OverleafBot
+from overlink_bot.core import OverleafBot
 
 # Configuration from Environment Variables
 PAYLOAD_JSON = os.getenv("payload", "{}")

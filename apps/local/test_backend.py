@@ -1,7 +1,7 @@
 import asyncio
 import os
 import json
-from cv_mirror.config import Config
+from backend.config import Config
 from server import MirrorRequest, mirror_cv
 
 # Mocking OverleafBot to avoid actual browser interaction during this quick test

@@ -6,8 +6,8 @@ from pydantic import BaseModel
 import logging
 import json
 import asyncio
-from overlink_bot.client import OverleafBot
-from cv_mirror.config import Config
+from overlink_bot.core import OverleafBot
+from backend.config import Config
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
