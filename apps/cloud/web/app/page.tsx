@@ -170,6 +170,7 @@ export default function Home() {
   // Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<any>(null);
   const [projectToDelete, setProjectToDelete] = useState<any>(null);
 
@@ -371,6 +372,7 @@ export default function Home() {
         handleSync(result.data.id);
       }
       setNotification({ message: "Project added successfully!", type: 'success' });
+      setIsAddModalOpen(false);
     } else {
       setNotification({ message: t.alert.addFail, type: 'error' });
     }
@@ -607,7 +609,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
+            <div className="flex gap-4 items-center">
               {session.user.tier !== 'pro' ? (
                 <button
                   className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
@@ -615,59 +617,37 @@ export default function Home() {
                   GO PRO
                 </button>
               ) : (
-                <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
+                <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-foreground border border-white/10">PRO TIER</span>
               )}
               <button
                 onClick={handleLogout}
-                className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
+                className="px-6 py-2.5 bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest transition-all text-foreground"
               >
                 {t.logout}
               </button>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            {/* Add Project Form */}
-            <div className="lg:col-span-1">
-              <div className="glass-card p-10 rounded-[3rem] relative overflow-hidden backdrop-blur-3xl border-white/50 dark:border-white/5 shadow-3xl">
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-black tracking-tighter text-foreground">{t.addProject}</h2>
-                </div>
-                <form onSubmit={handleAddProject} className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
-                    <input
-                      placeholder={t.form.filenamePlaceholder}
-                      value={filename}
-                      onChange={e => setFilename(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
-                    <input
-                      placeholder={t.form.projectIdPlaceholder}
-                      value={projectId}
-                      onChange={e => setProjectId(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                      required
-                    />
-                  </div>
-                  <button
-                    disabled={loading}
-                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
-                  >
-                    {loading ? t.form.submitting : t.form.submit}
-                  </button>
-                </form>
-              </div>
-            </div>
-
+          <div className="w-full">
             {/* Project List */}
-            <div className="lg:col-span-3 space-y-6">
-              <h2 className="text-2xl font-black tracking-tighter mb-8 px-2 text-foreground opacity-90">{t.yourProjects}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-8">
+              <div className="flex justify-between items-end px-2">
+                <h2 className="text-4xl font-black tracking-tighter text-foreground opacity-90">{t.yourProjects}</h2>
+                <p className="text-sm font-bold uppercase tracking-widest opacity-40">{projects.length} Projects</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Create New Card */}
+                <div
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="group relative flex flex-col items-center justify-center gap-6 glass p-8 rounded-[2.5rem] cursor-pointer hover-lift border-2 border-dashed border-blue-500/20 hover:border-blue-500/50 bg-blue-50/50 dark:bg-blue-500/5 hover:bg-blue-100/50 dark:hover:bg-blue-500/10 min-h-[320px] transition-all"
+                >
+                  <div className="w-20 h-20 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-xl shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                  </div>
+                  <p className="font-black text-lg text-blue-600 dark:text-blue-400 uppercase tracking-widest">Create New</p>
+                </div>
+
                 {projects.map(project => (
                   <div key={project.id} className="glass p-8 rounded-[2.5rem] hover-lift group relative overflow-hidden backdrop-blur-3xl border-white/50 dark:border-white/5 shadow-2xl">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-bl-[4rem] pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
@@ -752,6 +732,56 @@ export default function Home() {
         </div >
       )
       }
+      {/* Add Modal */}
+      {
+        isAddModalOpen && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
+            <div className="glass-modal w-full max-w-lg p-12 rounded-[3.5rem] animate-scale-in relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-green-500/10 rounded-bl-[4rem] pointer-events-none"></div>
+              <h2 className="text-3xl font-black tracking-tighter text-foreground mb-8">{t.addProject}</h2>
+              <form onSubmit={handleAddProject} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
+                  <input
+                    placeholder={t.form.filenamePlaceholder}
+                    value={filename}
+                    onChange={e => setFilename(e.target.value)}
+                    className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                    required
+                    autoFocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
+                  <input
+                    placeholder={t.form.projectIdPlaceholder}
+                    value={projectId}
+                    onChange={e => setProjectId(e.target.value)}
+                    className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                    required
+                  />
+                </div>
+                <div className="flex gap-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddModalOpen(false)}
+                    className="flex-1 py-5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                  >
+                    {t.modal.cancel}
+                  </button>
+                  <button
+                    disabled={loading}
+                    className="flex-1 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                  >
+                    {loading ? t.form.submitting : t.form.submit}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+
       {/* Edit Modal */}
       {
         isEditModalOpen && (
