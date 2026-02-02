@@ -50,12 +50,12 @@ const translations: Record<Lang, any> = {
     },
     faq: {
       title: "Frequently Asked Questions",
-      q1: "Is it really free?",
-      a1: "Yes. Use our cloud infra or deploy your own worker.",
-      q2: "How long until it's live?",
-      a2: "Usually about 2 minutes after the sync is triggered.",
-      q3: "Is my data safe?",
-      a3: "Your Overleaf credentials are encrypted before storage."
+      q1: "How do I find my Project ID?",
+      a1: "It's the 24-character code at the end of your project URL (e.g., overleaf.com/project/64b...)",
+      q2: "Can I sync private projects?",
+      a2: "Yes! OverLink uses a secure browser bot to access and compile your private projects.",
+      q3: "Does my PDF link change?",
+      a3: "No. Your specialized PDF URL allows you to update content without breaking existing links."
     },
     empty: "No projects yet. Add one to get started.",
     alert: {
@@ -121,12 +121,12 @@ const translations: Record<Lang, any> = {
     },
     faq: {
       title: "常见问题",
-      q1: "它是免费的吗？",
-      a1: "是的。使用我们的云端设施，或部署您自己的 Worker。",
-      q2: "同步需要多久？",
-      a2: "初始化后，系统大约需要 2 分钟来更新您的资产。",
-      q3: "数据安全吗？",
-      a3: "您的 Overleaf 密码在存储前会经过高强度加密。"
+      q1: "如何获取我的项目 ID？",
+      a1: "项目 URL 末尾的24位字符即是ID（例如：overleaf.com/project/64b...）。",
+      q2: "支持私有项目同步吗？",
+      a2: "支持！OverLink通过安全的浏览器机器人访问并编译您的私有项目。",
+      q3: "PDF 链接会变吗？",
+      a3: "不会。您的 PDF 链接是永久固定的，内容更新后无需重新分享链接。"
     },
     empty: "暂无项目。添加一个开始使用。",
     alert: {
