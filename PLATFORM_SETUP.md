@@ -7,7 +7,10 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
 1.  Go to [Supabase](https://supabase.com) and create a new project.
 2.  Go to **SQL Editor** -> **New query**.
 3.  Copy and paste the content of `apps/cloud/supabase/schema.sql` and run it.
-4.  Go to **Settings** -> **API**. Copy the `Project URL` and `anon` public key / `service_role` secret key.
+4.  Go to **Settings** -> **API**.
+5.  Under **Publishable and secret API keys**:
+    *   Copy **Publishable key** (`sb_publishable_...`) -> `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+    *   Copy **Secret key** (`sb_secret_...`) -> `SUPABASE_SERVICE_ROLE_KEY`
 
 ## 1.1 Authentication (Google Login)
 1.  Go to **Authentication** -> **Providers**.
