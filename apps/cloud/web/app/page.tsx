@@ -577,8 +577,16 @@ export default function Home() {
           {/* Header */}
           <header className="flex justify-between items-center mb-16 px-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/10">
-                <span className="text-white font-bold text-2xl">O</span>
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/10 overflow-hidden bg-gradient-to-tr from-blue-600 to-purple-600">
+                {(profile?.avatar_url || session?.user?.user_metadata?.avatar_url) ? (
+                  <img
+                    src={profile?.avatar_url || session?.user?.user_metadata?.avatar_url}
+                    alt="Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white font-bold text-2xl">O</span>
+                )}
               </div>
               <div>
                 <div>
