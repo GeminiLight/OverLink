@@ -567,23 +567,24 @@ export default function Home() {
                   <p className="text-xs uppercase tracking-widest opacity-30 font-bold">{session.user.email}</p>
                 </div>
               </div>
-              <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
-                {session.user.tier !== 'pro' ? (
-                  <button
-                    className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
-                  >
-                    GO PRO
-                  </button>
-                ) : (
-                  <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
-                )}
+            </div>
+            <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
+              {session.user.tier !== 'pro' ? (
                 <button
-                  onClick={handleLogout}
-                  className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
+                  className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
                 >
-                  {t.logout}
+                  GO PRO
                 </button>
-              </div>
+              ) : (
+                <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
+              )}
+              <button
+                onClick={handleLogout}
+                className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
+              >
+                {t.logout}
+              </button>
+            </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
