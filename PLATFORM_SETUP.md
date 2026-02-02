@@ -66,9 +66,17 @@ For the login to redirect back to your website (and not `localhost`), you **must
 ## 4. Cloudflare R2 (PDF Storage)
 
 1.  Go to [Cloudflare R2](https://dash.cloudflare.com/) and create a bucket (e.g., `overlink-pdfs`).
-2.  Enable **Public Access** (Custom Domain or R2.dev) so PDFs can be viewed.
-3.  Go to **R2 API Tokens** -> Create Token -> **Admin Read & Write**.
-4.  Copy: `Access Key ID`, `Secret Access Key`, and `Endpoint` (S3 API).
+2.  Enable **Public Access**:
+    -   **Option A (Custom Domain)**: Go to your bucket settings -> "Public Access" -> "Connect Domain".
+    -   **Option B (R2.dev Subdomain)**: If you don't have a domain, go to settings -> "Public Access" -> "Allow Access" (under R2.dev Subdomain). This will give you a long URL like `https://pub-xxx.r2.dev`.
+3.  **Set Your CDN Base URL**: The URL you get from Step 2 (e.g., `https://pub-xxx.r2.dev` or `https://cdn.yourdomain.com`) is what you should put in `NEXT_PUBLIC_CDN_BASE_URL` on Vercel.
+4.  Go to **R2 API Tokens** -> Create Token -> **Admin Read & Write**.
+5.  Copy: `Access Key ID`, `Secret Access Key`, and `Endpoint` (S3 API).
+
+> [!NOTE]
+> **How it Works**: 
+> 1. The **Worker** generates the PDF and uploads it to R2 using the API keys (`R2_ACCESS_KEY`, etc.).
+> 2. The **Web App** reads the project name and appends `.pdf` to your `NEXT_PUBLIC_CDN_BASE_URL` to create an public view link.
 
 ## 5. Environment Variables Reference
 
