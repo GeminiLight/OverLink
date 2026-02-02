@@ -154,6 +154,7 @@ const translations: Record<Lang, any> = {
 
 export default function Home() {
   const [session, setSession] = useState<any>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
@@ -209,6 +210,7 @@ export default function Home() {
     // Check session on load
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setIsAuthLoading(false);
       if (session) {
         fetchProjects(session.user.id);
         fetchProfile(session.user.id);
@@ -407,6 +409,14 @@ export default function Home() {
     setNotification({ message: t.alert.copySuccess, type: 'success' });
     setTimeout(() => setNotification(null), 3000);
   };
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-background">
+        <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-500">
