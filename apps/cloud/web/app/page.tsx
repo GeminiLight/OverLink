@@ -31,7 +31,7 @@ const translations = {
       syncing: "Starting...",
     },
     hero: {
-      title: "OverLink Cloud",
+      title: "OverLink",
       desc: "Sync your Overleaf projects to persistent File URLs."
     },
     howItWorks: {
@@ -128,6 +128,8 @@ export default function Home() {
   const [session, setSession] = useState<any>(null);
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
+  const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
   // Form State
   const [filename, setFilename] = useState("");
@@ -228,12 +230,36 @@ export default function Home() {
 
   const handleSync = async (projId: string) => {
     if (!session) return;
-    const res = await fetch("/api/sync", {
-      method: "POST",
-      body: JSON.stringify({ projectId: projId, userId: session.user.id })
-    });
-    if (res.ok) alert(t.alert.success);
-    else alert(t.alert.fail);
+
+    // Set syncing state
+    setSyncingIds(prev => new Set(prev).add(projId));
+
+    try {
+      const res = await fetch("/api/sync", {
+        method: "POST",
+        body: JSON.stringify({ projectId: projId, userId: session.user.id })
+      });
+
+      if (res.ok) {
+        setNotification({ message: t.alert.success, type: 'success' });
+      } else {
+        setNotification({ message: t.alert.fail, type: 'error' });
+      }
+    } catch (err) {
+      setNotification({ message: t.alert.fail, type: 'error' });
+    } finally {
+      // Auto-clear notification after 3s
+      setTimeout(() => setNotification(null), 3000);
+
+      // Keep "syncing" status for 60s (estimated worker time)
+      setTimeout(() => {
+        setSyncingIds(prev => {
+          const next = new Set(prev);
+          next.delete(projId);
+          return next;
+        });
+      }, 60000);
+    }
   };
 
   const handleDeleteProject = async (projId: string) => {
@@ -464,7 +490,10 @@ export default function Home() {
                           <span className="text-[10px] font-black uppercase tracking-widest">{project.view_count || 0} views</span>
                         </div>
                       </div>
-                      <div className="w-4 h-4 bg-emerald-400 rounded-full shadow-[0_0_20px_rgba(52,211,153,0.6)] animate-pulse"></div>
+                      <div className={`w-4 h-4 rounded-full ${syncingIds.has(project.id)
+                        ? 'bg-blue-500 animate-pulse-blue'
+                        : 'bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.6)] animate-pulse'
+                        }`}></div>
                     </div>
 
                     <div className="flex gap-3 mt-8 flex-wrap">
@@ -477,9 +506,13 @@ export default function Home() {
                       </a >
                       <button
                         onClick={() => handleSync(project.id)}
-                        className="px-6 py-4 bg-blue-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-600/20"
+                        disabled={syncingIds.has(project.id)}
+                        className={`px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl ${syncingIds.has(project.id)
+                          ? 'bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed'
+                          : 'bg-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-blue-600/20'
+                          }`}
                       >
-                        {t.actions.sync}
+                        {syncingIds.has(project.id) ? t.actions.syncing : t.actions.sync}
                       </button>
                       <button
                         onClick={() => handleEditProject(project)}
@@ -510,6 +543,22 @@ export default function Home() {
             </div >
           </div >
         </div >
+      )}
+      {/* Notification Toast */}
+      {notification && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-slide-up">
+          <div className={`px-8 py-4 rounded-2xl shadow-2xl backdrop-blur-3xl border ${notification.type === 'success'
+            ? 'bg-emerald-500/90 text-white border-emerald-400/20'
+            : 'bg-red-500/90 text-white border-red-400/20'
+            } flex items-center gap-4 font-bold text-sm tracking-wide`}>
+            {notification.type === 'success' ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+            )}
+            {notification.message}
+          </div>
+        </div>
       )}
     </div >
   );
