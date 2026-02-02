@@ -86,6 +86,9 @@ export async function PATCH(request: Request) {
     }
 }
 
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { r2 } from '@/lib/r2';
+
 export async function DELETE(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -96,6 +99,28 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: "Missing projectId or userId" }, { status: 400 });
         }
 
+        // 1. Get filename first
+        const { data: project } = await supabase
+            .from('projects')
+            .select('filename')
+            .eq('id', projectId)
+            .eq('user_id', userId)
+            .single();
+
+        if (project?.filename) {
+            // 2. Delete from R2 (fire and forget or await, safe to await here)
+            try {
+                await r2.send(new DeleteObjectCommand({
+                    Bucket: process.env.R2_BUCKET_NAME,
+                    Key: `${project.filename}.pdf`,
+                }));
+            } catch (err) {
+                console.error("Failed to delete from R2:", err);
+                // Continue to delete from DB even if R2 fails
+            }
+        }
+
+        // 3. Delete from DB
         const { error } = await supabase
             .from('projects')
             .delete()

@@ -174,6 +174,8 @@ export default function Home() {
   const [projectToDelete, setProjectToDelete] = useState<any>(null);
 
   // Edit Form State
+  const [filename, setFilename] = useState("");
+  const [projectId, setProjectId] = useState("");
   const [editFilename, setEditFilename] = useState("");
   const [editProjectId, setEditProjectId] = useState("");
 
