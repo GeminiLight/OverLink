@@ -2,7 +2,7 @@
 
 # 🎓 OverLink
 
-**您的学术资产，永远最新。**  
+**同步您的 Overleaf 项目并生成永久性的 PDF 链接。**  
 *将您的 Overleaf 项目无缝同步到您的个人网站/作品集。*
 
 [🇺🇸 English](./README.md) | 🇨🇳 中文
@@ -11,8 +11,8 @@
   <a href="https://github.com/GeminiLight/overlink">
     <img src="https://img.shields.io/github/stars/GeminiLight/overlink?style=social" alt="GitHub Star">
   </a>
-  <a href="https://twitter.com/intent/tweet?text=OverLink%3A%20%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%20Overleaf%20PDF%20%E5%88%B0%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%EF%BC%81%20https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink">
-    <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink" alt="Tweet">
+  <a href="https://twitter.com/intent/tweet?text=OverLink%3A%20%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%20Overleaf%20PDF%20%E5%88%B0%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%EF%BC%81%20https%3A%2F%2Foverlink.aurax.live%2F">
+    <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Foverlink.aurax.live%2F" alt="Tweet">
   </a>
 </p>
 
@@ -106,7 +106,7 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 
 | 组件 | 描述 | 访问方式 |
 | :--- | :--- | :--- |
-| **☁️ OverLink Cloud** | **(托管版本)** 最简单的使用方式，无需管理服务器。 | [访问 overlink.aurax.live](https://overlink.aurax.live) |
+| **☁️ OverLink Cloud** | **(托管版本)** 最简单的使用方式，无需管理服务器。 | [访问 overlink.aurax.live](https://overlink.aurax.live/) |
 | **💻 OverLink Local** | **(自托管)** 适用于本地机器或 CI/CD 的工具。 | [本地部署指南](docs/local-deployment.zh-CN.md) |
 | **📦 Core** | 共享库和浏览器自动化逻辑。 | [源码](overlink/) |
 
@@ -120,7 +120,7 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 
 **专业、零配置的体验。**
 
-1.  访问 **[overlink.aurax.live](https://overlink.aurax.live)**。
+1.  访问 **[overlink.aurax.live](https://overlink.aurax.live/)**。
 2.  连接您的 Overleaf 账户。
 3.  立即开始自动同步您的学术资产。
 

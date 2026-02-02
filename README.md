@@ -2,7 +2,7 @@
 
 # 🎓 OverLink
 
-**Your Academic Assets, Always Current.**  
+**Turn your Overleaf projects into persistent PDF URLs.**  
 *Seamlessly synchronize your Overleaf projects with your personal website/portfolio.*
 
 🇺🇸 English | [🇨🇳 中文](./README_zh-CN.md)
@@ -11,8 +11,8 @@
   <a href="https://github.com/GeminiLight/overlink">
     <img src="https://img.shields.io/github/stars/GeminiLight/overlink?style=social" alt="Star on GitHub">
   </a>
-  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OverLink%3A%20Sync%20Override%20PDFs%20to%20your%20website%20automatically!%20https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink">
-    <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink" alt="Tweet">
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OverLink%3A%20Sync%20Overleaf%20PDFs%20to%20your%20website%20automatically!%20https%3A%2F%2Foverlink.aurax.live%2F">
+    <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Foverlink.aurax.live%2F" alt="Tweet">
   </a>
 </p>
 
@@ -104,7 +104,7 @@
 
 | Component | Description | Access |
 | :--- | :--- | :--- |
-| **☁️ OverLink Cloud** | **(Managed)** The easiest way to get started. No infrastructure to manage. | [Visit overlink.aurax.live](https://overlink.aurax.live) |
+| **☁️ OverLink Cloud** | **(Managed)** The easiest way to get started. No infrastructure to manage. | [Visit overlink.aurax.live](https://overlink.aurax.live/) |
 | **💻 OverLink Local** | **(Self-Hosted)** CLI tool/Worker for your own machine or CI/CD. | [Local Setup Guide](docs/local-deployment.md) |
 | **📦 Core** | Shared libraries and browser automation logic. | [Source Code](overlink/) |
 
@@ -118,7 +118,7 @@
 
 **The professional, zero-config experience.**
 
-1.  Visit **[overlink.aurax.live](https://overlink.aurax.live)**.
+1.  Visit **[overlink.aurax.live](https://overlink.aurax.live/)**.
 2.  Connect your Overleaf account.
 3.  Start syncing your academic assets instantly.
 
