@@ -1,4 +1,4 @@
-# 🎓 OverLink / CV-Mirror
+# 🎓 OverLink
 
 **OverLink** is a service that automatically keeps your personal website's CV and academic papers synchronized with your Overleaf projects.
 
@@ -17,7 +17,7 @@ The centralized SaaS platform version. A Multi-tenant Web App where you can mana
 -   **Web**: Next.js (Dashboard)
 -   **Worker**: Python + Playwright (PDF Engine)
 
-## 3. Core (`packages/python-core`)
+## 3. Core (`overlink/`)
 Shared Python library (`overlink_bot`) used by both applications.
 
 ---
