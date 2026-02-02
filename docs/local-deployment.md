@@ -70,4 +70,18 @@ chmod +x start.sh
 
 ## Running in GitHub Actions
 
-You can also run this as a scheduled workflow in your own repository. See `.github/workflows/sync.yml` in this repository for a template.
+You can automate this process using GitHub Actions to sync your assets daily or on every push.
+
+1.  **Copy the workflow**:
+    Copy the `.github/workflows/sync.yml` file from this repository to your own repository's `.github/workflows/` directory.
+
+2.  **Configure Secrets**:
+    Go to your repository's **Settings > Secrets and variables > Actions** and add the following repository secrets:
+
+    | Secret Name | Description |
+    | :--- | :--- |
+    | `OVERLEAF_EMAIL` | Your Overleaf login email. |
+    | `OVERLEAF_PASSWORD` | Your Overleaf login password. |
+    | `SSH_PRIVATE_KEY` | (Optional) Private key if pushing to a git repo via SSH. |
+
+    *Note: Environment variables like `TARGET_DIR` or `GIT_REPO_URL` can be set in the workflow file itself if they aren't sensitive.*

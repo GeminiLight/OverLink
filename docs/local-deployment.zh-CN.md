@@ -70,4 +70,18 @@ chmod +x start.sh
 
 ## 在 GitHub Actions 中运行
 
-您也可以将其作为定时工作流运行在您自己的仓库中。请参考本仓库中的 `.github/workflows/sync.yml` 作为模板。
+您可以使用 GitHub Actions 自动化此过程，每日或在每次推送时同步您的资产。
+
+1.  **复制工作流文件**：
+    将本仓库中的 `.github/workflows/sync.yml` 文件复制到您自己仓库的 `.github/workflows/` 目录中。
+
+2.  **配置密钥 (Secrets)**：
+    前往您仓库的 **Settings > Secrets and variables > Actions** 并添加以下仓库密钥：
+
+    | 密钥名称 (Secret Name) | 描述 |
+    | :--- | :--- |
+    | `OVERLEAF_EMAIL` | 您的 Overleaf 登录邮箱。 |
+    | `OVERLEAF_PASSWORD` | 您的 Overleaf 登录密码。 |
+    | `SSH_PRIVATE_KEY` | (可选) 如果通过 SSH 推送到 git 仓库，则需要私钥。 |
+
+    *注意：像 `TARGET_DIR` 或 `GIT_REPO_URL` 这样的非敏感环境变量可以直接在工作流文件中设置。*
