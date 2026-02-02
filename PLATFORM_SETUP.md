@@ -12,6 +12,18 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
     *   Copy **Publishable key** (`sb_publishable_...`) -> `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Safe for browser)
     *   Copy **Secret key** (`sb_secret_...`) -> `SUPABASE_SECRET_KEY` (**KEEP SECRET!**)
 
+## 1.1 Supabase Auth Configuration (CRITICAL for Production)
+
+For the login to redirect back to your website (and not `localhost`), you **must** configure the redirect URLs in Supabase:
+
+1.  Go to **Authentication** -> **URL Configuration**.
+2.  **Site URL**: Change this to your Vercel production URL (e.g., `https://overlink-eta.vercel.app`).
+3.  **Redirect URLs**: Add `https://overlink-eta.vercel.app/**` (with the wildcards) to the list.
+4.  Click **Save**.
+
+> [!IMPORTANT]
+> If you don't do this, Supabase will always redirect you back to `http://localhost:3000` after a successful login.
+
 ## 1.1 Authentication (Google Login)
 1.  Go to **Authentication** -> **Providers**.
 2.  Enable **Google**.
