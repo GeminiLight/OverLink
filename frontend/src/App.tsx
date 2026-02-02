@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
-const envToken = import.meta.env.VITE_GITHUB_ACCESS_TOKEN;
+const envToken = import.meta.env.VITE_PERSONAL_ACCESS_TOKEN;
+console.log("Debug: Loaded Token Length:", envToken ? envToken.length : "None");
 
 const translations = {
   en: {

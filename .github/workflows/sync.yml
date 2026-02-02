@@ -54,7 +54,7 @@ jobs:
     - name: Build Frontend
       env:
         # INJECTING SECRET INTO FRONTEND BUILD (See README for security note)
-        VITE_GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        VITE_PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         cd frontend
         npm install

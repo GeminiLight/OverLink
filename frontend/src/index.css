@@ -1,10 +1,12 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #0f172a;
-  /* slate-900 */
+  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-700;
 }
 
 @keyframes shake {
