@@ -35,8 +35,8 @@ const translations = {
       email: "Verification Email",
       emailPlaceholderCreate: "Used for project mapping",
       emailPlaceholderDelete: "Email used when syncing",
-      projectId: "Overleaf Project ID",
-      projectIdPlaceholder: "24-character ID or URL",
+      projectId: "Project Share Link",
+      projectIdPlaceholder: "Paste the Read-Only Link here",
       submitCreate: "Initialize Sync",
       submitDelete: "Stop Syncing"
     },
@@ -70,8 +70,8 @@ const translations = {
       }
     },
     help: {
-      title: "Finding your Project ID",
-      desc: "Go to your Overleaf project. The ID is the 24-character string after /project/ in the URL."
+      title: "How to get the Link?",
+      desc: "1. Click 'Share' in Overleaf. 2. Turn on 'Link Sharing'. 3. Copy the 'Read-Only' link and paste it here."
     },
     howItWorks: {
       title: "How it Works",
@@ -125,8 +125,8 @@ const translations = {
       email: "验证邮箱",
       emailPlaceholderCreate: "用于身份验证",
       emailPlaceholderDelete: "同步时使用的邮箱",
-      projectId: "Overleaf 项目 ID",
-      projectIdPlaceholder: "24 位 ID 或完整链接",
+      projectId: "项目分享链接",
+      projectIdPlaceholder: "粘贴 Read-Only 分享链接",
       submitCreate: "开启同步",
       submitDelete: "停止同步"
     },
@@ -160,8 +160,8 @@ const translations = {
       }
     },
     help: {
-      title: "如何找到项目 ID？",
-      desc: "打开您的 Overleaf 项目。ID 是 URL 中 /project/ 后的 24 位字符串。"
+      title: "如何获取链接？",
+      desc: "1. 点击 Overleaf 中的 'Share'。2. 开启链接分享。3. 复制 'Read-Only' 链接并粘贴至此。"
     },
     howItWorks: {
       title: "运作过程",

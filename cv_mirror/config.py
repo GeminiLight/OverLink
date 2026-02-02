@@ -33,7 +33,19 @@ class Config:
     @classmethod
     def add_user(cls, nickname, email, project_id):
         users = cls.load_users()
-        url = project_id if project_id.startswith("http") else f"https://www.overleaf.com/project/{project_id}"
+        
+        # Handle different input formats
+        if project_id.startswith("http"):
+            url = project_id
+        elif len(project_id) == 24 and "/" not in project_id:
+            # Assume Project ID (24 hex chars)
+            url = f"https://www.overleaf.com/project/{project_id}"
+        elif len(project_id) < 24 and "/" not in project_id:
+             # Assume Read Token (usually 12 chars)
+            url = f"https://www.overleaf.com/read/{project_id}"
+        else:
+            # Default fallback
+            url = f"https://www.overleaf.com/project/{project_id}"
         
         new_user = {
             "username": nickname,
