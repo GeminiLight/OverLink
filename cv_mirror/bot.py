@@ -175,15 +175,19 @@ class OverleafBot:
             if status_callback: await status_callback("Waiting for editor to load...")
             await self.page.wait_for_selector(download_selector, timeout=60000)
             
-            if os.path.exists(target_path):
-                os.remove(target_path)
+            # Download to a temporary path first
+            temp_path = target_path + ".tmp"
             
             if status_callback: await status_callback("Initiating PDF download...")
             async with self.page.expect_download() as download_info:
                 await self.page.click(download_selector)
                 
             download = await download_info.value
-            await download.save_as(target_path)
+            await download.save_as(temp_path)
+            
+            # If successful, rename temp to target (atomic replacement)
+            os.replace(temp_path, target_path)
+            
             logger.info(f"Downloaded: {target_path}")
             if status_callback: await status_callback("Download complete.")
             return True
