@@ -5,7 +5,14 @@
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-700;
+  background-color: white;
+  color: #0f172a;
+  transition: background-color 0.7s, color 0.7s;
+}
+
+:root.dark body {
+  background-color: #0f172a;
+  color: white;
 }
 
 @keyframes shake {

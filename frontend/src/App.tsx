@@ -292,7 +292,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-full transition-colors duration-700 bg-white dark:bg-slate-900 flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32">
+    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32">
 
       {/* Hero BG */}
       <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
