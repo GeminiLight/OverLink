@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { encryptToString } from '@/lib/crypto';
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { r2 } from '@/lib/r2';
 
 // Service Role client needed to bypass RLS if we want, or just standard client
 const supabase = createClient(
@@ -86,8 +88,6 @@ export async function PATCH(request: Request) {
     }
 }
 
-import { DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { r2 } from '@/lib/r2';
 
 export async function DELETE(request: Request) {
     try {
