@@ -27,13 +27,16 @@ jobs:
           git config user.email "wtfly2018@163.com"
           git commit -m "chore: mirror clean state"
 
-      - name: Push to Public Repo
-        uses: ad-m/github-push-action@master
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          force: true
-          repository: GeminiLight/OverLink
-          ssh: true
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.MIRROR_SSH_KEY }}
+          ssh-private-key: ${{ secrets.MIRROR_SSH_KEY }}
+
+      - name: Push to Public Repo
+        run: |
+          # Add public repo as a remote
+          git remote add public git@github.com:GeminiLight/OverLink.git
+          
+          # Push the mirror-branch to the main branch of the public repo
+          # --force is used because it's a mirror
+          git push public mirror-branch:main --force
