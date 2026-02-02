@@ -9,6 +9,14 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
 3.  Copy and paste the content of `apps/cloud/supabase/schema.sql` and run it.
 4.  Go to **Settings** -> **API**. Copy the `Project URL` and `anon` public key / `service_role` secret key.
 
+## 1.1 Authentication (Google Login)
+1.  Go to **Authentication** -> **Providers**.
+2.  Enable **Google**.
+3.  Enter your **Client ID** and **Client Secret** (obtained from [Google Cloud Console](https://console.cloud.google.com/)).
+4.  Add your Supabase callback URL to Google Cloud Console (`https://<project-ref>.supabase.co/auth/v1/callback`).
+
+> **Note on Schema**: If you have already run the schema, you may need to apply the latest migration or re-run the updated `schema.sql` (which now uses `filename` instead of `nickname`).
+
 ## 2. GitHub Actions (Worker)
 
 1.  Push your code to GitHub (e.g., `overlink-cloud`).
