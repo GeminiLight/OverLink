@@ -18,6 +18,12 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
 3.  Enter your **Client ID** and **Client Secret** (obtained from [Google Cloud Console](https://console.cloud.google.com/)).
 4.  Add your Supabase callback URL to Google Cloud Console (`https://<project-ref>.supabase.co/auth/v1/callback`).
 
+## 1.2 Authentication (GitHub Login)
+1.  Go to **Authentication** -> **Providers**.
+2.  Enable **GitHub**.
+3.  Enter your **Client ID** and **Client Secret** (obtained from [GitHub Developer Settings](https://github.com/settings/developers)).
+4.  Add your Supabase callback URL to GitHub App (`https://<project-ref>.supabase.co/auth/v1/callback`).
+
 > **Note on Schema**: If you have already run the schema, you may need to apply the latest migration or re-run the updated `schema.sql` (which now uses `filename` instead of `nickname`).
 
 ## 2. GitHub Actions (Worker)
