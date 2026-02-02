@@ -180,7 +180,12 @@ export default function Home() {
   };
 
   const handleLogin = async (provider: 'github' | 'google') => {
-    await supabase.auth.signInWithOAuth({ provider });
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: window.location.origin
+      }
+    });
   };
 
   const handleLogout = async () => {
@@ -222,7 +227,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32 transition-colors duration-300">
+    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32 transition-colors duration-300 bg-white dark:bg-[#0a0a0a]">
       {/* Hero BG */}
       <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
       <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-purple-100 dark:bg-purple-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
@@ -238,35 +243,97 @@ export default function Home() {
       </div>
 
       {!session ? (
-        // Login Hero Screen
-        <div className="flex min-h-screen flex-col items-center justify-center p-8 z-10 animate-fade-in text-center">
-          <div className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg mb-8">
-            <span className="text-white font-bold text-3xl">O</span>
+        // Enriched Landing Page
+        <div className="w-full flex flex-col items-center">
+          {/* Hero Section */}
+          <div className="flex min-h-[85vh] flex-col items-center justify-center p-8 z-10 animate-fade-in text-center max-w-4xl">
+            <div className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl mb-10 rotate-3 hover:rotate-6 transition-transform">
+              <span className="text-white font-bold text-4xl">O</span>
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.05]">
+              {t.hero.title}
+            </h1>
+            <p className="max-w-2xl mx-auto text-xl md:text-2xl text-slate-500 dark:text-slate-400 font-medium mb-14 leading-relaxed">
+              {t.hero.desc}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-5 w-full max-w-lg">
+              <button
+                onClick={() => handleLogin('github')}
+                className="flex-1 py-5 bg-slate-950 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-bold shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                <svg height="24" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="24" className="fill-current">
+                  <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+                </svg>
+                {t.loginGithub}
+              </button>
+              <button
+                onClick={() => handleLogin('google')}
+                className="flex-1 py-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 rounded-2xl font-bold shadow-xl hover:bg-slate-50 dark:hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className="fill-current"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" /><path d="M1 1h22v22H1z" fill="none" /></svg>
+                {t.loginGoogle}
+              </button>
+            </div>
           </div>
-          <h1 className="text-6xl font-bold font-[Plus Jakarta Sans] tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.1]">
-            {t.hero.title}
-          </h1>
-          <p className="max-w-xl mx-auto text-xl text-slate-500 dark:text-slate-400 font-medium mb-12">
-            {t.hero.desc}
-          </p>
-          <div className="flex flex-col gap-4 w-full max-w-sm">
-            <button
-              onClick={() => handleLogin('github')}
-              className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
-            >
-              <svg height="24" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="24" data-view-component="true" className="fill-current">
-                <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
-              </svg>
-              {t.loginGithub}
-            </button>
-            <button
-              onClick={() => handleLogin('google')}
-              className="w-full py-4 bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-white/10 rounded-xl font-bold shadow-md hover:bg-slate-50 dark:hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className="fill-current"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" /><path d="M1 1h22v22H1z" fill="none" /></svg>
-              {t.loginGoogle}
-            </button>
-          </div>
+
+          {/* How it Works */}
+          <section className="w-full max-w-6xl px-6 mb-40 z-10 animate-fade-in delay-200">
+            <h3 className="text-center text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-20">{t.howItWorks.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              {[1, 2, 3].map((num) => (
+                <div key={num} className="glass p-10 rounded-[3rem] flex flex-col items-start gap-6 hover-lift group relative overflow-hidden backdrop-blur-2xl">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[5rem] group-hover:scale-110 transition-transform"></div>
+                  <div className="w-14 h-14 rounded-[1.25rem] bg-blue-600/10 dark:bg-blue-400/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all text-2xl shadow-inner">
+                    {num}
+                  </div>
+                  <h4 className="text-2xl font-bold dark:text-white tracking-tight">{(t.howItWorks as any)[`step${num}`].title}</h4>
+                  <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Bento Features */}
+          <section className="w-full max-w-6xl px-6 mb-40 z-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+                <div className="space-y-4">
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-blue-600 transition-colors">{t.features.sync}</h4>
+                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">Automated nightly builds. Zero manual effort to keep your site updated.</p>
+                </div>
+              </div>
+              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+                <div className="space-y-4">
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-purple-600 transition-colors">{t.features.url}</h4>
+                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">One permanent URL for your resume or paper. Never send a dead link again.</p>
+                </div>
+              </div>
+              <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
+                <div className="space-y-4">
+                  <h4 className="text-3xl font-black tracking-tighter group-hover:text-emerald-600 transition-colors">{t.features.open}</h4>
+                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">Military-grade encryption for your credentials. Your privacy is our priority.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Dynamic FAQ Section */}
+          <section className="w-full max-w-5xl px-6 mb-40 z-10">
+            <h3 className="text-center text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-20">{t.faq.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-16">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="space-y-4">
+                  <h4 className="font-bold text-2xl tracking-tight dark:text-white">{(t as any).faq[`q${i}`]}</h4>
+                  <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{(t as any).faq[`a${i}`]}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="w-full py-20 text-center opacity-30">
+            <p className="text-xs font-black uppercase tracking-[1em] text-slate-400">{t.title} CLOUD</p>
+          </footer>
         </div>
       ) : (
         // Dashboard
