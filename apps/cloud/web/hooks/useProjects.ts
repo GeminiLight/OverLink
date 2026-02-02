@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
 export function useProjects(userId: string | undefined) {
@@ -11,6 +11,10 @@ export function useProjects(userId: string | undefined) {
         const { data } = await supabase.from("projects").select("*").eq("user_id", userId);
         if (data) setProjects(data);
     }, [userId]);
+
+    useEffect(() => {
+        fetchProjects();
+    }, [fetchProjects]);
 
     const addProject = async (filename: string, projectId: string) => {
         if (!userId) return { success: false };
@@ -75,7 +79,7 @@ export function useProjects(userId: string | undefined) {
         setSyncingIds(prev => new Set(prev).add(projId));
 
         // Optimistic Update
-        setProjects(prev => prev.map(p =>
+        setProjects((prev: any[]) => prev.map((p: any) =>
             p.id === projId ? { ...p, last_sync_status: 'running', last_sync_at: new Date().toISOString() } : p
         ));
 
@@ -87,7 +91,7 @@ export function useProjects(userId: string | undefined) {
             });
 
             if (!res.ok) {
-                setSyncingIds(prev => {
+                setSyncingIds((prev: Set<string>) => {
                     const next = new Set(prev);
                     next.delete(projId);
                     return next;
@@ -97,7 +101,7 @@ export function useProjects(userId: string | undefined) {
             }
             return true;
         } catch (e) {
-            setSyncingIds(prev => {
+            setSyncingIds((prev: Set<string>) => {
                 const next = new Set(prev);
                 next.delete(projId);
                 return next;
