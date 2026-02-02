@@ -104,13 +104,11 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 
 ## 🏗️ 架构
 
-本仓库是一个 **Monorepo**，包含整个 OverLink 生态系统：
-
-| 组件 | 描述 | 技术栈 | 位置 |
-| :--- | :--- | :--- | :--- |
-| **☁️ Cloud** | **(推荐)** 带有精美仪表板的 SaaS 平台。 | Next.js, Playwright, R2 | [`apps/cloud`](apps/cloud) |
-| **💻 Local** | 用于本地机器或 CI/CD 的自托管 CLI 工具。 | Python, Playwright | [`apps/local`](apps/local) |
-| **📦 Core** | 共享库和浏览器自动化逻辑。 | Python | [`overlink/`](overlink/) |
+| 组件 | 描述 | 访问方式 |
+| :--- | :--- | :--- |
+| **☁️ OverLink Cloud** | **(托管版本)** 最简单的使用方式，无需管理服务器。 | [访问 overlink.aurax.live](https://overlink.aurax.live) |
+| **💻 OverLink Local** | **(自托管)** 适用于本地机器或 CI/CD 的工具。 | [本地部署指南](docs/local-deployment.zh-CN.md) |
+| **📦 Core** | 共享库和浏览器自动化逻辑。 | [源码](overlink/) |
 
 ---
 
@@ -120,11 +118,11 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 <summary><b>选项 A: OverLink Cloud (推荐)</b></summary>
 <br>
 
-**最简单的入门方式。** 无需管理服务器。
+**专业、零配置的体验。**
 
-1.  前往 **[平台设置指南](PLATFORM_SETUP.md)**。
-2.  部署您的实例或注册托管测试版。
-3.  连接您的 Overleaf 账户并开始同步。
+1.  访问 **[overlink.aurax.live](https://overlink.aurax.live)**。
+2.  连接您的 Overleaf 账户。
+3.  立即开始自动同步您的学术资产。
 
 </details>
 

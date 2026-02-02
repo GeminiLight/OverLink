@@ -102,13 +102,11 @@
 
 ## 🏗️ Architecture
 
-This repository is a **Monorepo** containing the entire OverLink ecosystem:
-
-| Component | Description | Technologies | Location |
-| :--- | :--- | :--- | :--- |
-| **☁️ Cloud** | **(Recommended)** SaaS platform with a beautiful dashboard. | Next.js, Playwright, R2 | [`apps/cloud`](apps/cloud) |
-| **💻 Local** | Self-hosted CLI tool for your own machine or CI/CD. | Python, Playwright | [`apps/local`](apps/local) |
-| **📦 Core** | Shared libraries and browser automation logic. | Python | [`overlink/`](overlink/) |
+| Component | Description | Access |
+| :--- | :--- | :--- |
+| **☁️ OverLink Cloud** | **(Managed)** The easiest way to get started. No infrastructure to manage. | [Visit overlink.aurax.live](https://overlink.aurax.live) |
+| **💻 OverLink Local** | **(Self-Hosted)** CLI tool/Worker for your own machine or CI/CD. | [Local Setup Guide](docs/local-deployment.md) |
+| **📦 Core** | Shared libraries and browser automation logic. | [Source Code](overlink/) |
 
 ---
 
@@ -118,11 +116,11 @@ This repository is a **Monorepo** containing the entire OverLink ecosystem:
 <summary><b>Option A: OverLink Cloud (Recommended)</b></summary>
 <br>
 
-**The easiest way to get started.** No servers to manage.
+**The professional, zero-config experience.**
 
-1.  Navigate to the **[Platform Setup Guide](PLATFORM_SETUP.md)**.
-2.  Deploy your instance or sign up for the hosted beta.
-3.  Connect your Overleaf account and start syncing.
+1.  Visit **[overlink.aurax.live](https://overlink.aurax.live)**.
+2.  Connect your Overleaf account.
+3.  Start syncing your academic assets instantly.
 
 </details>
 
