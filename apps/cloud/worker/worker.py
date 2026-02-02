@@ -20,7 +20,7 @@ async def run_worker():
         print(f"Error parsing payload: {e}")
         return
 
-    nickname = data.get("nickname")
+    filename = data.get("filename")
     project_id = data.get("project_id")
     email = data.get("email") 
     password = data.get("password")
@@ -30,7 +30,7 @@ async def run_worker():
         return
 
     # 2. Run Playwright Logic
-    pdf_path = f"/tmp/{nickname}.pdf"
+    pdf_path = f"/tmp/{filename}.pdf"
     
     async with OverleafBot(headless=True, auth_path=None) as bot:
         # Note: auth_path=None because we don't prefer caching sessions in stateless worker, 
@@ -61,10 +61,10 @@ async def run_worker():
             s3.upload_file(
                 pdf_path, 
                 R2_BUCKET, 
-                f"{nickname}.pdf",
+                f"{filename}.pdf",
                 ExtraArgs={'ContentType': 'application/pdf'}
             )
-            print(f"Upload complete: {nickname}.pdf")
+            print(f"Upload complete: {filename}.pdf")
         except Exception as e:
             print(f"Upload failed: {e}")
 

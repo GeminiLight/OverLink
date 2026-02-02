@@ -12,7 +12,7 @@ const supabase = createClient(
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { userId, nickname, projectId, email, password } = body;
+        const { userId, filename, projectId, email, password } = body;
 
         // Encrypt sensitive fields
         const overleaf_email_enc = encryptToString(email);
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
             .from('projects')
             .insert({
                 user_id: userId,
-                nickname,
+                filename,
                 project_id: projectId,
                 overleaf_email_enc,
                 overleaf_password_enc

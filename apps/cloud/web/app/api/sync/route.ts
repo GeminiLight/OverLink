@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         // So we just pass the database values.
 
         const workerPayload = {
-            nickname: project.nickname,
+            filename: project.filename,
             project_id: project.project_id,
             email: project.overleaf_email_enc, // Sending Encrypted
             password: project.overleaf_password_enc, // Sending Encrypted

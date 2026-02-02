@@ -5,7 +5,7 @@ create extension if not exists "uuid-ossp";
 create table public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
   email text,
-  full_name text,
+  nickname text,
   avatar_url text,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
@@ -25,7 +25,7 @@ create policy "Users can update their own profile" on public.profiles
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url, email)
+  insert into public.profiles (id, nickname, avatar_url, email)
   values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url', new.email);
   return new;
 end;
@@ -40,7 +40,7 @@ create trigger on_auth_user_created
 create table public.projects (
   id uuid default uuid_generate_v4() primary key,
   user_id uuid references auth.users on delete cascade not null,
-  nickname text not null check (char_length(nickname) >= 3),
+  filename text not null check (char_length(filename) >= 3),
   project_id text not null,
   
   -- Credentials
@@ -54,7 +54,7 @@ create table public.projects (
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now(),
   
-  unique(user_id, nickname)
+  unique(user_id, filename)
 );
 
 -- Index for faster queries by user
