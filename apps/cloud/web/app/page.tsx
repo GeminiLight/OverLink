@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { Logo } from "./components/Logo";
 
 type Lang = 'en' | 'zh';
 type Theme = 'light' | 'dark';
@@ -481,8 +482,8 @@ export default function Home() {
         <div className="w-full flex flex-col items-center">
           {/* Hero Section */}
           <div className="flex min-h-[90vh] flex-col items-center justify-center p-8 z-10 animate-fade-in text-center max-w-5xl">
-            <div className="w-24 h-24 bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 rounded-[1.8rem] flex items-center justify-center shadow-2xl mb-12 rotate-3 hover:rotate-6 transition-transform shadow-blue-500/20 animate-float">
-              <span className="text-white font-bold text-5xl">O</span>
+            <div className="flex items-center justify-center mb-12 animate-float drop-shadow-2xl">
+              <Logo className="w-24 h-24" />
             </div>
             <h1 className="text-7xl md:text-9xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-10 bg-clip-text text-transparent bg-gradient-to-b from-slate-950 via-slate-800 to-slate-600 dark:from-white dark:via-white/90 dark:to-white/40 leading-[0.95] drop-shadow-sm">
               {t.hero.title}
