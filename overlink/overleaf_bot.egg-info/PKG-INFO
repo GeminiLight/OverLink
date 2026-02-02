@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: overleaf_bot
+Version: 0.1.0
+Requires-Dist: playwright>=1.41.0
+Requires-Dist: python-dotenv
+Dynamic: requires-dist
