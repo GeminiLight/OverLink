@@ -23,6 +23,17 @@ jobs:
         pip install -r apps/cloud/worker/requirements.txt
         playwright install chromium
 
+    - name: Restore auth.json
+      env:
+        AUTH_JSON_B64: ${{ secrets.AUTH_JSON_BASE64 }}
+      run: |
+        if [ -n "$AUTH_JSON_B64" ]; then
+          echo "$AUTH_JSON_B64" | base64 -d > auth.json
+          echo "Restored auth.json from secrets"
+        else
+          echo "No AUTH_JSON_BASE64 secret found, skipping restoration."
+        fi
+
     - name: Run Worker Script
       env:
         # Secrets provided by GitHub Actions secrets

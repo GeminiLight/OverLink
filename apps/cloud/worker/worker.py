@@ -50,7 +50,6 @@ async def run_worker():
 
     email = data.get('email')
     password = data.get('password')
-    is_encrypted = data.get('is_encrypted', False)
 
     # Fallback to environment variables if not provided in payload
     if not email:
@@ -65,17 +64,6 @@ async def run_worker():
     if not email or not password:
         print("ERROR: Overleaf credentials missing (neither in payload nor environment).")
         return
-
-    if is_encrypted:
-        if not ENCRYPTION_KEY:
-            print("ERROR: ENCRYPTION_KEY missing but payload is encrypted.")
-            return
-        print("Decrypting credentials...")
-        email = decrypt_from_string(email, ENCRYPTION_KEY)
-        password = decrypt_from_string(password, ENCRYPTION_KEY)
-        if not email or not password:
-            print("ERROR: Failed to decrypt credentials.")
-            return
     
     # Support both single project and batch projects
     projects_input = data.get("projects")
@@ -102,7 +90,7 @@ async def run_worker():
         print("No valid projects to download.")
         return
 
-    async with OverleafBot(headless=True, auth_path=None) as bot:
+    async with OverleafBot(headless=True, auth_path="auth.json") as bot:
         print("Logging in...")
         if not await bot.login(email=email, password=password, manual=False):
             print("Login failed. Check your Overleaf credentials.")
