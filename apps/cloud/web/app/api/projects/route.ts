@@ -14,9 +14,9 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { userId, filename, projectId, email, password } = body;
 
-        // Encrypt sensitive fields
-        const overleaf_email_enc = encryptToString(email);
-        const overleaf_password_enc = encryptToString(password);
+        // Encrypt sensitive fields only if provided
+        const overleaf_email_enc = email ? encryptToString(email) : null;
+        const overleaf_password_enc = password ? encryptToString(password) : null;
 
         const { data, error } = await supabase
             .from('projects')
