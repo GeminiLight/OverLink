@@ -15,9 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "OverLink | Sync Overleaf to Persistent URLs",
   description: "Automatically sync your Overleaf projects to persistent PDF URLs. Always current, always accessible.",
-  icons: {
-    icon: '/favicon.ico',
-  },
 };
 
 export default function RootLayout({
