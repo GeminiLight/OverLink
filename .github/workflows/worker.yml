@@ -30,6 +30,8 @@ jobs:
         R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
         R2_BUCKET: ${{ secrets.R2_BUCKET }}
         R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+        OVERLEAF_EMAIL: ${{ secrets.OVERLEAF_EMAIL }}
+        OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
         ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
         # Payload comes from the dispatch event
         payload: ${{ toJson(github.event.client_payload) }}

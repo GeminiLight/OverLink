@@ -48,9 +48,23 @@ async def run_worker():
         print(f"Error parsing payload: {e}")
         return
 
-    email = data.get("email") 
-    password = data.get("password")
-    is_encrypted = data.get("is_encrypted", False)
+    email = data.get('email')
+    password = data.get('password')
+    is_encrypted = data.get('is_encrypted', False)
+
+    # Fallback to environment variables if not provided in payload
+    if not email:
+        email = os.getenv("OVERLEAF_EMAIL")
+        print("Using OVERLEAF_EMAIL from environment.")
+    if not password:
+        password = os.getenv("OVERLEAF_PASSWORD")
+        print("Using OVERLEAF_PASSWORD from environment.")
+        # If password comes from env, it's likely NOT encrypted in the same way as web payload
+        # But we'll let the decryption logic handle the check below
+
+    if not email or not password:
+        print("ERROR: Overleaf credentials missing (neither in payload nor environment).")
+        return
 
     if is_encrypted:
         if not ENCRYPTION_KEY:

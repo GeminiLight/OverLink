@@ -132,8 +132,6 @@ export default function Home() {
   // Form State
   const [filename, setFilename] = useState("");
   const [projectId, setProjectId] = useState("");
-  const [overleafEmail, setOverleafEmail] = useState("");
-  const [overleafPassword, setOverleafPassword] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // I18n & Theme State
@@ -209,15 +207,13 @@ export default function Home() {
         id: editingId,
         userId: session.user.id,
         filename,
-        projectId,
-        email: overleafEmail,
-        password: overleafPassword
+        projectId
       })
     });
 
     if (res.ok) {
       const result = await res.json();
-      setFilename(""); setProjectId(""); setOverleafEmail(""); setOverleafPassword(""); setEditingId(null);
+      setFilename(""); setProjectId(""); setEditingId(null);
       await fetchProjects(session.user.id);
 
       // Auto-trigger sync for new projects
@@ -437,32 +433,6 @@ export default function Home() {
                       required
                     />
                   </div>
-                  {!editingId && (
-                    <>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.overleafEmail}</label>
-                        <input
-                          type="email"
-                          placeholder="email@example.com"
-                          value={overleafEmail}
-                          onChange={e => setOverleafEmail(e.target.value)}
-                          className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.overleafPassword}</label>
-                        <input
-                          type="password"
-                          placeholder="••••••••"
-                          value={overleafPassword}
-                          onChange={e => setOverleafPassword(e.target.value)}
-                          className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                          required
-                        />
-                      </div>
-                    </>
-                  )}
                   <button
                     disabled={loading}
                     className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
