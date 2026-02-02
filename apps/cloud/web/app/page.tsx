@@ -206,6 +206,31 @@ export default function Home() {
       if (session) fetchProjects(session.user.id);
     });
 
+    // Check for OAuth errors in URL
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    const errorDesc = params.get('error_description');
+    if (error) {
+      setNotification({
+        message: errorDesc || "Authentication failed",
+        type: 'error'
+      });
+      // Clear URL params
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    // Check hash for legacy error structure
+    if (window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      if (hashParams.get('error')) {
+        setNotification({
+          message: hashParams.get('error_description') || "Authentication failed",
+          type: 'error'
+        });
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
