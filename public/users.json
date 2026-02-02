@@ -2,26 +2,6 @@
     {
         "username": "example_user",
         "email": "manual_entry@example.com",
-        "url": "https://www.overleaf.com/read/rgvvdtxvjfjt#2947b0"
-    },
-    {
-        "username": "jiayi_zhang",
-        "email": "manual_entry@example.com",
-        "url": "https://www.overleaf.com/read/jnhkgyqbtscx#ebbfa7"
-    },
-    {
-        "username": "GeminiLight",
-        "email": "wtfly2018@163.com",
-        "url": "https://www.overleaf.com/read/rgvvdtxvjfjt#2947b0"
-    },
-    {
-        "username": "gemini",
-        "email": "wtfly2018@163.com",
-        "url": "https://www.overleaf.com/read/rgvvdtxvjfjt#2947b0"
-    },
-    {
-        "username": "gemini1",
-        "email": "wtfly2018@163.com",
-        "url": "https://www.overleaf.com/read/rgvvdtxvjfjt#2947b0"
+        "url": "https://www.overleaf.com/read/example_user#2947b0"
     }
 ]
