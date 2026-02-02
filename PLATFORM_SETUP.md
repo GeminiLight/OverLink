@@ -37,8 +37,8 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
 3.  **Important**: Set **Root Directory** to `apps/cloud/web` (Edit button).
 4.  **CRITICAL**: Add Environment Variables (Build will fail without these):
     -   `NEXT_PUBLIC_SUPABASE_URL`: (From Supabase)
-    -   `NEXT_PUBLIC_SUPABASE_ANON_KEY`: (From Supabase)
-    -   `SUPABASE_SERVICE_ROLE_KEY`: (From Supabase - **Keep Secret!**)
+    -   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: (From Supabase)
+    -   `SUPABASE_SECRET_KEY`: (From Supabase - **Keep Secret!**)
     -   `ENCRYPTION_KEY`: Generate a random 32-char string.
     -   `GITHUB_TOKEN`: A Personal Access Token (Classic) with `repo` scope.
     -   `GITHUB_OWNER`: Your GitHub username.
