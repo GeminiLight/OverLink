@@ -159,9 +159,12 @@ export default function Home() {
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
   const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
-  // Form State (Add)
-  const [filename, setFilename] = useState("");
-  const [projectId, setProjectId] = useState("");
+  // Profile State
+  const [profile, setProfile] = useState<any>(null);
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [newNickname, setNewNickname] = useState("");
+
+  // Edit State
 
   // Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -203,9 +206,13 @@ export default function Home() {
   }, [theme]);
 
   useEffect(() => {
+    // Check session on load
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session) fetchProjects(session.user.id);
+      if (session) {
+        fetchProjects(session.user.id);
+        fetchProfile(session.user.id);
+      }
     });
 
     // Check for OAuth errors in URL
@@ -217,7 +224,6 @@ export default function Home() {
         message: errorDesc || "Authentication failed",
         type: 'error'
       });
-      // Clear URL params
       window.history.replaceState({}, '', window.location.pathname);
     }
 
@@ -237,11 +243,48 @@ export default function Home() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session) fetchProjects(session.user.id);
+      if (session) {
+        fetchProjects(session.user.id);
+        fetchProfile(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    if (data) {
+      setProfile(data);
+      setNewNickname(data.nickname || "");
+    }
+  };
+
+  const handleUpdateNickname = async () => {
+    if (!session || !newNickname.trim()) return;
+
+    // Optimistic update
+    const oldNickname = profile?.nickname;
+    setProfile({ ...profile, nickname: newNickname });
+    setIsEditingNickname(false);
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ nickname: newNickname })
+      .eq('id', session.user.id);
+
+    if (error) {
+      // Revert if failed
+      setProfile({ ...profile, nickname: oldNickname });
+      setNotification({ message: "Failed to update nickname", type: 'error' });
+    } else {
+      setNotification({ message: "Nickname updated!", type: 'success' });
+    }
+  };
 
   const fetchProjects = async (userId: string) => {
     const { data } = await supabase.from("projects").select("*").eq("user_id", userId);
@@ -487,27 +530,50 @@ export default function Home() {
                 <span className="text-white font-bold text-2xl">O</span>
               </div>
               <div>
-                <h1 className="text-3xl font-black tracking-tighter text-foreground">{t.dashboard}</h1>
-                <p className="text-xs uppercase tracking-widest opacity-30 font-bold">{session.user.email}</p>
+                <div>
+                  {isEditingNickname ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        autoFocus
+                        value={newNickname}
+                        onChange={e => setNewNickname(e.target.value)}
+                        onBlur={() => { if (newNickname.trim()) handleUpdateNickname(); else setIsEditingNickname(false); }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') handleUpdateNickname();
+                          if (e.key === 'Escape') setIsEditingNickname(false);
+                        }}
+                        className="text-3xl font-black tracking-tighter text-foreground bg-transparent border-b-2 border-blue-500 outline-none w-48"
+                      />
+                    </div>
+                  ) : (
+                    <h1
+                      onClick={() => { setIsEditingNickname(true); setNewNickname(profile?.nickname || session?.user?.user_metadata?.full_name || "User"); }}
+                      className="text-3xl font-black tracking-tighter text-foreground cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-2 group"
+                    >
+                      {profile?.nickname || session?.user?.user_metadata?.full_name || "Dashboard"}
+                      <svg className="w-4 h-4 opacity-0 group-hover:opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </h1>
+                  )}
+                  <p className="text-xs uppercase tracking-widest opacity-30 font-bold">{session.user.email}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
-              {session.user.tier !== 'pro' ? (
+              <div className="flex gap-4 items-center bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl p-2 pr-6 rounded-full border border-white/50 dark:border-white/5 shadow-2xl">
+                {session.user.tier !== 'pro' ? (
+                  <button
+                    className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
+                  >
+                    GO PRO
+                  </button>
+                ) : (
+                  <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
+                )}
                 <button
-                  className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
+                  onClick={handleLogout}
+                  className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
                 >
-                  GO PRO
+                  {t.logout}
                 </button>
-              ) : (
-                <span className="px-6 py-2.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">PRO TIER</span>
-              )}
-              <button
-                onClick={handleLogout}
-                className="text-xs font-black uppercase tracking-[0.2em] opacity-40 hover:opacity-100 transition-opacity pl-4"
-              >
-                {t.logout}
-              </button>
-            </div>
+              </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
