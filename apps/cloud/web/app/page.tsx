@@ -681,7 +681,7 @@ export default function Home() {
                         >
                           <svg className="w-3 h-3 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                           <span className="text-[10px] font-medium text-blue-600 dark:text-blue-400 truncate max-w-[150px]">
-                            {(process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://pub-1d83dc7c37724f9b9a4c2bb842d710f4.r2.dev').replace(/^https?:\/\//, '')}/{project.filename}.pdf
+                            {(process.env.NEXT_PUBLIC_CDN_BASE_URL || process.env.NEXT_PUBLIC_CDN_RAW_BASE_URL || '').replace(/^https?:\/\//, '')}/{project.filename}.pdf
                           </span>
                           <svg className="w-3 h-3 text-blue-400 opacity-0 group-hover/link:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                         </div>
@@ -694,7 +694,7 @@ export default function Home() {
 
                     <div className="flex gap-3 mt-8 flex-wrap">
                       <a
-                        href={`${process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://pub-1d83dc7c37724f9b9a4c2bb842d710f4.r2.dev'}/${project.filename}.pdf`}
+                        href={`${process.env.NEXT_PUBLIC_CDN_BASE_URL || process.env.NEXT_PUBLIC_CDN_RAW_BASE_URL || ''}/${project.filename}.pdf`}
                         target="_blank"
                         className="flex-1 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-slate-900/20 dark:shadow-white/5"
                       >
