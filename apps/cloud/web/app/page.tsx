@@ -66,6 +66,7 @@ const translations: Record<Lang, any> = {
       updateFail: "Failed to update project",
       deleteSuccess: "Project deleted!",
       deleteFail: "Failed to delete project",
+      copySuccess: "Link copied to clipboard!",
     },
     modal: {
       editTitle: "Edit Project",
@@ -136,6 +137,7 @@ const translations: Record<Lang, any> = {
       updateFail: "更新项目失败",
       deleteSuccess: "项目已删除！",
       deleteFail: "删除项目失败",
+      copySuccess: "链接已复制！",
     },
     modal: {
       editTitle: "编辑项目",
@@ -352,7 +354,16 @@ export default function Home() {
     setIsEditModalOpen(true);
   };
 
-  // handleSync, etc. already defined above
+  const handleEditProject = (project: any) => {
+    // ... logic ...
+  };
+
+  const handleCopyUrl = (filename: string) => {
+    const url = `${process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://cdn.overlink.com'}/${filename}.pdf`;
+    navigator.clipboard.writeText(url);
+    setNotification({ message: t.alert.copySuccess, type: 'success' });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-500">
@@ -557,6 +568,18 @@ export default function Home() {
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                           <span className="text-[10px] font-black uppercase tracking-widest">{project.view_count || 0} views</span>
                         </div>
+
+                        {/* Public Link Display */}
+                        <div
+                          onClick={() => handleCopyUrl(project.filename)}
+                          className="flex items-center gap-2 mt-2 px-3 py-2 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors group/link w-fit max-w-full"
+                        >
+                          <svg className="w-3 h-3 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                          <span className="text-[10px] font-medium text-blue-600 dark:text-blue-400 truncate max-w-[150px]">
+                            {process.env.NEXT_PUBLIC_CDN_BASE_URL || 'cdn.overlink.com'}/{project.filename}.pdf
+                          </span>
+                          <svg className="w-3 h-3 text-blue-400 opacity-0 group-hover/link:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </div>
                       </div>
                       <div className={`w-4 h-4 rounded-full ${syncingIds.has(project.id)
                         ? 'bg-blue-500 animate-pulse-blue'
@@ -611,98 +634,105 @@ export default function Home() {
             </div >
           </div >
         </div >
-      )}
+      )
+      }
       {/* Edit Modal */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
-          <div className="glass-modal w-full max-w-lg p-12 rounded-[3.5rem] animate-scale-in relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[4rem] pointer-events-none"></div>
-            <h2 className="text-3xl font-black tracking-tighter text-foreground mb-8">{t.modal.editTitle}</h2>
-            <form onSubmit={handleUpdateProject} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
-                <input
-                  value={editFilename}
-                  onChange={e => setEditFilename(e.target.value)}
-                  className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                  required
-                />
+      {
+        isEditModalOpen && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
+            <div className="glass-modal w-full max-w-lg p-12 rounded-[3.5rem] animate-scale-in relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[4rem] pointer-events-none"></div>
+              <h2 className="text-3xl font-black tracking-tighter text-foreground mb-8">{t.modal.editTitle}</h2>
+              <form onSubmit={handleUpdateProject} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
+                  <input
+                    value={editFilename}
+                    onChange={e => setEditFilename(e.target.value)}
+                    className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
+                  <input
+                    value={editProjectId}
+                    onChange={e => setEditProjectId(e.target.value)}
+                    className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                    required
+                  />
+                </div>
+                <div className="flex gap-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="flex-1 py-5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                  >
+                    {t.modal.cancel}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    {loading ? t.form.submitting : t.modal.save}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+
+      {/* Delete Confirmation Modal */}
+      {
+        isDeleteModalOpen && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
+            <div className="glass-modal w-full max-w-sm p-12 rounded-[3.5rem] animate-scale-in text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-bl-[4rem] pointer-events-none"></div>
+              <div className="w-16 h-16 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
-                <input
-                  value={editProjectId}
-                  onChange={e => setEditProjectId(e.target.value)}
-                  className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
-                  required
-                />
-              </div>
-              <div className="flex gap-4 pt-4">
+              <h2 className="text-2xl font-black tracking-tighter text-foreground mb-4">{t.modal.deleteTitle}</h2>
+              <p className="text-sm opacity-50 font-medium mb-10 leading-relaxed">{t.modal.deleteConfirm}</p>
+              <div className="flex gap-4">
                 <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  className="flex-1 py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all"
                 >
                   {t.modal.cancel}
                 </button>
                 <button
-                  type="submit"
+                  onClick={handleDeleteConfirm}
                   disabled={loading}
-                  className="flex-1 py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  className="flex-1 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  {loading ? t.form.submitting : t.modal.save}
+                  {loading ? "..." : t.modal.confirmDelete}
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
-          <div className="glass-modal w-full max-w-sm p-12 rounded-[3.5rem] animate-scale-in text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-bl-[4rem] pointer-events-none"></div>
-            <div className="w-16 h-16 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-            </div>
-            <h2 className="text-2xl font-black tracking-tighter text-foreground mb-4">{t.modal.deleteTitle}</h2>
-            <p className="text-sm opacity-50 font-medium mb-10 leading-relaxed">{t.modal.deleteConfirm}</p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all"
-              >
-                {t.modal.cancel}
-              </button>
-              <button
-                onClick={handleDeleteConfirm}
-                disabled={loading}
-                className="flex-1 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                {loading ? "..." : t.modal.confirmDelete}
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Notification Toast */}
-      {notification && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] animate-slide-up">
-          <div className={`px-8 py-4 rounded-2xl shadow-2xl backdrop-blur-3xl border ${notification.type === 'success'
-            ? 'bg-emerald-500/90 text-white border-emerald-400/20'
-            : 'bg-red-500/90 text-white border-red-400/20'
-            } flex items-center gap-4 font-bold text-sm tracking-wide`}>
-            {notification.type === 'success' ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
-            )}
-            {notification.message}
+      {
+        notification && (
+          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] animate-slide-up">
+            <div className={`px-8 py-4 rounded-2xl shadow-2xl backdrop-blur-3xl border ${notification.type === 'success'
+              ? 'bg-emerald-500/90 text-white border-emerald-400/20'
+              : 'bg-red-500/90 text-white border-red-400/20'
+              } flex items-center gap-4 font-bold text-sm tracking-wide`}>
+              {notification.type === 'success' ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+              )}
+              {notification.message}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 }
