@@ -1,4 +1,7 @@
 setup.py
+overlink_bot/__init__.py
+overlink_bot/core.py
+overlink_bot/logger.py
 overlink_bot.egg-info/PKG-INFO
 overlink_bot.egg-info/SOURCES.txt
 overlink_bot.egg-info/dependency_links.txt
