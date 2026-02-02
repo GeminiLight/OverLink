@@ -3,6 +3,7 @@
 *.pyc
 *.env
 
+.shared/
 !users.json
 auth.json
 error_screenshot.png
