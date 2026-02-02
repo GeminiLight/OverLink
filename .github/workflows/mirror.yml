@@ -1,0 +1,28 @@
+name: Mirror to Public
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mirror logic
+        uses: wearerequired/git-mirror-action@v1
+        with:
+          source-directory: '.'
+          # These are the files/folders that will NOT be pushed to the public OverLink repo
+          exclude: |
+            apps/cloud/*
+            .env*
+            auth.json
+            .shared/auth.json
+          destination-repo: 'git@github.com:GeminiLight/OverLink.git'
+          destination-branch: 'main'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.MIRROR_SSH_KEY }}
