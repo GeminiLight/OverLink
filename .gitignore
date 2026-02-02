@@ -1,3 +1,5 @@
+__pycache__
+
 *.pdf
 !public/pdfs/*.pdf
 *.pyc
@@ -10,6 +12,6 @@
 !users.json
 auth.json
 error_screenshot.png
-__pycache__
 public/assets/
 public/index.html
+*.egg-info
