@@ -43,11 +43,11 @@ const translations = {
     success: {
       titleCreate: "Sync Initialized",
       titleDelete: "Project Removed",
-      descCreate: "Your assets are now being mirrored. Link activated:",
+      descCreate: "The build pipeline has started. Your link will be live in ~2 minutes:",
       descDelete: "The project has been detached from the mirror.",
       copy: "Copy Link",
       copied: "Copied!",
-      download: "View Asset"
+      download: "View Asset (Wait ~2m)"
     },
     logs: {
       title: "Sync Engine Logs",
@@ -133,11 +133,11 @@ const translations = {
     success: {
       titleCreate: "同步已启动",
       titleDelete: "项目已移除",
-      descCreate: "您的资产正在被镜像。永久链接已激活：",
+      descCreate: "构建流水线已开始。您的链接将在约 2 分钟后生效：",
       descDelete: "该项目已从系统中移除。",
       copy: "复制链接",
       copied: "已复制！",
-      download: "查看资产"
+      download: "查看资产 (需等待约 2 分钟)"
     },
     logs: {
       title: "同步引擎日志",
@@ -467,17 +467,23 @@ function App() {
                 <h4 className="text-3xl font-bold mb-2 tracking-tight">{mode === 'create' ? t.success.titleCreate : t.success.titleDelete}</h4>
                 <p className="text-slate-500 mb-8 max-w-xs">{mode === 'create' ? t.success.descCreate : t.success.descDelete}</p>
 
-                {mode === 'create' && (
-                  <div className="w-full space-y-4">
-                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-black/40 p-2 pl-4 rounded-xl border border-slate-200 dark:border-white/5">
-                      <span className="text-xs font-mono flex-1 overflow-hidden text-ellipsis text-slate-600 dark:text-emerald-100">{resultUrl}</span>
-                      <button onClick={handleCopy} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${copySuccess ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-white'}`}>
-                        {copySuccess ? t.success.copied : t.success.copy}
-                      </button>
-                    </div>
-                    <a href={resultUrl} target="_blank" className="block w-full py-4 bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20">{t.success.download}</a>
+                <div className="w-full space-y-4">
+                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-black/40 p-2 pl-4 rounded-xl border border-slate-200 dark:border-white/5">
+                    <span className="text-xs font-mono flex-1 overflow-hidden text-ellipsis text-slate-600 dark:text-emerald-100">{resultUrl}</span>
+                    <button onClick={handleCopy} className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${copySuccess ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-white'}`}>
+                      {copySuccess ? t.success.copied : t.success.copy}
+                    </button>
                   </div>
-                )}
+
+                  <a href={resultUrl} target="_blank" className="block w-full py-4 bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 relative overflow-hidden group">
+                    <span className="relative z-10 group-hover:hidden">{t.success.download}</span>
+                    <span className="relative z-10 hidden group-hover:inline">Open (might 404 initially)</span>
+                  </a>
+
+                  <div className="text-[10px] text-slate-400 font-mono text-center">
+                    Estimated availability: ~120s
+                  </div>
+                </div>
                 <button onClick={() => setStatus('idle')} className="mt-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">BACK TO FORM</button>
               </div>
             )}
