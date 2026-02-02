@@ -35,7 +35,7 @@ const translations: Record<Lang, any> = {
     },
     hero: {
       title: "OverLink",
-      desc: "Sync your Overleaf projects to persistent File URLs."
+      desc: "Sync your Overleaf projects to persistent PDF URLs."
     },
     howItWorks: {
       title: "How it Works",
@@ -106,7 +106,7 @@ const translations: Record<Lang, any> = {
     },
     hero: {
       title: "OverLink",
-      desc: "将您的 Overleaf 项目自动同步到永久的文件链接。"
+      desc: "将您的 Overleaf 项目自动同步到永久的 PDF 链接。"
     },
     howItWorks: {
       title: "运作过程",
