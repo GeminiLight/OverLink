@@ -1,5 +1,5 @@
 import React from 'react';
-import { translations, Lang } from '../../../lib/translations';
+import { translations, Lang } from '@/lib/translations';
 
 interface Props {
     project: any;

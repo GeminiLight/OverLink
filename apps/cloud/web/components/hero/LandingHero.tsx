@@ -1,6 +1,6 @@
 import React from 'react';
-import { Logo } from '../Logo';
-import { translations, Lang } from '../../../lib/translations';
+import { Logo } from "@/components/Logo";
+import { translations, Lang } from "@/lib/translations";
 
 interface Props {
     lang: Lang;
