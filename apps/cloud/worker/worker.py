@@ -32,12 +32,12 @@ def decrypt_from_string(encrypted_text, secret_key):
 
 # Configuration from Environment Variables
 async def run_worker():
-    # 0. Load Configuration
-    R2_ACCESS_KEY = os.getenv("R2_ACCESS_KEY")
-    R2_SECRET_KEY = os.getenv("R2_SECRET_KEY")
-    R2_BUCKET = os.getenv("R2_BUCKET", "overlink")
-    R2_ENDPOINT = os.getenv("R2_ENDPOINT") 
-    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+    # 0. Load and Sanitize Configuration
+    R2_ACCESS_KEY = (os.getenv("R2_ACCESS_KEY") or "").strip()
+    R2_SECRET_KEY = (os.getenv("R2_SECRET_KEY") or "").strip()
+    R2_BUCKET = (os.getenv("R2_BUCKET", "overlink") or "").strip()
+    R2_ENDPOINT = (os.getenv("R2_ENDPOINT") or "").strip()
+    ENCRYPTION_KEY = (os.getenv("ENCRYPTION_KEY") or "").strip()
 
     # 1. Parse Payload
     payload_json = os.getenv("payload", "{}")
