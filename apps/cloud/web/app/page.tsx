@@ -2,7 +2,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-const translations = {
+type Lang = 'en' | 'zh';
+type Theme = 'light' | 'dark';
+
+const translations: Record<Lang, any> = {
   en: {
     title: "OverLink",
     tagline: "Your Academic Assets, Always Current.",
@@ -58,7 +61,19 @@ const translations = {
     alert: {
       success: "Sync started!",
       fail: "Sync failed to start",
-      addFail: "Failed to add project"
+      addFail: "Failed to add project",
+      updateSuccess: "Project updated!",
+      updateFail: "Failed to update project",
+      deleteSuccess: "Project deleted!",
+      deleteFail: "Failed to delete project",
+    },
+    modal: {
+      editTitle: "Edit Project",
+      deleteTitle: "Delete Project",
+      deleteConfirm: "Are you sure you want to delete this project? This action cannot be undone.",
+      cancel: "Cancel",
+      confirmDelete: "Delete",
+      save: "Save Changes",
     }
   },
   zh: {
@@ -116,13 +131,24 @@ const translations = {
     alert: {
       success: "同步已启动！",
       fail: "同步启动失败",
-      addFail: "添加项目失败"
+      addFail: "添加项目失败",
+      updateSuccess: "项目已更新！",
+      updateFail: "更新项目失败",
+      deleteSuccess: "项目已删除！",
+      deleteFail: "删除项目失败",
+    },
+    modal: {
+      editTitle: "编辑项目",
+      deleteTitle: "删除项目",
+      deleteConfirm: "您确定要删除此项目吗？该操作无法撤销。",
+      cancel: "取消",
+      confirmDelete: "删除",
+      save: "保存更改",
     }
   }
 };
 
-type Lang = 'en' | 'zh';
-type Theme = 'light' | 'dark';
+
 
 export default function Home() {
   const [session, setSession] = useState<any>(null);
@@ -131,10 +157,19 @@ export default function Home() {
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
   const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
-  // Form State
+  // Form State (Add)
   const [filename, setFilename] = useState("");
   const [projectId, setProjectId] = useState("");
-  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState<any>(null);
+  const [projectToDelete, setProjectToDelete] = useState<any>(null);
+
+  // Edit Form State
+  const [editFilename, setEditFilename] = useState("");
+  const [editProjectId, setEditProjectId] = useState("");
 
   // I18n & Theme State
   const [lang, setLang] = useState<Lang>('en');
@@ -205,12 +240,10 @@ export default function Home() {
     if (!session) return;
     setLoading(true);
 
-    const isEdit = !!editingId;
     const res = await fetch("/api/projects", {
-      method: isEdit ? "PATCH" : "POST",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: editingId,
         userId: session.user.id,
         filename,
         projectId
@@ -219,68 +252,82 @@ export default function Home() {
 
     if (res.ok) {
       const result = await res.json();
-      setFilename(""); setProjectId(""); setEditingId(null);
+      setFilename(""); setProjectId("");
       await fetchProjects(session.user.id);
 
       // Auto-trigger sync for new projects
-      if (!isEdit && result.data?.id) {
+      if (result.data?.id) {
         handleSync(result.data.id);
       }
+      setNotification({ message: "Project added successfully!", type: 'success' });
     } else {
-      alert(t.alert.addFail);
+      setNotification({ message: t.alert.addFail, type: 'error' });
     }
     setLoading(false);
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleSync = async (projId: string) => {
-    if (!session) return;
+  const handleUpdateProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!session || !projectToEdit) return;
+    setLoading(true);
 
-    // Set syncing state
-    setSyncingIds(prev => new Set(prev).add(projId));
+    const res = await fetch("/api/projects", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: projectToEdit.id,
+        userId: session.user.id,
+        filename: editFilename,
+        projectId: editProjectId
+      })
+    });
 
-    try {
-      const res = await fetch("/api/sync", {
-        method: "POST",
-        body: JSON.stringify({ projectId: projId, userId: session.user.id })
-      });
-
-      if (res.ok) {
-        setNotification({ message: t.alert.success, type: 'success' });
-      } else {
-        setNotification({ message: t.alert.fail, type: 'error' });
-      }
-    } catch (err) {
-      setNotification({ message: t.alert.fail, type: 'error' });
-    } finally {
-      // Auto-clear notification after 3s
-      setTimeout(() => setNotification(null), 3000);
-
-      // Keep "syncing" status for 60s (estimated worker time)
-      setTimeout(() => {
-        setSyncingIds(prev => {
-          const next = new Set(prev);
-          next.delete(projId);
-          return next;
-        });
-      }, 60000);
+    if (res.ok) {
+      setIsEditModalOpen(false);
+      setProjectToEdit(null);
+      await fetchProjects(session.user.id);
+      setNotification({ message: t.alert.updateSuccess, type: 'success' });
+    } else {
+      setNotification({ message: t.alert.updateFail, type: 'error' });
     }
+    setLoading(false);
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleDeleteProject = async (projId: string) => {
-    if (!confirm("Are you sure?")) return;
-    const res = await fetch(`/api/projects?id=${projId}&userId=${session.user.id}`, {
+  const handleDeleteConfirm = async () => {
+    if (!session || !projectToDelete) return;
+    setLoading(true);
+
+    const res = await fetch(`/api/projects?id=${projectToDelete.id}&userId=${session.user.id}`, {
       method: "DELETE"
     });
-    if (res.ok) fetchProjects(session.user.id);
+
+    if (res.ok) {
+      setIsDeleteModalOpen(false);
+      setProjectToDelete(null);
+      await fetchProjects(session.user.id);
+      setNotification({ message: t.alert.deleteSuccess, type: 'success' });
+    } else {
+      setNotification({ message: t.alert.deleteFail, type: 'error' });
+    }
+    setLoading(false);
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleEditProject = (project: any) => {
-    setEditingId(project.id);
-    setFilename(project.filename);
-    setProjectId(project.project_id);
-    // Focus the form
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleDeleteButtonClick = (project: any) => {
+    setProjectToDelete(project);
+    setIsDeleteModalOpen(true);
   };
+
+  const handleEditButtonClick = (project: any) => {
+    setProjectToEdit(project);
+    setEditFilename(project.filename);
+    setEditProjectId(project.project_id);
+    setIsEditModalOpen(true);
+  };
+
+  // handleSync, etc. already defined above
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-500">
@@ -432,15 +479,7 @@ export default function Home() {
             <div className="lg:col-span-1">
               <div className="glass-card p-10 rounded-[3rem] relative overflow-hidden backdrop-blur-3xl border-white/50 dark:border-white/5 shadow-3xl">
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-black tracking-tighter text-foreground">{editingId ? t.actions.edit : t.addProject}</h2>
-                  {editingId && (
-                    <button
-                      onClick={() => { setEditingId(null); setFilename(""); setProjectId(""); }}
-                      className="text-[10px] font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest"
-                    >
-                      Cancel
-                    </button>
-                  )}
+                  <h2 className="text-2xl font-black tracking-tighter text-foreground">{t.addProject}</h2>
                 </div>
                 <form onSubmit={handleAddProject} className="space-y-6">
                   <div className="space-y-2">
@@ -467,7 +506,7 @@ export default function Home() {
                     disabled={loading}
                     className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
                   >
-                    {loading ? t.form.submitting : (editingId ? t.form.updateSubmit : t.form.submit)}
+                    {loading ? t.form.submitting : t.form.submit}
                   </button>
                 </form>
               </div>
@@ -519,13 +558,13 @@ export default function Home() {
                         {syncingIds.has(project.id) ? t.actions.syncing : t.actions.sync}
                       </button>
                       <button
-                        onClick={() => handleEditProject(project)}
+                        onClick={() => handleEditButtonClick(project)}
                         className="px-4 py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
                       >
                         {t.actions.edit}
                       </button>
                       <button
-                        onClick={() => handleDeleteProject(project.id)}
+                        onClick={() => handleDeleteButtonClick(project)}
                         className="px-4 py-4 bg-red-500/10 text-red-600 hover:bg-red-600 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
                       >
                         {t.actions.delete}
@@ -548,9 +587,84 @@ export default function Home() {
           </div >
         </div >
       )}
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
+          <div className="glass-modal w-full max-w-lg p-12 rounded-[3.5rem] animate-scale-in relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-[4rem] pointer-events-none"></div>
+            <h2 className="text-3xl font-black tracking-tighter text-foreground mb-8">{t.modal.editTitle}</h2>
+            <form onSubmit={handleUpdateProject} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.filename}</label>
+                <input
+                  value={editFilename}
+                  onChange={e => setEditFilename(e.target.value)}
+                  className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-40 px-1">{t.form.projectId}</label>
+                <input
+                  value={editProjectId}
+                  onChange={e => setEditProjectId(e.target.value)}
+                  className="w-full bg-slate-50/50 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
+                  required
+                />
+              </div>
+              <div className="flex gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 py-5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+                >
+                  {t.modal.cancel}
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                >
+                  {loading ? t.form.submitting : t.modal.save}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 animate-fade-in bg-slate-900/40 backdrop-blur-sm">
+          <div className="glass-modal w-full max-w-sm p-12 rounded-[3.5rem] animate-scale-in text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-bl-[4rem] pointer-events-none"></div>
+            <div className="w-16 h-16 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </div>
+            <h2 className="text-2xl font-black tracking-tighter text-foreground mb-4">{t.modal.deleteTitle}</h2>
+            <p className="text-sm opacity-50 font-medium mb-10 leading-relaxed">{t.modal.deleteConfirm}</p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="flex-1 py-4 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all"
+              >
+                {t.modal.cancel}
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={loading}
+                className="flex-1 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-red-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                {loading ? "..." : t.modal.confirmDelete}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Notification Toast */}
       {notification && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-slide-up">
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] animate-slide-up">
           <div className={`px-8 py-4 rounded-2xl shadow-2xl backdrop-blur-3xl border ${notification.type === 'success'
             ? 'bg-emerald-500/90 text-white border-emerald-400/20'
             : 'bg-red-500/90 text-white border-red-400/20'
@@ -564,6 +678,6 @@ export default function Home() {
           </div>
         </div>
       )}
-    </div >
+    </div>
   );
 }
