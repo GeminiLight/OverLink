@@ -9,26 +9,36 @@ export function useAuth() {
 
     useEffect(() => {
         const initSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setSession(session);
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                await fetchProfile(session.user.id);
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                setSession(session);
+                setUser(session?.user ?? null);
+                setLoading(false); // Set loading false as soon as we have session/user
+                if (session?.user) {
+                    fetchProfile(session.user.id); // Non-blocking profile fetch
+                }
+            } catch (e) {
+                console.error("Error initializing session:", e);
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         initSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                await fetchProfile(session.user.id);
-            } else {
-                setProfile(null);
+            try {
+                setSession(session);
+                setUser(session?.user ?? null);
+                if (session?.user) {
+                    fetchProfile(session.user.id);
+                } else {
+                    setProfile(null);
+                }
+            } catch (e) {
+                console.error("Error on auth state change:", e);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         });
 
         return () => subscription.unsubscribe();

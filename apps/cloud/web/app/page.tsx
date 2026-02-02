@@ -100,7 +100,7 @@ export default function Home() {
   };
 
   // Loading Screen
-  if (authLoading) {
+  if (authLoading && !session) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-background">
         <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-2xl animate-spin"></div>
