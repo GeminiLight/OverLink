@@ -5,6 +5,8 @@
 **Your Academic Assets, Always Current.**  
 *Seamlessly synchronize your Overleaf projects with your personal website/portfolio.*
 
+🇺🇸 English | [🇨🇳 中文](./README_zh-CN.md)
+
 <p align="center">
   <a href="https://github.com/GeminiLight/overlink">
     <img src="https://img.shields.io/github/stars/GeminiLight/overlink?style=social" alt="Star on GitHub">
@@ -28,22 +30,50 @@
 
 **OverLink** acts as the automated bridge between your research and your audience. It solves the tedious problem of manually exporting, renaming, and uploading your CV or papers every time you fix a typo or add a citation.
 
-With OverLink, your personal website always serves the latest compiled version of your work directly from **Overleaf**.
+### Why OverLink?
+
+<table>
+<tr>
+<th width="50%">🚫 The Manual Struggle</th>
+<th width="50%">✅ The OverLink Flow</th>
+</tr>
+<tr>
+<td>
+<br>
+❌ <b>Tedious</b>: <br><i>Download PDF -> Rename -> Upload via FTP/Git</i>
+<br><br>
+❌ <b>Outdated</b>: <br><i>"Last updated: 2023" (because you forgot)</i>
+<br><br>
+❌ <b>Fragile</b>: <br><i>Broken links if you change filenames</i>
+<br>
+</td>
+<td>
+<br>
+🟢 <b>Automated</b>: <br><i>Detects changes & deploys instantly</i>
+<br><br>
+🟢 <b>Always Fresh</b>: <br><i>Your site always shows the latest compile</i>
+<br><br>
+🟢 <b>Reliable</b>: <br><i>Stable URLs, optimized delivery</i>
+<br>
+</td>
+</tr>
+</table>
 
 ## 🛠️ How It Works
 
-```mermaid
-graph LR
-    User[👩‍💻 User] -- Pushes Code --> Overleaf[📄 Overleaf Project]
-    Overleaf -- Compiles --> PDF[📑 PDF Asset]
-    subgraph OverLink Ecosystem
-        Worker[🤖 OverLink Worker] -- Detects Change --> PDF
-        Worker -- Downloads & Optimizes --> OptimizedPDF[✨ Optimized PDF]
-        OptimizedPDF -- Deploys --> Cloud[☁️ Cloud Storage / Git Repo]
-    end
-    Cloud -- Serves --> Website[🌐 Personal Website]
-    style OverLink Ecosystem fill:#f9f9f9,stroke:#333,stroke-width:2px
-```
+<div align="center">
+
+<code>👩‍💻 User Pushes</code> &nbsp; <b>→</b> &nbsp; <code>📄 Overleaf Compiles</code> &nbsp; <b>→</b> &nbsp; <code>🤖 OverLink Syncs</code> &nbsp; <b>→</b> &nbsp; <code>🌐 Website Updates</code>
+
+<br>
+
+| Step | Action |
+| :--- | :--- |
+| **1. Detect** | OverLink watches your Overleaf project for changes. |
+| **2. Capture** | Uses a headless browser to generate a pixel-perfect PDF. |
+| **3. Deploy** | Uploads the optimized asset to your Cloud Storage or Git Repo. |
+
+</div>
 
 ## ✨ Features
 
@@ -102,17 +132,15 @@ This repository is a **Monorepo** containing the entire OverLink ecosystem:
 
 **For power users who want full control.**
 
-1.  **Navigate to the local app directory**:
+1.  View the detailed guide:
+    -   [📖 Local Deployment Guide](docs/local-deployment.md)
+
+2.  **Quick Start**:
     ```bash
     cd apps/local
-    ```
-
-2.  **Start the application**:
-    ```bash
     chmod +x start.sh
     ./start.sh
     ```
-    *Requirements: Python 3.9+, Playwright*
 
 </details>
 
