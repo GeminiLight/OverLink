@@ -24,7 +24,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -e ./overlink
+        pip install -r apps/local/requirements.txt
         playwright install chromium
 
     - name: Restore auth.json
@@ -46,9 +47,9 @@ jobs:
         PROJECT_ID="${{ github.event.client_payload.project_id }}"
         
         if [ "$ACTION" == "add" ]; then
-          python main.py user add --nickname "$NICKNAME" --email "$EMAIL" --project-id "$PROJECT_ID"
+          python apps/local/main.py user add --nickname "$NICKNAME" --email "$EMAIL" --project-id "$PROJECT_ID"
         elif [ "$ACTION" == "delete" ]; then
-          python main.py user delete --nickname "$NICKNAME"
+          python apps/local/main.py user delete --nickname "$NICKNAME"
         else
           echo "Unknown action: $ACTION"
           exit 1
@@ -58,7 +59,7 @@ jobs:
       env:
         OVERLEAF_EMAIL: ${{ secrets.OVERLEAF_EMAIL }}
         OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
-      run: python main.py sync
+      run: python apps/local/main.py sync
       continue-on-error: true
 
     - name: Commit and Push Changes
