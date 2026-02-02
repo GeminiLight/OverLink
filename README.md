@@ -3,7 +3,16 @@
 # 🎓 OverLink
 
 **Your Academic Assets, Always Current.**  
-*Seamlessly synchronize your Overleaf projects with your personal website.*
+*Seamlessly synchronize your Overleaf projects with your personal website/portfolio.*
+
+<p align="center">
+  <a href="https://github.com/GeminiLight/overlink">
+    <img src="https://img.shields.io/github/stars/GeminiLight/overlink?style=social" alt="Star on GitHub">
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20OverLink%3A%20Sync%20Override%20PDFs%20to%20your%20website%20automatically!%20https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink">
+    <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2FGeminiLight%2Foverlink" alt="Tweet">
+  </a>
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status](https://img.shields.io/badge/Status-Beta-blue)]()
@@ -17,47 +26,81 @@
 
 ## 📖 Introduction
 
-**OverLink** solves the hassle of manually updating your CV and academic papers on your personal website. It acts as a bridge between your **Overleaf** projects and your public portfolio, ensuring that every time you compile a new version of your resume or paper, the latest PDF is automatically deployed to your site.
+**OverLink** acts as the automated bridge between your research and your audience. It solves the tedious problem of manually exporting, renaming, and uploading your CV or papers every time you fix a typo or add a citation.
 
-Whether you prefer a **fully managed cloud experience** or **complete control with self-hosting**, OverLink has you covered.
+With OverLink, your personal website always serves the latest compiled version of your work directly from **Overleaf**.
+
+## 🛠️ How It Works
+
+```mermaid
+graph LR
+    User[👩‍💻 User] -- Pushes Code --> Overleaf[📄 Overleaf Project]
+    Overleaf -- Compiles --> PDF[📑 PDF Asset]
+    subgraph OverLink Ecosystem
+        Worker[🤖 OverLink Worker] -- Detects Change --> PDF
+        Worker -- Downloads & Optimizes --> OptimizedPDF[✨ Optimized PDF]
+        OptimizedPDF -- Deploys --> Cloud[☁️ Cloud Storage / Git Repo]
+    end
+    Cloud -- Serves --> Website[🌐 Personal Website]
+    style OverLink Ecosystem fill:#f9f9f9,stroke:#333,stroke-width:2px
+```
 
 ## ✨ Features
 
-- **🔄 Automatic Synchronization**: Changes in Overleaf are detected and synced automatically.
-- **📄 High-Fidelity PDFs**: Uses Playwright to capture pixel-perfect PDFs directly from Overleaf.
-- **☁️ Dual Modes**: Choose between our hosted SaaS platform or run it locally on your own infrastructure.
-- **🛡️ Secure**: Securely handles your credentials and project IDs.
-- **🚀 Zero Config (Cloud)**: Get started in seconds with our hosted platform.
+<table>
+  <tr>
+    <td align="center">🔄 <b>Automatic Sync</b></td>
+    <td align="center">📄 <b>High-Fidelity</b></td>
+    <td align="center">🛡️ <b>Secure</b></td>
+  </tr>
+  <tr>
+    <td>Never drag-and-drop a PDF again. Changes in Overleaf are detected and deployed instantly.</td>
+    <td>Uses <b>Playwright</b> to ensure pixel-perfect rendering of your LaTeX documents.</td>
+    <td>Your credentials and project IDs are handled with industry-standard encryption.</td>
+  </tr>
+    <tr>
+    <td align="center">☁️ <b>Dual Modes</b></td>
+    <td align="center">🚀 <b>Zero Config</b></td>
+    <td align="center">📦 <b>Monorepo</b></td>
+  </tr>
+  <tr>
+    <td>Choose between our <b>fully managed Cloud SaaS</b> or self-host strictly on your own hardware.</td>
+    <td>Get started in seconds with our hosted platform without managing infrastructure.</td>
+    <td>One codebase, infinite possibilities. Extensible Python core.</td>
+  </tr>
+</table>
 
 ## 🏗️ Architecture
 
 This repository is a **Monorepo** containing the entire OverLink ecosystem:
 
-### 1. ☁️ OverLink Cloud (`apps/cloud`)
-The recommended way for most users. A centralized SaaS platform where you can manage your projects via a beautiful dashboard.
-- **Stack**: Next.js, Playwright, Cloudflare R2.
-- **Location**: [`apps/cloud`](apps/cloud)
-
-### 2. 💻 OverLink Local (`apps/local`)
-For those who want full control. Run the synchronization tool locally on your machine or inside your own CI/CD pipelines (e.g., GitHub Actions).
-- **Stack**: Python, Playwright.
-- **Location**: [`apps/local`](apps/local)
-
-### 3. 📦 Core (`overlink/`)
-The shared brain of OverLink. A Python library identifying the core logic for browser automation and state management, reused across both Cloud and Local versions.
+| Component | Description | Technologies | Location |
+| :--- | :--- | :--- | :--- |
+| **☁️ Cloud** | **(Recommended)** SaaS platform with a beautiful dashboard. | Next.js, Playwright, R2 | [`apps/cloud`](apps/cloud) |
+| **💻 Local** | Self-hosted CLI tool for your own machine or CI/CD. | Python, Playwright | [`apps/local`](apps/local) |
+| **📦 Core** | Shared libraries and browser automation logic. | Python | [`overlink/`](overlink/) |
 
 ---
 
 ## 🚀 Getting Started
 
-Choose the version that fits your needs:
+<details open>
+<summary><b>Option A: OverLink Cloud (Recommended)</b></summary>
+<br>
 
-### Option A: OverLink Cloud (Recommended)
-Skip the setup and start syncing immediately.
-1.  Navigate to the **[Platform Setup Guide](PLATFORM_SETUP.md)** to deploy the cloud instance or wait for the public release.
+**The easiest way to get started.** No servers to manage.
 
-### Option B: OverLink Local (Self-Hosted)
-Run the tool on your own machine.
+1.  Navigate to the **[Platform Setup Guide](PLATFORM_SETUP.md)**.
+2.  Deploy your instance or sign up for the hosted beta.
+3.  Connect your Overleaf account and start syncing.
+
+</details>
+
+<details>
+<summary><b>Option B: OverLink Local (Self-Hosted)</b></summary>
+<br>
+
+**For power users who want full control.**
 
 1.  **Navigate to the local app directory**:
     ```bash
@@ -69,9 +112,17 @@ Run the tool on your own machine.
     chmod +x start.sh
     ./start.sh
     ```
-    *Note: Ensure you have Python and Playwright dependencies installed.*
+    *Requirements: Python 3.9+, Playwright*
+
+</details>
 
 ---
+
+## 📈 Star History
+
+If you find OverLink detailed or useful, please consider giving it a star! It helps us grow.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=GeminiLight/overlink&type=Date)](https://star-history.com/#GeminiLight/overlink&Date)
 
 ## 🤝 Contributing
 
@@ -90,5 +141,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <div align="center">
-Built with ❤️ by the OverLink Team
+  <p>Built with ❤️ by the OverLink Team</p>
 </div>
