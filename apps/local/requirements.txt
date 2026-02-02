@@ -1,4 +1,3 @@
--e ../../overlink
 fastapi
 uvicorn
 python-dotenv
