@@ -17,16 +17,15 @@ const translations = {
       filenamePlaceholder: "e.g. resume",
       projectId: "Overleaf URL / ID",
       projectIdPlaceholder: "Link",
-      email: "Overleaf Email (Optional)",
-      emailPlaceholder: "Email",
-      password: "Password (Optional)",
-      passwordPlaceholder: "Password",
       submit: "Add Project",
-      submitting: "Adding..."
+      updateSubmit: "Update Project",
+      submitting: "Updating..."
     },
     actions: {
       view: "VIEW PDF",
       sync: "SYNC",
+      edit: "EDIT",
+      delete: "DELETE",
       syncing: "Starting...",
     },
     hero: {
@@ -74,16 +73,15 @@ const translations = {
       filenamePlaceholder: "例如：resume",
       projectId: "Overleaf 项目链接 / ID",
       projectIdPlaceholder: "分享链接",
-      email: "Overleaf 邮箱 (选填)",
-      emailPlaceholder: "邮箱",
-      password: "密码 (选填)",
-      passwordPlaceholder: "密码",
       submit: "添加项目",
-      submitting: "添加中..."
+      updateSubmit: "更新项目",
+      submitting: "更新中..."
     },
     actions: {
       view: "查看 PDF",
       sync: "同步",
+      edit: "修改",
+      delete: "删除",
       syncing: "启动中...",
     },
     hero: {
@@ -130,8 +128,7 @@ export default function Home() {
   // Form State
   const [filename, setFilename] = useState("");
   const [projectId, setProjectId] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // I18n & Theme State
   const [lang, setLang] = useState<Lang>('en');
@@ -198,17 +195,19 @@ export default function Home() {
     if (!session) return;
     setLoading(true);
 
+    const isEdit = !!editingId;
     const res = await fetch("/api/projects", {
-      method: "POST",
+      method: isEdit ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        id: editingId,
         userId: session.user.id,
-        filename, projectId, email, password
+        filename, projectId
       })
     });
 
     if (res.ok) {
-      setFilename(""); setProjectId(""); setEmail(""); setPassword("");
+      setFilename(""); setProjectId(""); setEditingId(null);
       fetchProjects(session.user.id);
     } else {
       alert(t.alert.addFail);
@@ -224,6 +223,22 @@ export default function Home() {
     });
     if (res.ok) alert(t.alert.success);
     else alert(t.alert.fail);
+  };
+
+  const handleDeleteProject = async (projId: string) => {
+    if (!confirm("Are you sure?")) return;
+    const res = await fetch(`/api/projects?id=${projId}&userId=${session.user.id}`, {
+      method: "DELETE"
+    });
+    if (res.ok) fetchProjects(session.user.id);
+  };
+
+  const handleEditProject = (project: any) => {
+    setEditingId(project.id);
+    setFilename(project.filename);
+    setProjectId(project.project_id);
+    // Focus the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -368,7 +383,17 @@ export default function Home() {
             {/* Add Project Form */}
             <div className="lg:col-span-1">
               <div className="glass-card p-8 rounded-[2rem] relative overflow-hidden">
-                <h2 className="text-xl font-bold mb-6 text-foreground">{t.addProject}</h2>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-foreground">{editingId ? t.actions.edit : t.addProject}</h2>
+                  {editingId && (
+                    <button
+                      onClick={() => { setEditingId(null); setFilename(""); setProjectId(""); }}
+                      className="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
                 <form onSubmit={handleAddProject} className="space-y-4">
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.filename}</label>
@@ -390,30 +415,11 @@ export default function Home() {
                       required
                     />
                   </div>
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.email}</label>
-                    <input
-                      placeholder={t.form.emailPlaceholder}
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.password}</label>
-                    <input
-                      type="password"
-                      placeholder={t.form.passwordPlaceholder}
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
-                    />
-                  </div>
                   <button
                     disabled={loading}
                     className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all disabled:opacity-50"
                   >
-                    {loading ? t.form.submitting : t.form.submit}
+                    {loading ? t.form.submitting : (editingId ? t.form.updateSubmit : t.form.submit)}
                   </button>
                 </form>
               </div>
@@ -443,9 +449,9 @@ export default function Home() {
                       <div className="w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
                     </div>
 
-                    <div className="flex gap-3 mt-4">
+                    <div className="flex gap-2 mt-4 flex-wrap">
                       <a
-                        href={`https://cdn.overlink.com/${project.filename}.pdf`}
+                        href={`${process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://cdn.overlink.com'}/${project.filename}.pdf`}
                         target="_blank"
                         className="flex-1 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold text-center hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors"
                       >
@@ -453,9 +459,21 @@ export default function Home() {
                       </a >
                       <button
                         onClick={() => handleSync(project.id)}
-                        className="px-4 py-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-xl text-xs font-bold transition-colors flex items-center justify-center"
+                        className="px-4 py-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-xl text-xs font-bold transition-colors"
                       >
                         {t.actions.sync}
+                      </button>
+                      <button
+                        onClick={() => handleEditProject(project)}
+                        className="px-4 py-3 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl text-xs font-bold transition-colors"
+                      >
+                        {t.actions.edit}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProject(project.id)}
+                        className="px-4 py-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-xl text-xs font-bold transition-colors"
+                      >
+                        {t.actions.delete}
                       </button>
                     </div >
                   </div >

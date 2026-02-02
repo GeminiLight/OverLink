@@ -7,6 +7,7 @@ create table public.profiles (
   email text,
   nickname text,
   avatar_url text,
+  tier text default 'free' check (tier in ('free', 'pro', 'institutional')),
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
 );
@@ -50,6 +51,9 @@ create table public.projects (
   -- Sync State
   last_sync_at timestamp with time zone,
   last_sync_status text check (last_sync_status in ('pending', 'running', 'success', 'failed')),
+  
+  -- Analytics
+  view_count int default 0,
   
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now(),

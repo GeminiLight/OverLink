@@ -61,6 +61,7 @@ For the login to redirect back to your website (and not `localhost`), you **must
     -   `GITHUB_TOKEN`: A Personal Access Token (Classic) with `repo` scope.
     -   `GITHUB_OWNER`: Your GitHub username.
     -   `GITHUB_REPO`: Your repo name.
+-   `NEXT_PUBLIC_CDN_BASE_URL`: Base URL for your PDFs (e.g., `https://cdn.example.com`).
 
 ## 4. Cloudflare R2 (PDF Storage)
 
@@ -83,6 +84,7 @@ Set these in **Vercel Project Settings -> Environment Variables**:
 | `GITHUB_TOKEN` | GitHub Settings -> Developer Settings -> PAT (Classic) | Trigger Actions |
 | `GITHUB_OWNER` | Your GitHub Username | Trigger Actions |
 | `GITHUB_REPO` | `OverLink` (or your repo name) | Trigger Actions |
+| `NEXT_PUBLIC_CDN_BASE_URL` | Cloudflare Custom Domain (e.g., `https://cdn.example.com`) | View PDFs |
 
 ### B. GitHub Secrets (Worker)
 Set these in **GitHub Repo -> Settings -> Secrets and variables -> Actions**:
