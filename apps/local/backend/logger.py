@@ -1,7 +1,7 @@
 import logging
 import sys
 
-def setup_logger(name="cv_mirror"):
+def setup_logger(name="overlink"):
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     
