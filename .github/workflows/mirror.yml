@@ -12,17 +12,31 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Mirror logic
-        uses: wearerequired/git-mirror-action@v1
+      - name: Prepare Mirror Branch
+        run: |
+          # 1. Create a temporary branch for the mirror
+          git checkout -b mirror-branch
+          
+          # 2. Remove private content
+          # We use git rm -rf to ensure it's removed from the index of this temporary branch
+          # List everything you want to EXCLUDE
+          git rm -rf apps/cloud
+          git rm -rf .env*
+          git rm -rf auth.json
+          git rm -rf .shared/auth.json
+          
+          # 3. Commit the changes (only on the mirror branch)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: mirror clean state"
+
+      - name: Push to Public Repo
+        uses: ad-m/github-push-action@master
         with:
-          source-directory: '.'
-          # These are the files/folders that will NOT be pushed to the public OverLink repo
-          exclude: |
-            apps/cloud/*
-            .env*
-            auth.json
-            .shared/auth.json
-          destination-repo: 'git@github.com:GeminiLight/OverLink.git'
-          destination-branch: 'main'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+          repository: GeminiLight/OverLink
+          ssh: true
         env:
           SSH_PRIVATE_KEY: ${{ secrets.MIRROR_SSH_KEY }}
