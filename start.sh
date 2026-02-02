@@ -3,7 +3,7 @@ echo "Starting CV Mirror..."
 
 # Start Backend
 echo "Starting Backend on port 8000..."
-python server.py &
+python main.py server &
 BACKEND_PID=$!
 
 # Start Frontend

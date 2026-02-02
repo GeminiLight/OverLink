@@ -26,5 +26,41 @@ class Config:
 
     @classmethod
     def save_users(cls, users):
+        cls.ensure_public_dir()
         with open(cls.USERS_FILE, "w") as f:
             json.dump(users, f, indent=4)
+
+    @classmethod
+    def add_user(cls, nickname, email, project_id):
+        users = cls.load_users()
+        url = project_id if project_id.startswith("http") else f"https://www.overleaf.com/project/{project_id}"
+        
+        new_user = {
+            "username": nickname,
+            "email": email,
+            "url": url
+        }
+        
+        updated = False
+        for i, user in enumerate(users):
+            if user["username"] == nickname:
+                users[i] = new_user
+                updated = True
+                break
+        
+        if not updated:
+            users.append(new_user)
+            
+        cls.save_users(users)
+        return updated
+
+    @classmethod
+    def delete_user(cls, nickname):
+        users = cls.load_users()
+        initial_count = len(users)
+        users = [u for u in users if u["username"] != nickname]
+        
+        if len(users) < initial_count:
+            cls.save_users(users)
+            return True
+        return False

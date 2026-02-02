@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-import os
 import logging
+import json
+import asyncio
 from cv_mirror.bot import OverleafBot
 from cv_mirror.config import Config
 
@@ -38,10 +40,6 @@ Config.ensure_public_dir()
 # Mount public directory to serve PDFs
 app.mount("/public", StaticFiles(directory=Config.PUBLIC_DIR), name="public")
 
-from fastapi.responses import StreamingResponse
-import json
-import asyncio
-
 @app.post("/api/mirror")
 async def mirror_cv(request: MirrorRequest):
     """
@@ -50,28 +48,20 @@ async def mirror_cv(request: MirrorRequest):
     """
     logger.info(f"Received request for {request.nickname} (ID: {request.project_id})")
     
-    # Construct user data
+    # Save/Update user in users.json using Config
+    try:
+        updated = Config.add_user(request.nickname, request.email, request.project_id)
+        action = "Updated" if updated else "Added"
+        logger.info(f"{action} user: {request.nickname}")
+    except Exception as e:
+        logger.error(f"Error saving user data: {e}")
+
+    # Prepare user data dict for the bot
     user_data = {
         "username": request.nickname,
         "email": request.email,
-        "url": request.project_id
+        "url": request.project_id if request.project_id.startswith("http") else f"https://www.overleaf.com/project/{request.project_id}"
     }
-
-    # Save/Update user in users.json
-    try:
-        users = Config.load_users()
-        user_index = next((index for (index, d) in enumerate(users) if d["username"] == request.nickname), None)
-        
-        if user_index is not None:
-             users[user_index] = user_data
-             logger.info(f"Updated existing user: {request.nickname}")
-        else:
-             users.append(user_data)
-             logger.info(f"Added new user: {request.nickname}")
-        
-        Config.save_users(users)
-    except Exception as e:
-        logger.error(f"Error saving user data: {e}")
 
     async def event_generator():
         q = asyncio.Queue()
@@ -142,10 +132,8 @@ async def delete_cv(request: DeleteRequest):
         new_users = []
         
         for user in users:
-            # Check for match (case-sensitive for simplicity, could be lowered)
             if user.get("username") == request.username and user.get("email") == request.email:
                 found = True
-                # Skip this user (delete)
                 continue
             new_users.append(user)
             
@@ -165,8 +153,3 @@ async def delete_cv(request: DeleteRequest):
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
-
-if __name__ == "__main__":
-    import uvicorn
-    # Run on 0.0.0.0 to be accessible if needed, port 8000
-    uvicorn.run(app, host="0.0.0.0", port=8000)

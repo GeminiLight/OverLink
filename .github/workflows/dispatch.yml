@@ -46,9 +46,9 @@ jobs:
         PROJECT_ID="${{ github.event.client_payload.project_id }}"
         
         if [ "$ACTION" == "add" ]; then
-          python manage_users.py add --nickname "$NICKNAME" --email "$EMAIL" --project-id "$PROJECT_ID"
+          python main.py user add --nickname "$NICKNAME" --email "$EMAIL" --project-id "$PROJECT_ID"
         elif [ "$ACTION" == "delete" ]; then
-          python manage_users.py delete --nickname "$NICKNAME"
+          python main.py user delete --nickname "$NICKNAME"
         else
           echo "Unknown action: $ACTION"
           exit 1
@@ -58,7 +58,7 @@ jobs:
       env:
         OVERLEAF_EMAIL: ${{ secrets.OVERLEAF_EMAIL }}
         OVERLEAF_PASSWORD: ${{ secrets.OVERLEAF_PASSWORD }}
-      run: python main.py
+      run: python main.py sync
       continue-on-error: true
 
     - name: Commit and Push Changes
