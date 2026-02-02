@@ -31,7 +31,7 @@ const translations = {
     },
     hero: {
       title: "OverLink Cloud",
-      desc: "Sync your Overleaf projects to persistent, magic URLs. Zero friction."
+      desc: "Sync your Overleaf projects to persistent File URLs."
     },
     howItWorks: {
       title: "How it Works",
@@ -87,14 +87,14 @@ const translations = {
       syncing: "启动中...",
     },
     hero: {
-      title: "OverLink 云端",
-      desc: "将您的 Overleaf 项目同步到永久链接。零摩擦，全自动。"
+      title: "OverLink",
+      desc: "将您的 Overleaf 项目自动同步到永久的文件链接。"
     },
     howItWorks: {
       title: "运作过程",
       step1: { title: "编写 LaTeX", desc: "在 Overleaf 中如常进行您的学术写作。" },
-      step2: { title: "机器人抓取", desc: "OverLink 机器人每晚会自动同步您的最新版 PDF。" },
-      step3: { title: "即刻呈现", desc: "您的个人仓库将始终显示最新版本的 PDF。" }
+      step2: { title: "自动抓取", desc: "OverLink 机器人每天会自动同步您的最新版 PDF。" },
+      step3: { title: "即刻呈现", desc: "你在任何地方引用的链接将始终显示最新版本的 PDF。" }
     },
     features: {
       sync: "自动同步",
@@ -227,10 +227,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-slate-900 dark:text-white pb-32 transition-colors duration-300 bg-white dark:bg-[#0a0a0a]">
+    <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-300">
       {/* Hero BG */}
-      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
-      <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-purple-100 dark:bg-purple-600/10 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-100 dark:bg-blue-600/5 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-purple-100 dark:bg-purple-600/5 rounded-full blur-[120px] pointer-events-none transition-colors duration-700"></div>
 
       {/* Navbar Controls (Absolute Top-Right for Cleanliness) */}
       <div className="absolute top-6 right-6 z-50 flex gap-3">
@@ -250,10 +250,10 @@ export default function Home() {
             <div className="w-20 h-20 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl mb-10 rotate-3 hover:rotate-6 transition-transform">
               <span className="text-white font-bold text-4xl">O</span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.05]">
+            <h1 className="text-6xl md:text-8xl font-black font-[Plus Jakarta Sans] tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-slate-950 via-slate-800 to-slate-500 dark:from-white dark:via-white dark:to-white/40 leading-[1.05]">
               {t.hero.title}
             </h1>
-            <p className="max-w-2xl mx-auto text-xl md:text-2xl text-slate-500 dark:text-slate-400 font-medium mb-14 leading-relaxed">
+            <p className="max-w-2xl mx-auto text-xl md:text-2xl opacity-70 font-medium mb-14 leading-relaxed">
               {t.hero.desc}
             </p>
             <div className="flex flex-col sm:flex-row gap-5 w-full max-w-lg">
@@ -286,8 +286,8 @@ export default function Home() {
                   <div className="w-14 h-14 rounded-[1.25rem] bg-blue-600/10 dark:bg-blue-400/10 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all text-2xl shadow-inner">
                     {num}
                   </div>
-                  <h4 className="text-2xl font-bold dark:text-white tracking-tight">{(t.howItWorks as any)[`step${num}`].title}</h4>
-                  <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
+                  <h4 className="text-2xl font-bold text-foreground tracking-tight">{(t.howItWorks as any)[`step${num}`].title}</h4>
+                  <p className="text-lg opacity-60 font-medium leading-relaxed">{(t.howItWorks as any)[`step${num}`].desc}</p>
                 </div>
               ))}
             </div>
@@ -299,19 +299,19 @@ export default function Home() {
               <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
                 <div className="space-y-4">
                   <h4 className="text-3xl font-black tracking-tighter group-hover:text-blue-600 transition-colors">{t.features.sync}</h4>
-                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">Automated nightly builds. Zero manual effort to keep your site updated.</p>
+                  <p className="opacity-60 font-medium text-lg leading-relaxed">Automated nightly builds. Zero manual effort to keep your site updated.</p>
                 </div>
               </div>
               <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
                 <div className="space-y-4">
                   <h4 className="text-3xl font-black tracking-tighter group-hover:text-purple-600 transition-colors">{t.features.url}</h4>
-                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">One permanent URL for your resume or paper. Never send a dead link again.</p>
+                  <p className="opacity-60 font-medium text-lg leading-relaxed">One permanent URL for your resume or paper. Never send a dead link again.</p>
                 </div>
               </div>
               <div className="md:col-span-1 p-10 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[3rem] flex flex-col justify-between hover:bg-white dark:hover:bg-white/10 transition-all group">
                 <div className="space-y-4">
                   <h4 className="text-3xl font-black tracking-tighter group-hover:text-emerald-600 transition-colors">{t.features.open}</h4>
-                  <p className="text-slate-500 dark:text-gray-400 font-medium text-lg leading-relaxed">Military-grade encryption for your credentials. Your privacy is our priority.</p>
+                  <p className="opacity-60 font-medium text-lg leading-relaxed">Military-grade encryption for your credentials. Your privacy is our priority.</p>
                 </div>
               </div>
             </div>
@@ -323,8 +323,8 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-16">
               {[1, 2, 3].map(i => (
                 <div key={i} className="space-y-4">
-                  <h4 className="font-bold text-2xl tracking-tight dark:text-white">{(t as any).faq[`q${i}`]}</h4>
-                  <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{(t as any).faq[`a${i}`]}</p>
+                  <h4 className="font-bold text-2xl tracking-tight text-foreground">{(t as any).faq[`q${i}`]}</h4>
+                  <p className="text-lg opacity-60 font-medium leading-relaxed">{(t as any).faq[`a${i}`]}</p>
                 </div>
               ))}
             </div>
@@ -347,7 +347,7 @@ export default function Home() {
               <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">{t.dashboard}</h1>
             </div>
             <div className="flex gap-4 items-center bg-white/50 dark:bg-white/5 backdrop-blur-md p-2 pl-4 rounded-full border border-white/20 dark:border-white/5 shadow-sm">
-              <span className="text-sm font-medium text-slate-600 dark:text-white/80">{session.user.email}</span>
+              <span className="text-sm font-medium opacity-80">{session.user.email}</span>
               {session.user.tier !== 'pro' && (
                 <button
                   className="px-4 py-2 bg-amber-500 text-white hover:bg-amber-600 rounded-full text-xs font-bold transition-all shadow-lg shadow-amber-500/20"
@@ -368,45 +368,45 @@ export default function Home() {
             {/* Add Project Form */}
             <div className="lg:col-span-1">
               <div className="glass-card p-8 rounded-[2rem] relative overflow-hidden">
-                <h2 className="text-xl font-bold mb-6 dark:text-white">{t.addProject}</h2>
+                <h2 className="text-xl font-bold mb-6 text-foreground">{t.addProject}</h2>
                 <form onSubmit={handleAddProject} className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.filename}</label>
+                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.filename}</label>
                     <input
                       placeholder={t.form.filenamePlaceholder}
                       value={filename}
                       onChange={e => setFilename(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 dark:text-white"
+                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
                       required
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.projectId}</label>
+                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.projectId}</label>
                     <input
                       placeholder={t.form.projectIdPlaceholder}
                       value={projectId}
                       onChange={e => setProjectId(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 dark:text-white"
+                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
                       required
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.email}</label>
+                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.email}</label>
                     <input
                       placeholder={t.form.emailPlaceholder}
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 dark:text-white"
+                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">{t.form.password}</label>
+                    <label className="text-xs font-bold uppercase tracking-wider opacity-40 mb-2 block">{t.form.password}</label>
                     <input
                       type="password"
                       placeholder={t.form.passwordPlaceholder}
                       value={password}
                       onChange={e => setPassword(e.target.value)}
-                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 dark:text-white"
+                      className="w-full bg-slate-50/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 p-4 rounded-xl outline-none focus:ring-2 ring-blue-500/50 text-foreground"
                     />
                   </div>
                   <button
@@ -421,7 +421,7 @@ export default function Home() {
 
             {/* Project List */}
             <div className="lg:col-span-2 space-y-4">
-              <h2 className="text-xl font-bold mb-4 px-2 dark:text-white">{t.yourProjects}</h2>
+              <h2 className="text-xl font-bold mb-4 px-2 text-foreground">{t.yourProjects}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projects.map(project => (
                   <div key={project.id} className="glass p-6 rounded-2xl hover-lift group relative overflow-hidden">
@@ -429,13 +429,13 @@ export default function Home() {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-bold text-lg text-slate-800 dark:text-white">{project.filename}.pdf</h3>
+                          <h3 className="font-bold text-lg text-foreground">{project.filename}.pdf</h3>
                           {session.user.tier === 'pro' && (
                             <span className="px-2 py-0.5 bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-bold rounded-full uppercase tracking-tighter">Pro</span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 font-mono truncate max-w-[150px]">{project.project_id}</p>
-                        <div className="flex items-center gap-2 mt-2 text-slate-400 dark:text-slate-500">
+                        <p className="text-xs opacity-50 font-mono truncate max-w-[150px]">{project.project_id}</p>
+                        <div className="flex items-center gap-2 mt-2 opacity-40">
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                           <span className="text-xs font-semibold">{project.view_count || 0} views</span>
                         </div>
@@ -462,7 +462,7 @@ export default function Home() {
                 ))}
                 {
                   projects.length === 0 && (
-                    <div className="col-span-full py-20 text-center text-slate-400 dark:text-slate-500 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl">
+                    <div className="col-span-full py-20 text-center opacity-40 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl">
                       <p>{t.empty}</p>
                     </div>
                   )
