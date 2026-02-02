@@ -9,8 +9,8 @@ Congratulation! The code for your SaaS platform is ready in the `apps/cloud/` di
 3.  Copy and paste the content of `apps/cloud/supabase/schema.sql` and run it.
 4.  Go to **Settings** -> **API**.
 5.  Under **Publishable and secret API keys**:
-    *   Copy **Publishable key** (`sb_publishable_...`) -> `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-    *   Copy **Secret key** (`sb_secret_...`) -> `SUPABASE_SERVICE_ROLE_KEY`
+    *   Copy **Publishable key** (`sb_publishable_...`) -> `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Safe for browser)
+    *   Copy **Secret key** (`sb_secret_...`) -> `SUPABASE_SECRET_KEY` (**KEEP SECRET!**)
 
 ## 1.1 Authentication (Google Login)
 1.  Go to **Authentication** -> **Providers**.
@@ -59,8 +59,8 @@ Set these in **Vercel Project Settings -> Environment Variables**:
 | Variable | Value Source | Purpose |
 | :--- | :--- | :--- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Settings | Connect to DB |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Settings | Public Client |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Settings | Admin/Server Access |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase Settings | Public Client |
+| `SUPABASE_SECRET_KEY` | Supabase Settings | Admin/Server Access |
 | `ENCRYPTION_KEY` | Generate Random (32 chars) | Encrypt Overleaf Creds |
 | `GITHUB_TOKEN` | GitHub Settings -> Developer Settings -> PAT (Classic) | Trigger Actions |
 | `GITHUB_OWNER` | Your GitHub Username | Trigger Actions |

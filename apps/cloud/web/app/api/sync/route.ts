@@ -7,7 +7,7 @@ import { encryptToString } from '@/lib/crypto';
 // Actually we should fetch credentials from DB to verify ownership before triggering
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY! // Needed to read encrypted columns if we used RLS to hide them? 
+    process.env.SUPABASE_SECRET_KEY! // Needed to read encrypted columns if we used RLS to hide them? 
     // For this MVP, let's assume standard client can read if user owns it. 
     // BUT we stored them in `overlink_password_enc` which might be readable by owner.
 );
