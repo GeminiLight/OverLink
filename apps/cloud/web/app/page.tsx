@@ -138,14 +138,13 @@ export default function Home() {
 
   // I18n & Theme State
   const [lang, setLang] = useState<Lang>('en');
-  // Lazy init theme to prevent FOUC
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
-    }
-    return 'light';
-  });
+  const [theme, setTheme] = useState<Theme>('light');
+
+  // Hydrate theme from DOM (applied by blocking script)
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'dark' : 'light');
+  }, []);
 
   const t = translations[lang];
 
@@ -157,8 +156,13 @@ export default function Home() {
 
   useEffect(() => {
     // Adaptive Theme
-    if (theme === 'dark') document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   }, [theme]);
 
   useEffect(() => {
