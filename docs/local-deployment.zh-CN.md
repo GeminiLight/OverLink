@@ -68,6 +68,26 @@ chmod +x start.sh
 ./start.sh
 ```
 
+### 6. (可选) 高级身份验证 (避免 CAPTCHA)
+
+如果您在登录时遇到 CAPTCHA（验证码）问题，您可以手动捕获会话 Cookie：
+
+1.  以设置模式运行机器人：
+    ```bash
+    python main.py sync --setup
+    ```
+2.  浏览器将会打开。请手动登录 Overleaf。
+3.  登录成功后，返回终端并按 **Enter** 键。
+4.  脚本将保存 `auth.json`。将其转换为 Base64：
+    ```bash
+    # MacOS / Linux
+    base64 -i auth.json | pbcopy  # 复制到剪贴板
+    
+    # 或者直接打印：
+    base64 -i auth.json
+    ```
+5.  使用此字符串作为下方 `AUTH_JSON_BASE64` 的密钥值。
+
 ## 在 GitHub Actions 中运行
 
 您可以使用 GitHub Actions 自动化此过程，每日或在每次推送时同步您的资产。
@@ -78,10 +98,11 @@ chmod +x start.sh
 2.  **配置密钥 (Secrets)**：
     前往您仓库的 **Settings > Secrets and variables > Actions** 并添加以下仓库密钥：
 
-    | 密钥名称 (Secret Name) | 描述 |
-    | :--- | :--- |
-    | `OVERLEAF_EMAIL` | 您的 Overleaf 登录邮箱。 |
-    | `OVERLEAF_PASSWORD` | 您的 Overleaf 登录密码。 |
-    | `SSH_PRIVATE_KEY` | (可选) 如果通过 SSH 推送到 git 仓库，则需要私钥。 |
+    | 密钥名称 (Secret Name) | 描述 | 是否必须 |
+    | :--- | :--- | :--- |
+    | `OVERLEAF_EMAIL` | 您的 Overleaf 登录邮箱。 | **是** |
+    | `OVERLEAF_PASSWORD` | 您的 Overleaf 登录密码。 | **是** |
+    | `AUTH_JSON_BASE64` | Base64 编码的 `auth.json` (见上文第 6 步)。用于绕过登录/验证码。 | **推荐** |
+    | `SSH_PRIVATE_KEY` | (可选) 如果通过 SSH 推送到 git 仓库，则需要私钥。 | 否 |
 
     *注意：像 `TARGET_DIR` 或 `GIT_REPO_URL` 这样的非敏感环境变量可以直接在工作流文件中设置。*

@@ -68,6 +68,26 @@ chmod +x start.sh
 ./start.sh
 ```
 
+### 6. (Optional) Advanced Authentication (Avoid CAPTCHAs)
+
+If you encounter CAPTCHA issues during login, you can capture your session cookie manually:
+
+1.  Run the bot in setup mode:
+    ```bash
+    python main.py sync --setup
+    ```
+2.  A browser will open. Log in to Overleaf manually.
+3.  Once logged in, return to the terminal and press **Enter**.
+4.  The script will save `auth.json`. Convert it to Base64:
+    ```bash
+    # MacOS / Linux
+    base64 -i auth.json | pbcopy  # Copies to clipboard
+    
+    # Or just print it:
+    base64 -i auth.json
+    ```
+5.  Use this string for the `AUTH_JSON_BASE64` secret below.
+
 ## Running in GitHub Actions
 
 You can automate this process using GitHub Actions to sync your assets daily or on every push.
@@ -78,10 +98,11 @@ You can automate this process using GitHub Actions to sync your assets daily or 
 2.  **Configure Secrets**:
     Go to your repository's **Settings > Secrets and variables > Actions** and add the following repository secrets:
 
-    | Secret Name | Description |
-    | :--- | :--- |
-    | `OVERLEAF_EMAIL` | Your Overleaf login email. |
-    | `OVERLEAF_PASSWORD` | Your Overleaf login password. |
-    | `SSH_PRIVATE_KEY` | (Optional) Private key if pushing to a git repo via SSH. |
+    | Secret Name | Description | Required |
+    | :--- | :--- | :--- |
+    | `OVERLEAF_EMAIL` | Your Overleaf login email. | **Yes** |
+    | `OVERLEAF_PASSWORD` | Your Overleaf login password. | **Yes** |
+    | `AUTH_JSON_BASE64` | Base64 encoded `auth.json` (see step 6 above). Bypass Login/CAPTCHA. | **Recommended** |
+    | `SSH_PRIVATE_KEY` | (Optional) Private key if pushing to a git repo via SSH. | No |
 
     *Note: Environment variables like `TARGET_DIR` or `GIT_REPO_URL` can be set in the workflow file itself if they aren't sensitive.*
