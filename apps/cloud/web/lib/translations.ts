@@ -88,6 +88,30 @@ export const translations: Record<Lang, any> = {
             proTier: "PRO TIER",
             goPro: "GO PRO",
             cloudPlatform: "CLOUD PLATFORM"
+        },
+        pricing: {
+            title: "Simple, Transparent Pricing",
+            subtitle: "Invest in your academic career with professional tools.",
+            monthly: "/ month",
+            free: {
+                title: "Free",
+                desc: "Perfect for getting started.",
+                price: "$0",
+                features: ["1 Active Project", "Daily Sync", "Public PDF Link", "Basic Analytics"]
+            },
+            pro: {
+                title: "Pro",
+                desc: "For serious researchers.",
+                price: "$4.99",
+                features: ["Unlimited Projects", "Instant Sync", "Priority Support", "Advanced Analytics", "Custom Domain (Coming Soon)"],
+                cta: "Upgrade Now"
+            },
+            institutional: {
+                title: "Institutional",
+                desc: "For labs and universities.",
+                price: "Custom",
+                cta: "Contact Sales"
+            }
         }
     },
     zh: {
@@ -176,6 +200,30 @@ export const translations: Record<Lang, any> = {
             proTier: "专业版",
             goPro: "升级专业版",
             cloudPlatform: "云平台"
+        },
+        pricing: {
+            title: "简单透明的价格",
+            subtitle: "为您的学术生涯投资，使用更专业的工具。",
+            monthly: "/ 月",
+            free: {
+                title: "免费版",
+                desc: "适合初学者体验。",
+                price: "¥0",
+                features: ["1 个活跃项目", "每日自动同步", "公开 PDF链接", "基础数据统计"]
+            },
+            pro: {
+                title: "专业版",
+                desc: "为严谨的研究者打造。",
+                price: "¥35",
+                features: ["无限项目数量", "即时同步", "优先技术支持", "高级数据统计", "自定义域名 (即将推出)"],
+                cta: "立即升级"
+            },
+            institutional: {
+                title: "机构版",
+                desc: "适用于实验室和高校。",
+                price: "定制",
+                cta: "联系销售"
+            }
         }
     }
 };
