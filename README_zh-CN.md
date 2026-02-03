@@ -82,23 +82,13 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 <table>
   <tr>
     <td align="center">🔄 <b>自动同步</b></td>
-    <td align="center">📄 <b>高保真</b></td>
-    <td align="center">🛡️ <b>安全</b></td>
+    <td align="center">🛡️ <b>安全可靠</b></td>
+    <td align="center">☁️ <b>双重模式</b></td>
   </tr>
   <tr>
     <td>告别拖拽上传。Overleaf 中的更改会被检测并自动部署。</td>
-    <td>使用 <b>Playwright</b> 确保您的 LaTeX 文档渲染效果完美无缺。</td>
-    <td>使用行业标准加密处理您的凭据和项目 ID。</td>
-  </tr>
-    <tr>
-    <td align="center">☁️ <b>双重模式</b></td>
-    <td align="center">🚀 <b>零配置</b></td>
-    <td align="center">📦 <b>Monorepo</b></td>
-  </tr>
-  <tr>
+    <td>无需提供账号密码，仅需使用您的共享项目 ID。保障您的账户安全。</td>
     <td>选择我们<b>完全托管的云 SaaS</b>，或者在您自己的硬件上完全自托管。</td>
-    <td>使用我们的托管平台，几秒钟内即可开始使用，无需管理基础设施。</td>
-    <td>一个代码库，无限可能。可扩展的 Python 核心。</td>
   </tr>
 </table>
 

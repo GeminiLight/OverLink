@@ -80,23 +80,13 @@
 <table>
   <tr>
     <td align="center">🔄 <b>Automatic Sync</b></td>
-    <td align="center">📄 <b>High-Fidelity</b></td>
     <td align="center">🛡️ <b>Secure</b></td>
+    <td align="center">☁️ <b>Dual Modes</b></td>
   </tr>
   <tr>
     <td>Never drag-and-drop a PDF again. Changes in Overleaf are detected and deployed instantly.</td>
-    <td>Uses <b>Playwright</b> to ensure pixel-perfect rendering of your LaTeX documents.</td>
-    <td>Your credentials and project IDs are handled with industry-standard encryption.</td>
-  </tr>
-    <tr>
-    <td align="center">☁️ <b>Dual Modes</b></td>
-    <td align="center">🚀 <b>Zero Config</b></td>
-    <td align="center">📦 <b>Monorepo</b></td>
-  </tr>
-  <tr>
+    <td>No required credentials—just use your shared project IDs. Your account stays safe.</td>
     <td>Choose between our <b>fully managed Cloud SaaS</b> or self-host strictly on your own hardware.</td>
-    <td>Get started in seconds with our hosted platform without managing infrastructure.</td>
-    <td>One codebase, infinite possibilities. Extensible Python core.</td>
   </tr>
 </table>
 
