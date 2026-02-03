@@ -21,6 +21,8 @@ jobs:
           # Using --ignore-unmatch so it doesn't fail if a file is already gone or renamed
           git rm -rf --ignore-unmatch apps/cloud
           git rm -rf --ignore-unmatch .env*
+          git rm -rf --ignore-unmatch .github/workflows/mirror.yml
+          git rm -rf --ignore-unmatch .github/workflows/worker.yml
           
           # 3. Commit the changes (only on the mirror branch)
           git config user.name "GeminiLight"
