@@ -69,12 +69,27 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 
 ```html
 <!-- 您的个人作品集网站 -->
-<a href="https://dl.overlink.aurax.live/output.pdf" target="_blank">
+<a href="https://blob.overlink.aurax.live/output.pdf" target="_blank">
   📄 下载我的简历
 </a>
 ```
 
 当您在 Overleaf 中重新编译时，您的网站会出现最新版本。
+
+## ✨ 功能特性
+
+<table>
+  <tr>
+    <td align="center">🔄 <b>自动同步</b></td>
+    <td align="center">🛡️ <b>安全可靠</b></td>
+    <td align="center">☁️ <b>双重模式</b></td>
+  </tr>
+  <tr>
+    <td>告别拖拽上传。Overleaf 中的更改会被检测并自动部署。</td>
+    <td>无需提供账号密码，仅需使用您的共享项目 ID。保障您的账户安全。</td>
+    <td>选择我们<b>完全托管的云 SaaS</b>，或者在您自己的硬件上完全自托管。</td>
+  </tr>
+</table>
 
 ## 🛠️ 工作原理
 
@@ -91,21 +106,6 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 | **3. 部署** | 将优化后的资产上传到您的云存储或 Git 仓库。 |
 
 </div>
-
-## ✨ 功能特性
-
-<table>
-  <tr>
-    <td align="center">🔄 <b>自动同步</b></td>
-    <td align="center">🛡️ <b>安全可靠</b></td>
-    <td align="center">☁️ <b>双重模式</b></td>
-  </tr>
-  <tr>
-    <td>告别拖拽上传。Overleaf 中的更改会被检测并自动部署。</td>
-    <td>无需提供账号密码，仅需使用您的共享项目 ID。保障您的账户安全。</td>
-    <td>选择我们<b>完全托管的云 SaaS</b>，或者在您自己的硬件上完全自托管。</td>
-  </tr>
-</table>
 
 ## 🏗️ 架构
 

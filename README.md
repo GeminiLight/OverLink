@@ -67,12 +67,27 @@ Instead of uploading `CV_Final_v2_REALLY_FINAL.pdf` every time you fix a typo, j
 
 ```html
 <!-- Your portfolio website -->
-<a href="https://dl.overlink.aurax.live/output.pdf" target="_blank">
+<a href="https://blob.overlink.aurax.live/output.pdf" target="_blank">
   📄 Download My CV
 </a>
 ```
 
 When you recompile in Overleaf, your website updates automatically.
+
+## ✨ Features
+
+<table>
+  <tr>
+    <td align="center">🔄 <b>Automatic Sync</b></td>
+    <td align="center">🛡️ <b>Secure</b></td>
+    <td align="center">☁️ <b>Dual Modes</b></td>
+  </tr>
+  <tr>
+    <td>Never drag-and-drop a PDF again. Changes in Overleaf are detected and deployed instantly.</td>
+    <td>No required credentials—just use your shared project IDs. Your account stays safe.</td>
+    <td>Choose between our <b>fully managed Cloud SaaS</b> or self-host strictly on your own hardware.</td>
+  </tr>
+</table>
 
 ## 🛠️ How It Works
 
@@ -89,21 +104,6 @@ When you recompile in Overleaf, your website updates automatically.
 | **3. Deploy** | Uploads the optimized asset to your Cloud Storage or Git Repo. |
 
 </div>
-
-## ✨ Features
-
-<table>
-  <tr>
-    <td align="center">🔄 <b>Automatic Sync</b></td>
-    <td align="center">🛡️ <b>Secure</b></td>
-    <td align="center">☁️ <b>Dual Modes</b></td>
-  </tr>
-  <tr>
-    <td>Never drag-and-drop a PDF again. Changes in Overleaf are detected and deployed instantly.</td>
-    <td>No required credentials—just use your shared project IDs. Your account stays safe.</td>
-    <td>Choose between our <b>fully managed Cloud SaaS</b> or self-host strictly on your own hardware.</td>
-  </tr>
-</table>
 
 ## 🏗️ Architecture
 
