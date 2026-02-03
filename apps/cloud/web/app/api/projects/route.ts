@@ -39,6 +39,20 @@ export async function POST(request: Request) {
             );
         }
 
+        // 2b. Enforce Global Filename Uniqueness (since R2 uses flat namespace)
+        const { data: existing } = await supabase
+            .from('projects')
+            .select('id')
+            .eq('filename', filename)
+            .maybeSingle();
+
+        if (existing) {
+            return NextResponse.json(
+                { error: "This filename is already taken. Please choose a unique name (e.g. resume-john)." },
+                { status: 409 }
+            );
+        }
+
         // 3. Encrypt sensitive fields only if provided
         const overleaf_email_enc = email ? encryptToString(email) : null;
         const overleaf_password_enc = password ? encryptToString(password) : null;
@@ -70,6 +84,23 @@ export async function PATCH(request: Request) {
 
         if (!id || !userId) {
             return NextResponse.json({ error: "Missing id or userId" }, { status: 400 });
+        }
+
+        // Check if new filename is taken (if filename is being updated)
+        if (filename) {
+            const { data: existing } = await supabase
+                .from('projects')
+                .select('id')
+                .eq('filename', filename)
+                .neq('id', id) // Exclude self
+                .maybeSingle();
+
+            if (existing) {
+                return NextResponse.json(
+                    { error: "This filename is already taken." },
+                    { status: 409 }
+                );
+            }
         }
 
         const { data, error } = await supabase

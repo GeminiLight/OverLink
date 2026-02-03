@@ -65,20 +65,20 @@ export default function Home() {
       setFilename(""); setProjectId("");
       setIsAddOpen(false);
     } else {
-      notify(t.alert.addFail, 'error');
+      notify(result.error || t.alert.addFail, 'error');
     }
   };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedProject) return;
-    const success = await updateProject(selectedProject.id, editFilename, editProjectId);
-    if (success) {
+    const result = await updateProject(selectedProject.id, editFilename, editProjectId);
+    if (result.success) {
       notify(t.alert.updateSuccess, 'success');
       setIsEditOpen(false);
       setSelectedProject(null);
     } else {
-      notify(t.alert.updateFail, 'error');
+      notify(result.error || t.alert.updateFail, 'error');
     }
   };
 

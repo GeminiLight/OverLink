@@ -39,7 +39,7 @@ export function useProjects(userId: string | undefined) {
     };
 
     const updateProject = async (id: string, filename: string, projectId: string) => {
-        if (!userId) return false;
+        if (!userId) return { success: false, error: "Not authenticated" };
         setLoading(true);
         try {
             const res = await fetch("/api/projects", {
@@ -47,11 +47,14 @@ export function useProjects(userId: string | undefined) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id, userId, filename, projectId })
             });
+            const result = await res.json();
             if (res.ok) {
                 await fetchProjects();
-                return true;
+                return { success: true };
             }
-            return false;
+            return { success: false, error: result.error };
+        } catch (e: any) {
+            return { success: false, error: e.message };
         } finally {
             setLoading(false);
         }
