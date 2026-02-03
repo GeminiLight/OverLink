@@ -102,7 +102,7 @@ export const translations: Record<Lang, any> = {
             pro: {
                 title: "Pro",
                 desc: "For serious researchers.",
-                price: "$4.99",
+                price: "$0.99",
                 features: ["Unlimited Projects", "Instant Sync", "Priority Support", "Advanced Analytics", "Custom Domain (Coming Soon)"],
                 cta: "Upgrade Now"
             },

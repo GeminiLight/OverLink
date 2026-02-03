@@ -53,7 +53,7 @@ export function ProjectCard({ project, lang, session, profile, isSyncing, onSync
 
             <div className="flex gap-3 mt-6 flex-wrap">
                 <a
-                    href={`${process.env.NEXT_PUBLIC_CDN_BASE_URL || process.env.NEXT_PUBLIC_CDN_RAW_BASE_URL || ''}/${project.filename}.pdf`}
+                    href={`https://${(process.env.NEXT_PUBLIC_CDN_BASE_URL || process.env.NEXT_PUBLIC_CDN_RAW_BASE_URL || '').replace(/^https?:\/\//, '').replace(/\/$/, '')}/${project.filename}.pdf`}
                     target="_blank"
                     className="flex-1 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-slate-900/20 dark:shadow-white/5"
                 >
