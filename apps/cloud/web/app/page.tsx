@@ -4,6 +4,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
 import { translations, Lang } from "@/lib/translations";
+import { DebugOverlay } from "@/components/DebugOverlay";
 
 import { LandingHero } from "@/components/hero/LandingHero";
 import { FAQ } from "@/components/hero/FAQ";
@@ -110,6 +111,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center relative overflow-x-hidden text-foreground bg-background pb-32 transition-colors duration-500">
+      <DebugOverlay session={session} />
       {/* Background FX */}
       <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-[160px] pointer-events-none transition-colors duration-700 animate-pulse"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-[140px] pointer-events-none transition-colors duration-700 animate-pulse" style={{ animationDelay: '2s' }}></div>
