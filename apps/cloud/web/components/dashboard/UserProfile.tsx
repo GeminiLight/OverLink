@@ -70,10 +70,6 @@ export function UserProfile({ profile, session, lang, onUpdateNickname, onLogout
                     </div>
                 </div>
             </div>
-            {profile?.tier !== 'pro' ? (
-                <Link
-                    href="/pricing"
-                    className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
             <div className="flex items-center gap-4">
                 {profile?.tier !== 'pro' ? (
                     <Link
