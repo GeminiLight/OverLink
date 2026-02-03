@@ -172,5 +172,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <div align="center">
-  <p>Built with ❤️ by the OverLink Team</p>
+  <p>Built with ❤️ by GeminiLight</p>
 </div>

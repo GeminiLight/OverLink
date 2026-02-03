@@ -174,5 +174,5 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 ---
 
 <div align="center">
-  <p>由 OverLink 团队 ❤️ 构建</p>
+  <p>❤️ GeminiLight 开发</p>
 </div>
