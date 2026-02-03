@@ -74,6 +74,7 @@ chmod +x start.sh
 
 1.  以设置模式运行机器人：
     ```bash
+    cd apps/local
     python main.py sync --setup
     ```
 2.  浏览器将会打开。请手动登录 Overleaf。

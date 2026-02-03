@@ -74,6 +74,7 @@ If you encounter CAPTCHA issues during login, you can capture your session cooki
 
 1.  Run the bot in setup mode:
     ```bash
+    cd apps/local
     python main.py sync --setup
     ```
 2.  A browser will open. Log in to Overleaf manually.
