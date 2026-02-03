@@ -1,6 +1,11 @@
+
+<div align="center">
+  <img src="apps/cloud/web/app/icon.svg" width="80" alt="OverLink Logo" />
+</div>
+
 <div align="center">
 
-# 🎓 OverLink
+# OverLink
 
 **同步您的 Overleaf 项目并生成永久性的 PDF 链接。**  
 *将您的 Overleaf 项目无缝同步到您的个人网站/作品集。*

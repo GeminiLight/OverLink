@@ -1,6 +1,11 @@
+
+<div align="center">
+  <img src="apps/cloud/web/app/icon.svg" width="80" alt="OverLink Logo" />
+</div>
+
 <div align="center">
 
-# 🎓 OverLink
+# OverLink
 
 **Turn your Overleaf projects into persistent PDF URLs.**  
 *Seamlessly synchronize your Overleaf projects with your personal website/portfolio.*
