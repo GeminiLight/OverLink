@@ -59,6 +59,21 @@
 </tr>
 </table>
 
+## ⚡ Use Case: Always-Current CV
+
+**Link it once, update it forever.**
+
+Instead of uploading `CV_Final_v2_REALLY_FINAL.pdf` every time you fix a typo, just use your stable OverLink URL on your personal website:
+
+```html
+<!-- Your portfolio website -->
+<a href="https://dl.overlink.aurax.live/output.pdf" target="_blank">
+  📄 Download My CV
+</a>
+```
+
+When you recompile in Overleaf, your website updates automatically.
+
 ## 🛠️ How It Works
 
 <div align="center">

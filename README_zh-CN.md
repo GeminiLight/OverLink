@@ -61,6 +61,21 @@ OverLink 让您的个人网站始终直接从 **Overleaf** 获取并展示最新
 </tr>
 </table>
 
+## ⚡ 使用场景：永远最新的简历
+
+**一次链接，永久更新。**
+
+不再需要因为修改了一个错别字而反复上传 `CV_最终版_v2_真的最终版.pdf`。只需在您的个人网站上使用稳定的 OverLink URL：
+
+```html
+<!-- 您的个人作品集网站 -->
+<a href="https://dl.overlink.aurax.live/output.pdf" target="_blank">
+  📄 下载我的简历
+</a>
+```
+
+当您在 Overleaf 中重新编译时，您的网站会出现最新版本。
+
 ## 🛠️ 工作原理
 
 <div align="center">
