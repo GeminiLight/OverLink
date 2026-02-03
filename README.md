@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="apps/cloud/web/app/icon.svg" width="80" alt="OverLink Logo" />
+  <img src="resources/icon.svg" width="80" alt="OverLink Logo" />
 </div>
 
 <div align="center">

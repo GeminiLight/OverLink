@@ -47,8 +47,11 @@ export const translations: Record<Lang, any> = {
         },
         features: {
             sync: "Zero-Touch Sync",
+            syncDesc: "Automated nightly builds. Zero manual effort to keep your site updated.",
             url: "Permanent URLs",
-            open: "Secure & Encryption"
+            urlDesc: "One permanent URL for your resume or paper. Never send a dead link again.",
+            open: "Secure & Encryption",
+            openDesc: "Military-grade encryption for your credentials. Your privacy is our priority."
         },
         faq: {
             title: "Frequently Asked Questions",
@@ -160,8 +163,11 @@ export const translations: Record<Lang, any> = {
         },
         features: {
             sync: "自动同步",
+            syncDesc: "每晚自动构建。无需任何手动操作即可保持站点更新。",
             url: "永久链接",
-            open: "安全加密"
+            urlDesc: "为您的简历或论文提供一个永久链接。再也不会发送死链。",
+            open: "安全加密",
+            openDesc: "军用级凭据加密。您的隐私是我们的首要任务。"
         },
         faq: {
             title: "常见问题",

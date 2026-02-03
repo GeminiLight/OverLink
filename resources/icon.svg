@@ -1,0 +1,45 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Vibrant Gradient for the Document Body -->
+        <linearGradient id="doc_gradient" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#3b82f6" /> <!-- Blue-500 -->
+            <stop offset="100%" stop-color="#8b5cf6" /> <!-- Violet-500 -->
+        </linearGradient>
+        
+        <!-- Subtle Glow -->
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Document Shape (Rounded Rect) -->
+    <rect 
+        x="20" y="10" width="60" height="80" rx="12" 
+        fill="url(#doc_gradient)" 
+        filter="url(#glow)"
+        stroke="white" stroke-width="2" stroke-opacity="0.2"
+    />
+
+    <!-- Stylized Text Lines (White, Semi-transparent) -->
+    <rect x="32" y="30" width="25" height="4" rx="2" fill="white" fill-opacity="0.4" />
+    <rect x="32" y="42" width="36" height="4" rx="2" fill="white" fill-opacity="0.4" />
+    
+    <!-- The "Lifeline" / "Link" Element (Signature Motif) -->
+    <!-- A vibrant line cutting across, representing active sync/life -->
+    <path
+        d="M10 65 L25 65 L35 50 L50 75 L65 55 L75 65 L90 65"
+        stroke="white"
+        stroke-width="5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+    
+    <!-- Active Dot -->
+    <circle cx="85" cy="65" r="4" fill="#34d399"> <!-- Emerald-400 -->
+        <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+    </circle>
+</svg>
