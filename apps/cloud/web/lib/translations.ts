@@ -73,6 +73,7 @@ export const translations: Record<Lang, any> = {
             deleteSuccess: "Project deleted!",
             deleteFail: "Failed to delete project",
             copySuccess: "Link copied to clipboard!",
+            duplicateFile: "Filename already taken. Please choose another.",
         },
         modal: {
             editTitle: "Edit Project",
@@ -189,6 +190,7 @@ export const translations: Record<Lang, any> = {
             deleteSuccess: "项目已删除！",
             deleteFail: "删除项目失败",
             copySuccess: "链接已复制！",
+            duplicateFile: "文件名已被占用，请尝试其他名称。",
         },
         modal: {
             editTitle: "编辑项目",

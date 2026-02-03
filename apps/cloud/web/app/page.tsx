@@ -64,7 +64,12 @@ export default function Home() {
       setFilename(""); setProjectId("");
       setIsAddOpen(false);
     } else {
-      notify(result.error || t.alert.addFail, 'error');
+      // Handle Conflict (Duplicate filename)
+      if (result.status === 409) {
+        notify((t.alert as any).duplicateFile, 'error');
+      } else {
+        notify(result.error || t.alert.addFail, 'error');
+      }
     }
   };
 
@@ -77,7 +82,12 @@ export default function Home() {
       setIsEditOpen(false);
       setSelectedProject(null);
     } else {
-      notify(result.error || t.alert.updateFail, 'error');
+      // Handle Conflict (Duplicate filename)
+      if (result.status === 409) {
+        notify((t.alert as any).duplicateFile, 'error');
+      } else {
+        notify(result.error || t.alert.updateFail, 'error');
+      }
     }
   };
 

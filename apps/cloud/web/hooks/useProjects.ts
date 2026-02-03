@@ -28,18 +28,18 @@ export function useProjects(userId: string | undefined) {
             const result = await res.json();
             if (res.ok) {
                 await fetchProjects();
-                return { success: true, data: result.data };
+                return { success: true, data: result.data, status: res.status };
             }
-            return { success: false, error: result.error };
+            return { success: false, error: result.error, status: res.status };
         } catch (e: any) {
-            return { success: false, error: e.message };
+            return { success: false, error: e.message, status: 500 };
         } finally {
             setLoading(false);
         }
     };
 
     const updateProject = async (id: string, filename: string, projectId: string) => {
-        if (!userId) return { success: false, error: "Not authenticated" };
+        if (!userId) return { success: false, error: "Not authenticated", status: 401 };
         setLoading(true);
         try {
             const res = await fetch("/api/projects", {
@@ -50,11 +50,11 @@ export function useProjects(userId: string | undefined) {
             const result = await res.json();
             if (res.ok) {
                 await fetchProjects();
-                return { success: true };
+                return { success: true, status: res.status };
             }
-            return { success: false, error: result.error };
+            return { success: false, error: result.error, status: res.status };
         } catch (e: any) {
-            return { success: false, error: e.message };
+            return { success: false, error: e.message, status: 500 };
         } finally {
             setLoading(false);
         }
