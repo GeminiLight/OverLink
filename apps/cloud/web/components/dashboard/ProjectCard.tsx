@@ -5,6 +5,7 @@ interface Props {
     project: any;
     lang: Lang;
     session: any;
+    profile: any;
     isSyncing: boolean;
     onSync: (id: string) => void;
     onEdit: (p: any) => void;
@@ -12,7 +13,7 @@ interface Props {
     onCopyUrl: (filename: string) => void;
 }
 
-export function ProjectCard({ project, lang, session, isSyncing, onSync, onEdit, onDelete, onCopyUrl }: Props) {
+export function ProjectCard({ project, lang, session, profile, isSyncing, onSync, onEdit, onDelete, onCopyUrl }: Props) {
     const t = translations[lang];
 
     return (
@@ -22,7 +23,7 @@ export function ProjectCard({ project, lang, session, isSyncing, onSync, onEdit,
                 <div className="space-y-1">
                     <div className="flex items-center gap-3">
                         <h3 className="font-black text-2xl text-foreground tracking-tight">{project.filename}.pdf</h3>
-                        {session.user.tier === 'pro' && (
+                        {profile?.tier === 'pro' && (
                             <span className="px-3 py-1 bg-amber-400 dark:bg-amber-400/10 text-amber-500 text-[9px] font-black rounded-full uppercase tracking-widest border border-amber-400/20">{(t.misc as any).pro}</span>
                         )}
                     </div>

@@ -70,7 +70,7 @@ export function UserProfile({ profile, session, lang, onUpdateNickname, onLogout
                 </div>
             </div>
             <div className="flex gap-4 items-center">
-                {session.user.tier !== 'pro' ? (
+                {profile?.tier !== 'pro' ? (
                     <button
                         className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white hover:scale-105 rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-orange-500/20"
                     >

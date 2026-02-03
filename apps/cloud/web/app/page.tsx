@@ -166,6 +166,7 @@ export default function Home() {
                   project={project}
                   lang={lang}
                   session={session}
+                  profile={profile}
                   isSyncing={syncingIds.has(project.id)}
                   onSync={syncProject}
                   onEdit={(p) => {

@@ -43,9 +43,23 @@ export function AddProjectModal({ isOpen, onClose, onSubmit, filename, setFilena
                             className="w-full bg-slate-50/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 p-5 rounded-2xl outline-none focus:ring-2 ring-blue-500/20 text-foreground transition-all font-medium text-lg leading-none"
                             required
                         />
-                        <p className="text-[10px] opacity-40 font-bold px-2 pt-1 leading-relaxed">
-                            Tip: Turn on "Link Sharing" in Overleaf and paste the full <strong>Read Link</strong> (e.g., <span className="text-blue-500 font-mono">overleaf.com/read/abc...</span>).
-                        </p>
+                        <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-4 mt-2 border border-slate-100 dark:border-white/5">
+                            <p className="text-[10px] uppercase font-bold opacity-50 mb-2">{t.form.steps.title}</p>
+                            <div className="flex flex-col gap-2">
+                                <div className="flex items-center gap-2 text-[11px] font-medium opacity-80">
+                                    <span className="w-4 h-4 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-[9px] font-bold">1</span>
+                                    {t.form.steps.s1}
+                                </div>
+                                <div className="flex items-center gap-2 text-[11px] font-medium opacity-80">
+                                    <span className="w-4 h-4 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-[9px] font-bold">2</span>
+                                    {t.form.steps.s2}
+                                </div>
+                                <div className="flex items-center gap-2 text-[11px] font-medium opacity-80">
+                                    <span className="w-4 h-4 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-[9px] font-bold">3</span>
+                                    {t.form.steps.s3} <span className="text-blue-500 font-mono ml-1 bg-blue-500/10 px-1 rounded truncate max-w-[180px]">{t.form.steps.example}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="flex gap-4 pt-4">
                         <button

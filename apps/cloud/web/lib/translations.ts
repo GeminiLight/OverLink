@@ -14,12 +14,19 @@ export const translations: Record<Lang, any> = {
             filename: "Filename",
             filenamePlaceholder: "e.g. resume",
             projectId: "Overleaf URL / ID",
-            projectIdPlaceholder: "Link",
+            projectIdPlaceholder: "https://www.overleaf.com/read/...",
             overleafEmail: "Overleaf Email",
             overleafPassword: "Overleaf Password",
             submit: "Add Project",
             updateSubmit: "Update Project",
-            submitting: "Updating..."
+            submitting: "Updating...",
+            steps: {
+                title: "How to get Link:",
+                s1: "Open Overleaf Project",
+                s2: "Turn on 'Link Sharing'",
+                s3: "Copy 'Read-only Link'",
+                example: "e.g. overleaf.com/read/rgvvdtxvjfjt"
+            }
         },
         actions: {
             view: "VIEW PDF",
@@ -96,12 +103,19 @@ export const translations: Record<Lang, any> = {
             filename: "文件名称",
             filenamePlaceholder: "例如：resume",
             projectId: "Overleaf 项目链接 / ID",
-            projectIdPlaceholder: "分享链接",
+            projectIdPlaceholder: "https://www.overleaf.com/read/...",
             overleafEmail: "Overleaf 邮箱",
             overleafPassword: "Overleaf 密码",
             submit: "添加项目",
             updateSubmit: "更新项目",
-            submitting: "更新中..."
+            submitting: "更新中...",
+            steps: {
+                title: "如何获取链接：",
+                s1: "打开 Overleaf 项目",
+                s2: "开启 Share -> Link Sharing",
+                s3: "复制 Read-only Link",
+                example: "例如：overleaf.com/read/rgvvdtxvjfjt"
+            }
         },
         actions: {
             view: "查看 PDF",
