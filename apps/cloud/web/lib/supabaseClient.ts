@@ -8,4 +8,16 @@ if (!supabaseUrl || !supabaseKey) {
     console.error("Supabase environment variables are missing! Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY");
 }
 
-export const supabase = createClient(supabaseUrl || "", supabaseKey || "")
+let url = supabaseUrl;
+let key = supabaseKey;
+
+// Robust fallback for build time
+if (!url || !url.startsWith('http')) {
+    console.warn("Using placeholder Supabase URL for build");
+    url = "https://placeholder.supabase.co";
+}
+if (!key) {
+    key = "placeholder";
+}
+
+export const supabase = createClient(url, key);

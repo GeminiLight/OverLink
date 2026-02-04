@@ -5,31 +5,31 @@ import { encryptToString } from '@/lib/crypto';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { r2 } from '@/lib/r2';
 
-// Service Role client needed to bypass RLS if we want, or just standard client
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
-);
+// Helper to get Supabase client safely
+function getSupabase() {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SECRET_KEY) {
+        throw new Error("Missing Supabase credentials");
+    }
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SECRET_KEY
+    );
+}
 
 export async function POST(request: Request) {
     try {
+        const supabase = getSupabase();
         const body = await request.json();
         const { userId, filename, projectId, email, password } = body;
 
-        // 1. Fetch User Tier and Project Count
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('tier')
-            .eq('id', userId)
-            .single();
+        // 1. Fetch User Tier and Project Count concurrently
+        const [profileRes, countRes] = await Promise.all([
+            supabase.from('profiles').select('tier').eq('id', userId).single(),
+            supabase.from('projects').select('*', { count: 'exact', head: true }).eq('user_id', userId)
+        ]);
 
-        const { count } = await supabase
-            .from('projects')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', userId);
-
-        const tier = profile?.tier || 'free';
-        const projectCount = count || 0;
+        const tier = profileRes.data?.tier || 'free';
+        const projectCount = countRes.count || 0;
 
         // 2. Enforce Limits
         if (tier === 'free' && projectCount >= 1) {
@@ -79,6 +79,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
     try {
+        const supabase = getSupabase();
         const body = await request.json();
         const { id, userId, filename, projectId } = body;
 
@@ -122,6 +123,7 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
+        const supabase = getSupabase();
         const { searchParams } = new URL(request.url);
         const projectId = searchParams.get('id');
         const userId = searchParams.get('userId');
@@ -130,35 +132,24 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: "Missing projectId or userId" }, { status: 400 });
         }
 
-        // 1. Get filename first
-        const { data: project } = await supabase
-            .from('projects')
-            .select('filename')
-            .eq('id', projectId)
-            .eq('user_id', userId)
-            .single();
-
-        if (project?.filename) {
-            // 2. Delete from R2 (fire and forget or await, safe to await here)
-            try {
-                await r2.send(new DeleteObjectCommand({
-                    Bucket: process.env.R2_BUCKET_NAME,
-                    Key: `${project.filename}.pdf`,
-                }));
-            } catch (err) {
-                console.error("Failed to delete from R2:", err);
-                // Continue to delete from DB even if R2 fails
-            }
-        }
-
-        // 3. Delete from DB
-        const { error } = await supabase
+        // 1. Delete from DB and get filename in one go
+        const { data: project, error } = await supabase
             .from('projects')
             .delete()
             .eq('id', projectId)
-            .eq('user_id', userId);
+            .eq('user_id', userId)
+            .select('filename')
+            .single();
 
         if (error) throw error;
+
+        // 2. Delete from R2 (fire and forget / async)
+        if (project?.filename) {
+            r2.send(new DeleteObjectCommand({
+                Bucket: process.env.R2_BUCKET_NAME,
+                Key: `${project.filename}.pdf`,
+            })).catch(err => console.error("Failed to delete from R2:", err));
+        }
 
         return NextResponse.json({ success: true });
     } catch (e: any) {

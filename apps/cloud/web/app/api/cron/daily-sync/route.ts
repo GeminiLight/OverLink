@@ -2,11 +2,6 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Admin client to read secure data from all users
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
-);
-
 export async function GET(request: Request) {
     // Basic Auth Check for Cron
     const authHeader = request.headers.get('authorization');
@@ -15,6 +10,11 @@ export async function GET(request: Request) {
     }
 
     try {
+        const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SECRET_KEY!
+        );
+
         // 1. Fetch ALL projects that have credentials
         const { data: projects, error } = await supabaseAdmin
             .from('projects')

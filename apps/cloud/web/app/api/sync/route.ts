@@ -3,18 +3,15 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { encryptToString } from '@/lib/crypto';
 
-// Admin client to read secure data if needed, though here we might just pass args
-// Actually we should fetch credentials from DB to verify ownership before triggering
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY! // Needed to read encrypted columns if we used RLS to hide them? 
-    // For this MVP, let's assume standard client can read if user owns it. 
-    // BUT we stored them in `overlink_password_enc` which might be readable by owner.
-);
-
 export async function POST(request: Request) {
     try {
         const { projectId, userId } = await request.json();
+
+        // Lazy init
+        const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SECRET_KEY!
+        );
 
         if (!projectId || !userId) {
             return NextResponse.json({ error: 'Missing projectId or userId' }, { status: 400 });
