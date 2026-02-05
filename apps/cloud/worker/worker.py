@@ -96,6 +96,17 @@ async def run_worker():
         print("No valid projects to download.")
         return
 
+    # Handle auth.json from payload if provided (bypasses GitHub Secrets if set)
+    auth_b64 = data.get("auth_json_base64")
+    if auth_b64:
+        try:
+            import base64
+            print("Restoring auth.json from payload...")
+            with open("auth.json", "wb") as f:
+                f.write(base64.b64decode(auth_b64))
+        except Exception as e:
+            print(f"Failed to decode auth_json_base64 from payload: {e}")
+
     async with OverleafBot(headless=True, auth_path="auth.json") as bot:
         print("Logging in...")
         if not await bot.login(email=email, password=password, manual=False):

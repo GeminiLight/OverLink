@@ -91,7 +91,8 @@ export const translations: Record<Lang, any> = {
             views: "views",
             proTier: "PRO TIER",
             goPro: "GO PRO",
-            cloudPlatform: "CLOUD PLATFORM"
+            cloudPlatform: "CLOUD PLATFORM",
+            lastUpdated: "Last Updated"
         },
         pricing: {
             title: "Simple, Transparent Pricing",
@@ -207,7 +208,8 @@ export const translations: Record<Lang, any> = {
             views: "次查看",
             proTier: "专业版",
             goPro: "升级专业版",
-            cloudPlatform: "云平台"
+            cloudPlatform: "云平台",
+            lastUpdated: "最后更新"
         },
         pricing: {
             title: "简单透明的价格",

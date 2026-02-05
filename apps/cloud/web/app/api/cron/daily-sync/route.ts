@@ -15,12 +15,10 @@ export async function GET(request: Request) {
             process.env.SUPABASE_SECRET_KEY!
         );
 
-        // 1. Fetch ALL projects that have credentials
+        // 1. Fetch ALL projects (even those without credentials, as they can use shared env vars)
         const { data: projects, error } = await supabaseAdmin
             .from('projects')
-            .select('project_id, filename, overleaf_email_enc, overleaf_password_enc')
-            .not('overleaf_email_enc', 'is', null)
-            .not('overleaf_password_enc', 'is', null);
+            .select('project_id, filename, overleaf_email_enc, overleaf_password_enc');
 
         if (error) throw error;
         if (!projects || projects.length === 0) {
@@ -29,14 +27,19 @@ export async function GET(request: Request) {
 
         // 2. Group by Unique Credentials (User Session)
         // Key: "email|password" -> { email, password, projects: [] }
+        // Key: "SHARED" -> { email: null, password: null, projects: [] }
         const userGroups: Record<string, any> = {};
 
         projects.forEach(p => {
-            const key = `${p.overleaf_email_enc}|${p.overleaf_password_enc}`;
+            let key = "SHARED";
+            if (p.overleaf_email_enc && p.overleaf_password_enc) {
+                key = `${p.overleaf_email_enc}|${p.overleaf_password_enc}`;
+            }
+
             if (!userGroups[key]) {
                 userGroups[key] = {
-                    email: p.overleaf_email_enc,
-                    password: p.overleaf_password_enc,
+                    email: p.overleaf_email_enc || null,
+                    password: p.overleaf_password_enc || null,
                     projects: []
                 };
             }
@@ -52,7 +55,8 @@ export async function GET(request: Request) {
                 email: group.email,
                 password: group.password,
                 projects: group.projects,
-                is_encrypted: true
+                is_encrypted: true,
+                auth_json_base64: process.env.AUTH_JSON_BASE64
             };
 
             const response = await fetch(
